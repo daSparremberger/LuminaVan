@@ -59,6 +59,24 @@ export async function requireAuth(req: AuthRequest, res: Response, next: NextFun
       }
     }
 
+    // Verificar se e admin
+    if (!user) {
+      const adminResult = await pool.query(
+        "SELECT valor FROM system_config WHERE chave = 'admin_firebase_uid'"
+      );
+
+      if (adminResult.rows.length > 0 && adminResult.rows[0].valor === firebaseUid) {
+        user = {
+          id: 0,
+          tenant_id: null,
+          firebase_uid: firebaseUid,
+          nome: email || 'Admin',
+          email: email,
+          role: 'admin'
+        };
+      }
+    }
+
     if (!user) {
       return res.status(401).json({ error: 'Usuario nao encontrado' });
     }
