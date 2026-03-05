@@ -1,45 +1,33 @@
 import { create } from 'zustand';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth, logout as firebaseLogout } from '../lib/firebase';
-import { api } from '../lib/api';
-import type { UserProfile } from '@rotavans/shared';
+import { persist } from 'zustand/middleware';
 
-interface AuthStore {
-  user: User | null;
-  profile: UserProfile | null;
-  loading: boolean;
-  setUser: (user: User | null) => void;
-  setProfile: (profile: UserProfile | null) => void;
-  logout: () => Promise<void>;
-  fetchProfile: () => Promise<void>;
+type UserRole = 'admin' | 'gestor' | 'motorista' | null;
+
+interface User {
+  id: number;
+  tenant_id: number | null;
+  firebase_uid: string;
+  nome: string;
+  email?: string;
 }
 
-export const useAuth = create<AuthStore>((set, get) => ({
-  user: null,
-  profile: null,
-  loading: true,
-  setUser: (user) => set({ user }),
-  setProfile: (profile) => set({ profile }),
-  logout: async () => {
-    await firebaseLogout();
-    set({ user: null, profile: null });
-  },
-  fetchProfile: async () => {
-    try {
-      const profile = await api.get<UserProfile>('/auth/perfil');
-      set({ profile });
-    } catch {
-      set({ profile: null });
-    }
-  },
-}));
+interface AuthState {
+  user: User | null;
+  role: UserRole;
+  token: string | null;
+  setAuth: (user: User, role: UserRole, token: string) => void;
+  logout: () => void;
+}
 
-// Listen to auth state changes
-onAuthStateChanged(auth, async (user) => {
-  useAuth.setState({ user, loading: false });
-  if (user) {
-    useAuth.getState().fetchProfile();
-  } else {
-    useAuth.setState({ profile: null });
-  }
-});
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      role: null,
+      token: null,
+      setAuth: (user, role, token) => set({ user, role, token }),
+      logout: () => set({ user: null, role: null, token: null }),
+    }),
+    { name: 'rotavans-auth' }
+  )
+);
