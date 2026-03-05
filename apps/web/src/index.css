@@ -7,20 +7,78 @@
 
 * { box-sizing: border-box; }
 
+/* Dark Theme (Warm Espresso) - Default */
+:root {
+  --color-bg: #1A1613;
+  --color-surface: #2D2520;
+  --color-surface2: #3D352C;
+  --color-surface3: #4A3F35;
+  --color-border: #4A3F35;
+  --color-text: #F7F1E4;
+  --color-text-muted: #A89F94;
+  --color-accent: #D4A574;
+  --color-accent-hover: #C9963C;
+  --color-accent-muted: rgba(212, 165, 116, 0.2);
+}
+
+/* Light Theme (Cream Elegante) */
+.light {
+  --color-bg: #FAF8F5;
+  --color-surface: #FFFFFF;
+  --color-surface2: #F5F0E8;
+  --color-surface3: #EDE6DA;
+  --color-border: #E5DDD0;
+  --color-text: #2D2520;
+  --color-text-muted: #6B5D4D;
+  --color-accent: #D4A574;
+  --color-accent-hover: #C9963C;
+  --color-accent-muted: rgba(212, 165, 116, 0.15);
+}
+
 body {
-  background: #1F1A15;
-  color: #F7F1E4;
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: 'Satoshi', system-ui, sans-serif;
   margin: 0;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Plus Jakarta Sans', 'Satoshi', system-ui, sans-serif;
   font-weight: 800;
   letter-spacing: -0.03em;
+  color: var(--color-text);
 }
 
-::-webkit-scrollbar { width: 5px; }
+/* Premium scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #3D352C; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #F7AF27; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Focus ring */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Floating app container */
+.app-container {
+  margin: 16px;
+  height: calc(100vh - 32px);
+  background: var(--color-surface);
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.light .app-container {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
