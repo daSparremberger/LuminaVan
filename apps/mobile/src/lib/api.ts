@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store';
 import { io, Socket } from 'socket.io-client';
 
-const BASE = 'http://192.168.0.100:3001'; // Ajuste para IP da sua rede local
+const BASE = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001';
 
 let socket: Socket | null = null;
 
