@@ -4,3 +4,7 @@ dist/
 *.log
 .expo/
 .turbo/
+
+# Release files
+api/uploads/releases/*.exe
+api/uploads/releases/*.apk
