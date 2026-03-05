@@ -1,6 +1,7 @@
 {
   "name": "rotavans",
   "private": true,
+  "packageManager": "pnpm@9.1.0",
   "scripts": {
     "dev:api": "pnpm --filter api dev",
     "dev:web": "pnpm --filter web dev",
