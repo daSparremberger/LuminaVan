@@ -8,3 +8,6 @@ dist/
 # Release files
 api/uploads/releases/*.exe
 api/uploads/releases/*.apk
+
+# Electron build output
+apps/desktop/release/

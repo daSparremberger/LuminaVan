@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/auth';
 import { Layout } from './components/layout/Layout';
-import { Login } from './pages/Login';
+import { LoginPage as Login } from './pages/Login';
 import { ConvitePage } from './pages/Convite';
 import { Dashboard } from './pages/Dashboard';
 import { Escolas } from './pages/Escolas';

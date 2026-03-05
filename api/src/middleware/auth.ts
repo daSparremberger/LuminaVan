@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { auth } from '../lib/firebase';
 import { pool } from '../db/pool';
-import type { UserRole, UserProfile } from '@rotavans/shared';
+import type { UserRole, UserProfile } from '../types';
 
 export interface AuthRequest extends Request {
   user?: UserProfile;

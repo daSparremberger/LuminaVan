@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, School, Users, Truck, Car, Map, History, DollarSign, Radio, MessageCircle, LogOut } from 'lucide-react';
-import { useAuth } from '../../stores/auth';
+import { useAuthStore } from '../../stores/auth';
 import { clsx } from 'clsx';
 import { LampAnimation } from '../ui/LampAnimation';
 
@@ -18,7 +18,7 @@ const links = [
 ];
 
 export function Sidebar() {
-  const { logout, profile } = useAuth();
+  const { logout, user } = useAuthStore();
   return (
     <aside className="relative flex flex-col w-16 lg:w-56 h-screen bg-bg shrink-0 overflow-hidden">
       {/* Lamp Animation at top with logo */}
@@ -51,7 +51,7 @@ export function Sidebar() {
 
       {/* User section */}
       <div className="relative z-10 px-2 pb-4 pt-2">
-        <div className="hidden lg:block px-3 pb-2 text-xs text-beige/30 truncate">{profile?.nome}</div>
+        <div className="hidden lg:block px-3 pb-2 text-xs text-beige/30 truncate">{user?.nome}</div>
         <button onClick={logout} className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-beige/50 hover:text-beige/80 w-full transition-all duration-200">
           <LogOut size={18} className="shrink-0" /><span className="hidden lg:block">Sair</span>
         </button>

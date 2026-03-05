@@ -3,12 +3,12 @@ import { MessageCircle, Send, User } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { EmptyState } from '../components/ui/EmptyState';
 import { api } from '../lib/api';
-import { useAuth } from '../stores/auth';
+import { useAuthStore } from '../stores/auth';
 import { clsx } from 'clsx';
 import type { Conversa, Mensagem, Motorista } from '@rotavans/shared';
 
 export function Mensagens() {
-  const { profile } = useAuth();
+  const { user } = useAuthStore();
   const [conversas, setConversas] = useState<Conversa[]>([]);
   const [motoristas, setMotoristas] = useState<Motorista[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversa | null>(null);
@@ -243,7 +243,7 @@ export function Mensagens() {
                   </div>
                 ) : (
                   messages.map((msg) => {
-                    const isFromMe = msg.remetente_tipo === 'gestor' && msg.remetente_id === profile?.id;
+                    const isFromMe = msg.remetente_tipo === 'gestor' && msg.remetente_id === user?.id;
                     return (
                       <div
                         key={msg.id}
