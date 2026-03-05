@@ -31,12 +31,16 @@
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION",
-        "CAMERA"
+        "CAMERA",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "extra": {
       "eas": {
-        "projectId": "your-project-id"
+        "projectId": "1cec8129-944c-468f-b670-6b075587af5f"
       }
     },
     "plugins": [
@@ -51,7 +55,9 @@
         {
           "cameraPermission": "Precisamos da camera para tirar fotos de documentos"
         }
-      ]
-    ]
+      ],
+      "expo-secure-store"
+    ],
+    "owner": "dasparremberger"
   }
 }
