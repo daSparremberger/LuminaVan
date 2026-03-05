@@ -16,6 +16,8 @@ import financeiroRouter from './routes/financeiro';
 import veiculosRouter from './routes/veiculos';
 import mensagensRouter from './routes/mensagens';
 import dashboardRouter from './routes/dashboard';
+import adminRoutes from './routes/admin';
+import downloadRoutes from './routes/download';
 
 dotenv.config();
 
@@ -44,6 +46,8 @@ app.use('/financeiro', financeiroRouter);
 app.use('/veiculos', veiculosRouter);
 app.use('/mensagens', mensagensRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/admin', adminRoutes);
+app.use('/download', downloadRoutes);
 
 const PORT = process.env.PORT || 3001;
 
