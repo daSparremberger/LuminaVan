@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "RotaVans Motorista",
+    "slug": "rotavans-motorista",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0a0a0a"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.rotavans.motorista",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Precisamos da sua localizacao para rastrear a rota",
+        "NSLocationAlwaysUsageDescription": "Precisamos da sua localizacao em segundo plano para rastrear a rota",
+        "NSCameraUsageDescription": "Precisamos da camera para tirar fotos de documentos"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0a0a0a"
+      },
+      "package": "com.rotavans.motorista",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "CAMERA"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Precisamos da sua localizacao para rastrear a rota"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Precisamos da camera para tirar fotos de documentos"
+        }
+      ]
+    ]
+  }
+}
