@@ -100,8 +100,8 @@ export function LoginPage() {
 
         <p className="mb-8 text-sm text-text-muted md:text-base">
           {conviteToken
-            ? 'Voce foi convidado para acessar o sistema. Faca login com sua conta Google para continuar.'
-            : 'Acesse sua conta para gerenciar o transporte escolar da sua regiao.'
+            ? 'Você foi convidado para acessar o sistema. Faça login com sua conta Google para continuar.'
+            : 'Acesse sua conta para gerenciar o transporte escolar da sua região.'
           }
         </p>
 
@@ -156,7 +156,7 @@ export function LoginPage() {
         )}
 
         <p className="mt-8 text-center text-xs text-text-muted">
-          Ao continuar, voce concorda com os termos de uso do sistema.
+          Ao continuar, você concorda com os termos de uso do sistema.
         </p>
       </div>
     </div>

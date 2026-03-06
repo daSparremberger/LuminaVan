@@ -5,7 +5,7 @@ import * as Google from 'expo-auth-session/providers/google';
 import * as Linking from 'expo-linking';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useAuthStore } from '../stores/auth';
-import { firebaseAuth } from '../lib/firebase';
+import { firebaseAuth, missingFirebaseConfig } from '../lib/firebase';
 import { getDeviceId } from '../lib/device';
 import { api } from '../lib/api';
 
@@ -78,6 +78,11 @@ export function OnboardingScreen() {
   }, [response]);
 
   async function concluirLoginGoogle(idToken: string) {
+    if (!firebaseAuth) {
+      throw new Error(
+        `Configurações do Firebase ausentes no aplicativo: ${missingFirebaseConfig.join(', ')}.`
+      );
+    }
     setLoading(true);
     try {
       const credential = GoogleAuthProvider.credential(idToken);
@@ -153,7 +158,16 @@ export function OnboardingScreen() {
 
       <TouchableOpacity
         style={[styles.googleButton, loading && styles.disabled]}
-        onPress={() => promptAsync()}
+        onPress={() => {
+          if (!process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID && !process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID) {
+            Alert.alert(
+              'Configuração pendente',
+              'Defina EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID e EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID para habilitar o login Google.'
+            );
+            return;
+          }
+          promptAsync();
+        }}
         disabled={loading}
       >
         <Text style={styles.plus}>+</Text>

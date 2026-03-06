@@ -8,5 +8,11 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-export const firebaseAuth = getAuth(app);
+const required = ['apiKey', 'authDomain', 'projectId'] as const;
+export const missingFirebaseConfig = required.filter((key) => !firebaseConfig[key]);
+
+const app = missingFirebaseConfig.length
+  ? null
+  : (getApps().length ? getApps()[0] : initializeApp(firebaseConfig));
+
+export const firebaseAuth = app ? getAuth(app) : null;
