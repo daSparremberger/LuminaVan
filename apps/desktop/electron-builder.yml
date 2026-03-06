@@ -1,6 +1,8 @@
 appId: com.rotavans.desktop
 productName: RotaVans
-copyright: Copyright 2026
+copyright: Copyright 2026 RotaVans
+artifactName: RotaVans-Setup-${version}.${ext}
+asar: true
 
 directories:
   output: release
@@ -16,10 +18,14 @@ win:
     - target: nsis
       arch:
         - x64
+  executableName: RotaVans
 
 nsis:
+  installerLanguages:
+    - pt_BR
   oneClick: false
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: RotaVans
+  deleteAppDataOnUninstall: false
