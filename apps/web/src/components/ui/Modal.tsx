@@ -1,41 +1,74 @@
-import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ReactNode, useEffect } from 'react';
 
-interface Props {
+interface ModalProps {
   open: boolean;
   onClose: () => void;
   title: string;
-  children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  children: ReactNode;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
-const sizes = { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-2xl' };
+const sizeClasses = {
+  sm: 'max-w-md',
+  md: 'max-w-lg',
+  lg: 'max-w-2xl',
+  xl: 'max-w-4xl',
+};
 
-export function Modal({ open, onClose, title, children, size = 'md' }: Props) {
+export function Modal({ open, onClose, title, children, size = 'md' }: ModalProps) {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
   return (
     <AnimatePresence>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            transition={{ duration: 0.2 }}
             onClick={onClose}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
+
+          {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className={`relative bg-bg border border-beige/10 rounded-2xl w-full ${sizes[size]} p-6 shadow-2xl shadow-black/60`}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className={`relative w-full ${sizeClasses[size]} bg-surface border border-border/50
+                       rounded-2xl shadow-2xl overflow-hidden`}
           >
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-beige">{title}</h2>
-              <button onClick={onClose} className="text-beige/30 hover:text-accent transition-colors">
-                <X size={20} />
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border/30">
+              <h2 className="text-lg font-bold text-text">{title}</h2>
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-lg flex items-center justify-center
+                          text-text-muted hover:text-text hover:bg-surface2
+                          transition-colors duration-200"
+              >
+                <X size={18} />
               </button>
             </div>
-            {children}
+
+            {/* Content */}
+            <div className="p-6">
+              {children}
+            </div>
           </motion.div>
         </div>
       )}
