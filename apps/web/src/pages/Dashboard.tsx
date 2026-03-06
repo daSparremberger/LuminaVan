@@ -1,34 +1,40 @@
-import { useEffect, useState } from 'react';
-import { Users, Map, Truck, Car, Activity } from 'lucide-react';
-import {
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from 'recharts';
+import { useEffect, useMemo, useState } from 'react';
+import { Activity, ArrowRight, Car, Map, Truck, Users } from 'lucide-react';
+import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { PageTransition, staggerContainer } from '../components/ui/PageTransition';
 import { StatCard } from '../components/ui/StatCard';
-import { PageTransition, staggerContainer, staggerItem } from '../components/ui/PageTransition';
 import { api } from '../lib/api';
 import { motion } from 'framer-motion';
-import type { DashboardStats, DashboardChartData } from '@rotavans/shared';
-
-const COLORS = ['#3B82F6', '#22C55E', '#F59E0B', '#EC4899', '#8B5CF6', '#EF4444'];
+import type { DashboardChartData, DashboardStats } from '@rotavans/shared';
 
 const tooltipStyle = {
   contentStyle: {
-    backgroundColor: 'var(--color-surface2)',
+    backgroundColor: 'var(--color-surface)',
     border: '1px solid var(--color-border)',
     color: 'var(--color-text)',
     borderRadius: '12px',
   },
+  cursor: { fill: 'var(--color-accent-muted)' },
 };
+
+const moneyFormatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+  maximumFractionDigits: 0,
+});
+
+function formatShortDate(date: string) {
+  if (!date) return '--';
+  const [year, month, day] = date.split('-').map(Number);
+  return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}`;
+}
+
+function normalizeTurno(turno: string) {
+  if (turno === 'manha') return 'Manha';
+  if (turno === 'tarde') return 'Tarde';
+  if (turno === 'noite') return 'Noite';
+  return 'Indefinido';
+}
 
 export function Dashboard() {
   const [stats, setStats] = useState<DashboardStats>({
@@ -50,114 +56,236 @@ export function Dashboard() {
     api.get<DashboardChartData>('/dashboard/charts').then(setCharts).catch(() => {});
   }, []);
 
+  const financialSummary = useMemo(() => {
+    const months = charts.financeiro_mensal;
+    const latest = months.length > 0 ? months[months.length - 1] : undefined;
+    const previous = months.length > 1 ? months[months.length - 2] : undefined;
+
+    const latestBalance = latest ? latest.receitas - latest.despesas : 0;
+    const previousBalance = previous ? previous.receitas - previous.despesas : 0;
+
+    let trend = 0;
+    if (previousBalance !== 0) {
+      trend = ((latestBalance - previousBalance) / Math.abs(previousBalance)) * 100;
+    }
+
+    return {
+      latestBalance,
+      trend,
+      positive: trend >= 0,
+      period: latest?.mes ?? '--',
+    };
+  }, [charts.financeiro_mensal]);
+
+  const peakRoutes = useMemo(() => {
+    if (charts.rotas_por_dia.length === 0) return 0;
+    return Math.max(...charts.rotas_por_dia.map((item) => item.total));
+  }, [charts.rotas_por_dia]);
+
+  const routesTotal = useMemo(
+    () => charts.rotas_por_dia.reduce((acc, item) => acc + item.total, 0),
+    [charts.rotas_por_dia]
+  );
+
+  const popularSchools = charts.alunos_por_escola.slice(0, 5);
+  const latestActivity = charts.rotas_por_dia.slice(-4).reverse();
+
   return (
-    <PageTransition>
-      <h1 className="text-2xl font-bold text-text mb-8">Dashboard</h1>
+    <PageTransition className="pt-4 md:pt-6">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <section className="min-w-0 space-y-6">
+          <div className="rounded-[26px] border border-border bg-surface2 p-4 md:p-6">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <h2 className="font-heading text-xl font-bold text-text">Overview</h2>
+              <button className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-medium text-text-muted transition-colors hover:text-text">
+                Last month
+              </button>
+            </div>
 
-      {/* Stat Cards */}
-      <motion.div
-        variants={staggerContainer}
-        initial="initial"
-        animate="animate"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8"
-      >
-        <StatCard label="Veiculos Ativos" value={stats.veiculos_ativos} icon={Car} />
-        <StatCard label="Veiculos Total" value={stats.veiculos_total} icon={Truck} />
-        <StatCard label="Motoristas em Acao" value={stats.motoristas_em_acao} icon={Activity} />
-        <StatCard label="Rotas Hoje" value={stats.rotas_hoje} icon={Map} />
-        <StatCard label="Alunos" value={stats.alunos_total} icon={Users} />
-      </motion.div>
+            <motion.div
+              variants={staggerContainer}
+              initial="initial"
+              animate="animate"
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+            >
+              <StatCard
+                label="Alunos"
+                value={stats.alunos_total.toLocaleString('pt-BR')}
+                icon={Users}
+                trend={{ value: Math.abs(financialSummary.trend), positive: financialSummary.positive }}
+                subtitle="vs ultimo mes"
+              />
+              <StatCard
+                label="Saldo"
+                value={moneyFormatter.format(financialSummary.latestBalance)}
+                icon={Car}
+                trend={{ value: Math.abs(financialSummary.trend), positive: financialSummary.positive }}
+                subtitle={`periodo ${financialSummary.period}`}
+              />
+            </motion.div>
 
-      {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Line Chart */}
-        <motion.div
-          variants={staggerItem}
-          initial="initial"
-          animate="animate"
-          className="bg-surface2 border border-border/30 rounded-2xl p-6"
-        >
-          <h2 className="text-text font-semibold mb-4">Rotas por Dia</h2>
-          <ResponsiveContainer width="100%" height={240}>
-            <LineChart data={charts.rotas_por_dia}>
-              <XAxis dataKey="data" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-              <Tooltip {...tooltipStyle} />
-              <Line type="monotone" dataKey="total" stroke={COLORS[0]} strokeWidth={2} dot={{ fill: COLORS[0], r: 3 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </motion.div>
+            <div className="mt-6">
+              <p className="text-lg font-semibold text-text">{stats.motoristas_em_acao} motoristas em acao agora</p>
+              <p className="mt-1 text-sm text-text-muted">Monitore rotas em andamento e acompanhe os times.</p>
 
-        {/* Pie Chart */}
-        <motion.div
-          variants={staggerItem}
-          initial="initial"
-          animate="animate"
-          className="bg-surface2 border border-border/30 rounded-2xl p-6"
-        >
-          <h2 className="text-text font-semibold mb-4">Alunos por Escola</h2>
-          <ResponsiveContainer width="100%" height={240}>
-            <PieChart>
-              <Pie
-                data={charts.alunos_por_escola}
-                dataKey="total"
-                nameKey="escola"
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                label={({ name }) => name as string}
-                labelLine={{ stroke: 'var(--color-text-muted)' }}
-              >
-                {charts.alunos_por_escola.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                {popularSchools.map((item, index) => (
+                  <div key={item.escola} className="flex items-center gap-2 rounded-full border border-border bg-surface px-2.5 py-1.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface2 text-xs font-semibold text-text">
+                      {item.escola.slice(0, 2).toUpperCase()}
+                    </div>
+                    <span className="text-xs font-medium text-text-muted">{item.escola}</span>
+                    {index === popularSchools.length - 1 && <ArrowRight size={14} className="text-text-muted" />}
+                  </div>
                 ))}
-              </Pie>
-              <Tooltip {...tooltipStyle} />
-            </PieChart>
-          </ResponsiveContainer>
-        </motion.div>
+                {popularSchools.length === 0 && (
+                  <span className="text-sm text-text-muted">Sem escolas para exibir.</span>
+                )}
+              </div>
+            </div>
+          </div>
 
-        {/* Bar Chart */}
-        <motion.div
-          variants={staggerItem}
-          initial="initial"
-          animate="animate"
-          className="bg-surface2 border border-border/30 rounded-2xl p-6"
-        >
-          <h2 className="text-text font-semibold mb-4">Receitas vs Despesas</h2>
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={charts.financeiro_mensal}>
-              <XAxis dataKey="mes" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-              <Tooltip {...tooltipStyle} />
-              <Bar dataKey="receitas" fill={COLORS[2]} name="Receitas" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="despesas" fill={COLORS[5]} name="Despesas" radius={[6, 6, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </motion.div>
+          <div className="rounded-[26px] border border-border bg-surface2 p-4 md:p-6">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <div>
+                <h2 className="font-heading text-xl font-bold text-text">Product view</h2>
+                <p className="text-sm text-text-muted">Rotas realizadas nos ultimos 7 dias</p>
+              </div>
+              <button className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-medium text-text-muted transition-colors hover:text-text">
+                Last 7 days
+              </button>
+            </div>
 
-        {/* Horizontal Bar Chart */}
-        <motion.div
-          variants={staggerItem}
-          initial="initial"
-          animate="animate"
-          className="bg-surface2 border border-border/30 rounded-2xl p-6"
-        >
-          <h2 className="text-text font-semibold mb-4">Atividade por Turno</h2>
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={charts.atividade_por_turno} layout="vertical">
-              <XAxis type="number" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis dataKey="turno" type="category" stroke="var(--color-text-muted)" width={60} fontSize={11} tickLine={false} axisLine={false} />
-              <Tooltip {...tooltipStyle} />
-              <Bar dataKey="rotas" radius={[0, 6, 6, 0]}>
-                {charts.atividade_por_turno.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </motion.div>
+            <div className="mb-4 flex items-end justify-between">
+              <p className="text-4xl font-bold tracking-tight text-text">{routesTotal.toLocaleString('pt-BR')}</p>
+              <span className="rounded-full bg-success-muted px-3 py-1 text-xs font-semibold text-success">Meta semanal</span>
+            </div>
+
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={charts.rotas_por_dia} barCategoryGap={26}>
+                <CartesianGrid stroke="var(--color-border)" strokeDasharray="4 6" vertical={false} />
+                <XAxis
+                  dataKey="data"
+                  stroke="var(--color-text-muted)"
+                  tickFormatter={formatShortDate}
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                <Tooltip {...tooltipStyle} labelFormatter={(label) => `Dia ${formatShortDate(String(label))}`} />
+                <Bar dataKey="total" radius={[10, 10, 0, 0]}>
+                  {charts.rotas_por_dia.map((entry) => (
+                    <Cell
+                      key={entry.data}
+                      fill={entry.total === peakRoutes ? 'var(--color-success)' : 'var(--color-surface3)'}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="rounded-[24px] border border-border bg-surface2 p-5">
+              <h3 className="font-heading text-lg font-bold text-text">Resumo financeiro</h3>
+              <p className="mt-1 text-sm text-text-muted">Receitas vs despesas</p>
+              <div className="mt-4 h-[190px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={charts.financeiro_mensal}>
+                    <XAxis dataKey="mes" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                    <YAxis stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                    <Tooltip {...tooltipStyle} />
+                    <Bar dataKey="receitas" fill="var(--color-success)" radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="despesas" fill="var(--color-danger)" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="rounded-[24px] border border-border bg-surface2 p-5">
+              <h3 className="font-heading text-lg font-bold text-text">Atividade por turno</h3>
+              <p className="mt-1 text-sm text-text-muted">Ultimos 30 dias</p>
+              <div className="mt-4 h-[190px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={charts.atividade_por_turno} layout="vertical">
+                    <XAxis type="number" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                    <YAxis
+                      dataKey="turno"
+                      type="category"
+                      width={74}
+                      tickFormatter={normalizeTurno}
+                      stroke="var(--color-text-muted)"
+                      fontSize={11}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <Tooltip {...tooltipStyle} />
+                    <Bar dataKey="rotas" fill="var(--color-accent)" radius={[0, 8, 8, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside className="space-y-6">
+          <div className="rounded-[24px] border border-border bg-surface2 p-5">
+            <h3 className="font-heading text-lg font-bold text-text">Popular schools</h3>
+            <div className="mt-4 space-y-3">
+              {popularSchools.map((item) => (
+                <div key={item.escola} className="flex items-center gap-3 rounded-2xl bg-surface px-3 py-2.5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface2 text-xs font-semibold text-text">
+                    {item.escola.slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-text">{item.escola}</p>
+                    <p className="text-xs text-text-muted">{item.total} alunos</p>
+                  </div>
+                  <span className="rounded-full bg-success-muted px-2 py-0.5 text-[11px] font-semibold text-success">
+                    Active
+                  </span>
+                </div>
+              ))}
+              {popularSchools.length === 0 && (
+                <p className="text-sm text-text-muted">Sem dados de escolas no momento.</p>
+              )}
+            </div>
+            <button className="mt-4 w-full rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:text-text">
+              All schools
+            </button>
+          </div>
+
+          <div className="rounded-[24px] border border-border bg-surface2 p-5">
+            <h3 className="font-heading text-lg font-bold text-text">Comentarios</h3>
+            <div className="mt-4 space-y-4">
+              {latestActivity.map((item) => (
+                <div key={item.data} className="flex items-start gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-surface text-text-muted">
+                    <Map size={15} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-text">{item.total} rotas registradas em {formatShortDate(item.data)}</p>
+                    <p className="mt-1 text-xs text-text-muted">Atualizacao automatica do painel operacional.</p>
+                  </div>
+                </div>
+              ))}
+              {latestActivity.length === 0 && (
+                <p className="text-sm text-text-muted">Sem atualizacoes recentes.</p>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <StatCard label="Veiculos ativos" value={stats.veiculos_ativos} icon={Truck} />
+            <StatCard label="Rotas hoje" value={stats.rotas_hoje} icon={Activity} />
+          </div>
+        </aside>
       </div>
     </PageTransition>
   );
 }
+
+
+
+

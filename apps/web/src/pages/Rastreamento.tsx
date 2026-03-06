@@ -191,7 +191,7 @@ export function Rastreamento() {
       <div className="w-80 shrink-0">
         <PageHeader title="Rastreamento" subtitle={
           <span className="flex items-center gap-2">
-            <span className={`w-2 h-2 rounded-full ${connected ? 'bg-accent2' : 'bg-warn'}`} />
+            <span className={`w-2 h-2 rounded-full ${connected ? 'bg-success' : 'bg-danger'}`} />
             {connected ? 'Ao vivo' : 'Desconectado'}
           </span>
         } />
@@ -221,7 +221,7 @@ export function Rastreamento() {
                       <p className="text-text-muted text-xs truncate">{loc.rota_nome}</p>
                     )}
                     <div className="flex items-center gap-3 mt-1">
-                      <span className="text-accent2 text-xs">{loc.speed.toFixed(0)} km/h</span>
+                      <span className="text-success text-xs">{loc.speed.toFixed(0)} km/h</span>
                       <span className="text-text-muted text-xs">{formatTime(loc.timestamp)}</span>
                     </div>
                   </div>
@@ -233,10 +233,14 @@ export function Rastreamento() {
       </div>
 
       {/* Mapa */}
-      <div className="flex-1 border border-border/30 rounded-xl overflow-hidden">
+      <div className="flex-1 ui-table-wrap">
         <div ref={mapRef} className="w-full h-full" />
       </div>
     </div>
     </PageTransition>
   );
 }
+
+
+
+

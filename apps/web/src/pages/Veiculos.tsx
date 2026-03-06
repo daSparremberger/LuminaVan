@@ -100,7 +100,7 @@ export function Veiculos() {
           action={
             <button
               onClick={openNew}
-              className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-3 py-2 rounded-xl text-sm font-medium"
+              className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-surface px-3 py-2 rounded-xl text-sm font-medium"
             >
               <Plus size={16} />
             </button>
@@ -118,7 +118,7 @@ export function Veiculos() {
                 className={`w-full text-left bg-surface2 border rounded-xl p-4 transition-colors ${
                   selected?.id === v.id
                     ? 'border-accent'
-                    : 'border-border/30 hover:border-gray-600'
+                    : 'border-border/30 hover:border-border'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -175,7 +175,7 @@ export function Veiculos() {
                 <button
                   onClick={saveMotoristas}
                   disabled={saving}
-                  className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-50"
+                  className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-surface px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-50"
                 >
                   <Save size={14} />
                   {saving ? 'Salvando...' : 'Salvar'}
@@ -267,7 +267,7 @@ export function Veiculos() {
                 value={form.placa}
                 onChange={(e) => setForm({ ...form, placa: e.target.value.toUpperCase() })}
                 placeholder="ABC1D23"
-                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
+                className="w-full ui-input"
               />
             </div>
             <div>
@@ -277,7 +277,7 @@ export function Veiculos() {
                 onChange={(e) => setForm({ ...form, ano: e.target.value })}
                 type="number"
                 placeholder="2020"
-                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
+                className="w-full ui-input"
               />
             </div>
           </div>
@@ -290,7 +290,7 @@ export function Veiculos() {
                 value={form.fabricante}
                 onChange={(e) => setForm({ ...form, fabricante: e.target.value })}
                 placeholder="Fiat"
-                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
+                className="w-full ui-input"
               />
             </div>
             <div>
@@ -299,7 +299,7 @@ export function Veiculos() {
                 value={form.modelo}
                 onChange={(e) => setForm({ ...form, modelo: e.target.value })}
                 placeholder="Ducato"
-                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
+                className="w-full ui-input"
               />
             </div>
           </div>
@@ -313,7 +313,7 @@ export function Veiculos() {
                 onChange={(e) => setForm({ ...form, capacidade: e.target.value })}
                 type="number"
                 placeholder="15"
-                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
+                className="w-full ui-input"
               />
             </div>
             <div>
@@ -326,14 +326,14 @@ export function Veiculos() {
                 type="number"
                 step="0.1"
                 placeholder="8.5"
-                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
+                className="w-full ui-input"
               />
             </div>
           </div>
           <button
             onClick={createVeiculo}
             disabled={!form.placa || !form.fabricante || !form.modelo || !form.capacidade}
-            className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl disabled:opacity-50"
+            className="w-full bg-accent hover:bg-accent-hover text-surface font-semibold py-3 rounded-xl disabled:opacity-50"
           >
             Criar Veiculo
           </button>
@@ -343,3 +343,7 @@ export function Veiculos() {
     </PageTransition>
   );
 }
+
+
+
+

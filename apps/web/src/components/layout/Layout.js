@@ -6,5 +6,5 @@ import { AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 export function Layout() {
     const location = useLocation();
-    return (_jsxs("div", { className: "app-container", children: [_jsx(Sidebar, {}), _jsxs("div", { className: "flex-1 flex flex-col overflow-hidden", children: [_jsx(Header, {}), _jsx("main", { className: "flex-1 overflow-y-auto p-6", children: _jsx(AnimatePresence, { mode: "wait", children: _jsx("div", { children: _jsx(Outlet, {}) }, location.pathname) }) })] })] }));
+    return (_jsxs("div", { className: "app-container gap-3 p-3 md:gap-4 md:p-4", children: [_jsx(Sidebar, {}), _jsx("div", { className: "flex min-w-0 flex-1 flex-col overflow-hidden", children: _jsxs("div", { className: "flex flex-1 flex-col overflow-hidden rounded-[28px] border border-border bg-surface shadow-[0_30px_60px_rgba(16,18,20,0.07)]", children: [_jsx(Header, {}), _jsx("main", { className: "flex-1 overflow-y-auto px-4 pb-4 md:px-6 md:pb-6", children: _jsx(AnimatePresence, { mode: "wait", children: _jsx("div", { children: _jsx(Outlet, {}) }, location.pathname) }) })] }) })] }));
 }

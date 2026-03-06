@@ -58,46 +58,34 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
-      <div
-        className="w-full max-w-md animate-fade-in"
-        style={{
-          animation: 'fadeSlideIn 0.3s ease-out forwards',
-        }}
-      >
-        {/* Titulo */}
-        <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
+    <div className="app-container items-center justify-center px-4">
+      <div className="w-full max-w-md rounded-[28px] border border-border bg-surface p-8 shadow-[0_28px_52px_rgba(16,18,20,0.14)]">
+        <h1 className="font-heading mb-3 text-2xl font-bold text-text md:text-3xl">
           Entrar na conta
         </h1>
 
-        {/* Subtitulo */}
-        <p className="text-zinc-400 text-sm md:text-base mb-8">
+        <p className="mb-8 text-sm text-text-muted md:text-base">
           {conviteToken
             ? 'Voce foi convidado para acessar o sistema. Faca login com sua conta Google para continuar.'
             : 'Acesse sua conta para gerenciar o transporte escolar da sua regiao.'
           }
         </p>
 
-        {/* Erro */}
         {error && (
-          <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
+          <div className="mb-6 rounded-2xl border border-danger/30 bg-danger-muted px-4 py-3 text-sm text-danger">
             {error}
           </div>
         )}
 
-        {/* Botao Google */}
         <button
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full bg-zinc-900 border border-zinc-800 text-white py-4 px-6 rounded-xl font-medium
-                     hover:bg-zinc-800 hover:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed
-                     flex items-center justify-center gap-3 transition-all duration-200"
+          className="flex w-full items-center justify-center gap-3 rounded-full border border-border bg-surface2 px-6 py-4 font-medium text-text transition-all duration-200 hover:bg-surface disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? (
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-text/20 border-t-text" />
           ) : (
             <>
-              {/* Google Logo */}
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
                   fill="#4285F4"
@@ -121,25 +109,14 @@ export function LoginPage() {
           )}
         </button>
 
-        {/* Rodape */}
-        <p className="text-zinc-600 text-xs text-center mt-8">
+        <p className="mt-8 text-center text-xs text-text-muted">
           Ao continuar, voce concorda com os termos de uso do sistema.
         </p>
       </div>
-
-      {/* CSS Animation */}
-      <style>{`
-        @keyframes fadeSlideIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }
+
+
+
+

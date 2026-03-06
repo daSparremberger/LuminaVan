@@ -13,15 +13,17 @@ export function PageHeader({ title, subtitle, action }: PageHeaderProps) {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="flex items-center justify-between mb-8"
+      className="mb-6 flex flex-col gap-4 md:mb-7 md:flex-row md:items-center md:justify-between"
     >
       <div>
-        <h1 className="text-2xl font-bold text-text">{title}</h1>
+        <h1 className="font-heading text-2xl font-bold text-text md:text-[30px]">{title}</h1>
         {subtitle && (
-          <p className="text-sm text-text-muted mt-1">{subtitle}</p>
+          <p className="mt-1 text-sm text-text-muted">{subtitle}</p>
         )}
       </div>
-      {action && <div>{action}</div>}
+      {action && <div className="flex items-center gap-2">{action}</div>}
     </motion.div>
   );
 }
+
+

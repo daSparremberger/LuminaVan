@@ -59,3 +59,5 @@ export function RouteMap({ paradas, geojson }: Props) {
 
   return <div ref={ref} className="w-full h-80 rounded-xl overflow-hidden border border-surface2" />;
 }
+
+

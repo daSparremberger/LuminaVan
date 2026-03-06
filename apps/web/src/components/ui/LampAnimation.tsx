@@ -157,3 +157,5 @@ export function LampAnimation({ height = 180 }: { height?: number }) {
     />
   );
 }
+
+

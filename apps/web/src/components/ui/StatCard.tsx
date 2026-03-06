@@ -16,29 +16,28 @@ export function StatCard({ label, value, icon: Icon, trend, subtitle }: StatCard
       variants={staggerItem}
       whileHover={{ y: -2 }}
       transition={{ duration: 0.15 }}
-      className="bg-surface border border-border/50 rounded-2xl p-5
-                 hover:shadow-md transition-all duration-200"
+      className="rounded-3xl border border-border bg-surface p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_28px_rgba(16,18,20,0.08)]"
     >
-      <div className="flex items-center gap-3 mb-4">
+      <div className="mb-4 flex items-center gap-3">
         <Icon size={18} strokeWidth={1.5} className="text-text-muted" />
         <span className="text-sm font-medium text-text-muted">{label}</span>
       </div>
 
       <div className="flex items-end justify-between">
         <div>
-          <p className="text-3xl font-semibold text-text tracking-tight">{value}</p>
+          <p className="text-3xl font-semibold tracking-tight text-text">{value}</p>
           {subtitle && (
-            <p className="text-xs text-text-muted mt-1">{subtitle}</p>
+            <p className="mt-1 text-xs text-text-muted">{subtitle}</p>
           )}
         </div>
 
         {trend && (
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium ${
-            trend.positive
-              ? 'bg-success-muted text-success'
-              : 'bg-danger-muted text-danger'
-          }`}>
-            <span>{trend.positive ? '↑' : '↓'}</span>
+          <div
+            className={`flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium ${
+              trend.positive ? 'bg-success-muted text-success' : 'bg-danger-muted text-danger'
+            }`}
+          >
+            <span>{trend.positive ? '+' : '-'}</span>
             <span>{Math.abs(trend.value)}%</span>
           </div>
         )}
@@ -46,3 +45,5 @@ export function StatCard({ label, value, icon: Icon, trend, subtitle }: StatCard
     </motion.div>
   );
 }
+
+

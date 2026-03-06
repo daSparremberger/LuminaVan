@@ -24,59 +24,54 @@ export function Header() {
   const title = pageTitles[location.pathname] || 'Dashboard';
 
   return (
-    <header className="h-14 px-6 flex items-center justify-between border-b border-border/50 bg-surface">
-      {/* Left - Title */}
-      <h1 className="text-xl font-semibold text-text">{title}</h1>
+    <header className="flex h-[76px] items-center justify-between border-b border-border/80 px-4 md:px-6">
+      <h1 className="font-heading text-xl font-bold text-text md:text-2xl">{title}</h1>
 
-      {/* Center - Search */}
-      <div className="flex-1 max-w-md mx-8">
-        <div className="relative">
+      <div className="mx-4 hidden max-w-md flex-1 md:block lg:mx-8">
+        <label className="relative block">
           <Search
             size={18}
             strokeWidth={1.5}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
+            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
           />
           <input
             type="text"
             placeholder="Search anything..."
-            className="w-full h-10 pl-11 pr-4 bg-surface2 border border-border/50 rounded-xl
-                       text-text text-sm placeholder:text-text-muted
-                       focus:outline-none focus:border-text-muted focus:bg-surface
-                       transition-all duration-200"
+            className="h-11 w-full rounded-full border border-border bg-surface2 pl-11 pr-4 text-sm text-text placeholder:text-text-muted transition-all duration-200 focus:border-success/50 focus:outline-none"
           />
-        </div>
+        </label>
       </div>
 
-      {/* Right - Actions */}
-      <div className="flex items-center gap-2">
-        <button className="h-9 px-4 bg-accent hover:bg-accent-hover text-surface text-sm font-medium
-                          rounded-xl flex items-center gap-2 transition-colors duration-150">
+      <div className="flex items-center gap-2 md:gap-3">
+        <button className="hidden h-10 items-center gap-2 rounded-full bg-accent px-5 text-sm font-medium text-surface transition-colors duration-150 hover:bg-accent-hover sm:flex">
           <Plus size={16} strokeWidth={2} />
           <span>Create</span>
         </button>
 
-        <ThemeToggle />
+        <div className="flex items-center gap-1 rounded-full border border-border bg-surface2 p-1">
+          <ThemeToggle />
 
-        <button className="relative w-9 h-9 rounded-xl hover:bg-surface2
-                          flex items-center justify-center transition-colors duration-150">
-          <Bell size={18} strokeWidth={1.5} className="text-text-muted" />
-        </button>
+          <button className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 hover:bg-surface">
+            <Bell size={18} strokeWidth={1.5} className="text-text-muted" />
+          </button>
 
-        <button className="relative w-9 h-9 rounded-xl hover:bg-surface2
-                          flex items-center justify-center transition-colors duration-150">
-          <MessageCircle size={18} strokeWidth={1.5} className="text-text-muted" />
-        </button>
+          <button className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 hover:bg-surface">
+            <MessageCircle size={18} strokeWidth={1.5} className="text-text-muted" />
+          </button>
+        </div>
 
-        <button className="w-9 h-9 rounded-xl overflow-hidden bg-surface2 flex items-center justify-center">
+        <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-border bg-surface2">
           {user?.nome ? (
-            <span className="text-sm font-medium text-text">
+            <span className="text-sm font-semibold text-text">
               {user.nome.charAt(0).toUpperCase()}
             </span>
           ) : (
             <span className="text-sm font-medium text-text-muted">?</span>
           )}
-        </button>
+        </div>
       </div>
     </header>
   );
 }
+
+

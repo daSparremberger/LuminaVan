@@ -11,29 +11,37 @@ export function TenantsPage() {
   }, [token]);
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Regioes</h2>
-        <Link to="/admin/tenants/novo" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Nova Regiao</Link>
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="font-heading text-3xl font-bold text-text">Regioes</h2>
+        <Link to="/admin/tenants/novo" className="ui-btn-primary">Nova Regiao</Link>
       </div>
-      <div className="bg-zinc-900 rounded-lg overflow-hidden">
+      <div className="ui-table-wrap">
         <table className="w-full">
-          <thead className="bg-zinc-800"><tr>
-            <th className="text-left p-4 text-zinc-400">Nome</th>
-            <th className="text-left p-4 text-zinc-400">Cidade</th>
-            <th className="text-left p-4 text-zinc-400">Estado</th>
-            <th className="text-left p-4 text-zinc-400">Gestores</th>
-            <th className="text-left p-4 text-zinc-400">Status</th>
-            <th className="text-left p-4 text-zinc-400">Acoes</th>
+          <thead className="ui-table-head"><tr>
+            <th className="p-4 text-left">Nome</th>
+            <th className="p-4 text-left">Cidade</th>
+            <th className="p-4 text-left">Estado</th>
+            <th className="p-4 text-left">Gestores</th>
+            <th className="p-4 text-left">Status</th>
+            <th className="p-4 text-left">Acoes</th>
           </tr></thead>
           <tbody>
             {tenants.map((t) => (
-              <tr key={t.id} className="border-t border-zinc-800">
-                <td className="p-4 text-white">{t.nome}</td>
-                <td className="p-4 text-zinc-400">{t.cidade}</td>
-                <td className="p-4 text-zinc-400">{t.estado}</td>
-                <td className="p-4 text-zinc-400">{t.total_gestores}</td>
-                <td className="p-4"><span className={`px-2 py-1 rounded text-xs ${t.ativo ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>{t.ativo ? 'Ativo' : 'Inativo'}</span></td>
-                <td className="p-4"><Link to={`/admin/tenants/${t.id}`} className="text-blue-500 hover:underline">Ver</Link></td>
+              <tr key={t.id} className="ui-table-row">
+                <td className="p-4 text-text">{t.nome}</td>
+                <td className="p-4 text-text-muted">{t.cidade}</td>
+                <td className="p-4 text-text-muted">{t.estado}</td>
+                <td className="p-4 text-text-muted">{t.total_gestores}</td>
+                <td className="p-4">
+                  <span className={`rounded-full px-2 py-1 text-xs ${t.ativo ? 'bg-success-muted text-success' : 'bg-danger-muted text-danger'}`}>
+                    {t.ativo ? 'Ativo' : 'Inativo'}
+                  </span>
+                </td>
+                <td className="p-4">
+                  <Link to={`/admin/tenants/${t.id}`} className="text-sm font-medium text-text hover:text-accent">
+                    Ver
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -42,3 +50,7 @@ export function TenantsPage() {
     </div>
   );
 }
+
+
+
+

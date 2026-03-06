@@ -111,7 +111,7 @@ export function Motoristas() {
           action={
             <button
               onClick={openNew}
-              className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-3 py-2 rounded-xl text-sm font-medium"
+              className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-surface px-3 py-2 rounded-xl text-sm font-medium"
             >
               <Plus size={16} />
             </button>
@@ -129,7 +129,7 @@ export function Motoristas() {
                 className={`w-full text-left bg-surface2 border rounded-xl p-4 transition-colors ${
                   selected?.id === m.id
                     ? 'border-accent'
-                    : 'border-border/30 hover:border-gray-600'
+                    : 'border-border/30 hover:border-border'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -137,9 +137,9 @@ export function Motoristas() {
                     <div className="flex items-center gap-2">
                       <p className="text-text font-medium truncate">{m.nome}</p>
                       {m.cadastro_completo ? (
-                        <span className="text-accent2 text-xs bg-accent2/10 px-2 py-0.5 rounded-full shrink-0">Ativo</span>
+                        <span className="text-success text-xs bg-success-muted px-2 py-0.5 rounded-full shrink-0">Ativo</span>
                       ) : (
-                        <span className="text-warn text-xs bg-warn/10 px-2 py-0.5 rounded-full shrink-0">Pendente</span>
+                        <span className="text-danger text-xs bg-danger-muted px-2 py-0.5 rounded-full shrink-0">Pendente</span>
                       )}
                     </div>
                     <p className="text-text-muted text-xs mt-1">{m.telefone || 'Sem telefone'}</p>
@@ -191,9 +191,9 @@ export function Motoristas() {
                 <p className="text-text-muted text-sm mt-1">{selectedStats.motorista.telefone || 'Sem telefone'}</p>
                 <div className="flex items-center gap-3 mt-2">
                   {selectedStats.motorista.cadastro_completo ? (
-                    <span className="text-accent2 text-xs bg-accent2/10 px-3 py-1 rounded-full">Ativo</span>
+                    <span className="text-success text-xs bg-success-muted px-3 py-1 rounded-full">Ativo</span>
                   ) : (
-                    <span className="text-warn text-xs bg-warn/10 px-3 py-1 rounded-full">Pendente</span>
+                    <span className="text-danger text-xs bg-danger-muted px-3 py-1 rounded-full">Pendente</span>
                   )}
                   <span className="text-text-muted text-xs">
                     Desde {formatDate(selectedStats.motorista.criado_em)}
@@ -213,14 +213,14 @@ export function Motoristas() {
               </div>
               <div className="rounded-xl p-4 border border-border/30">
                 <div className="flex items-center gap-2 mb-2">
-                  <MapPin size={16} className="text-accent2" />
+                  <MapPin size={16} className="text-success" />
                   <p className="text-text-muted text-xs">Rotas Realizadas</p>
                 </div>
                 <p className="text-2xl font-bold text-text">{selectedStats.stats.total_rotas}</p>
               </div>
               <div className="rounded-xl p-4 border border-border/30">
                 <div className="flex items-center gap-2 mb-2">
-                  <Users size={16} className="text-warn" />
+                  <Users size={16} className="text-danger" />
                   <p className="text-text-muted text-xs">Alunos Transportados</p>
                 </div>
                 <p className="text-2xl font-bold text-text">{selectedStats.stats.total_alunos}</p>
@@ -255,7 +255,7 @@ export function Motoristas() {
                       </div>
                       <div className="flex items-center gap-4 text-xs">
                         <div className="text-center">
-                          <p className="text-accent2 font-medium">{r.alunos_embarcados}</p>
+                          <p className="text-success font-medium">{r.alunos_embarcados}</p>
                           <p className="text-text-muted">alunos</p>
                         </div>
                         {r.km_total && (
@@ -294,15 +294,15 @@ export function Motoristas() {
               <input value={conviteUrl} readOnly className="flex-1 bg-transparent text-text text-sm focus:outline-none" />
               <button onClick={copyUrl} className="text-accent hover:text-accent/80"><Copy size={18} /></button>
             </div>
-            <button onClick={() => setModalOpen(false)} className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl">Fechar</button>
+            <button onClick={() => setModalOpen(false)} className="w-full bg-accent hover:bg-accent-hover text-surface font-semibold py-3 rounded-xl">Fechar</button>
           </div>
         ) : (
           <div className="space-y-4">
             <div><label className="block text-sm text-text-muted mb-1">Nome</label>
-              <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" /></div>
+              <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className="w-full ui-input" /></div>
             <div><label className="block text-sm text-text-muted mb-1">Telefone</label>
-              <input value={form.telefone} onChange={(e) => setForm({ ...form, telefone: e.target.value })} className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" /></div>
-            <button onClick={save} className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl">{editing ? 'Salvar' : 'Criar e Gerar Convite'}</button>
+              <input value={form.telefone} onChange={(e) => setForm({ ...form, telefone: e.target.value })} className="w-full ui-input" /></div>
+            <button onClick={save} className="w-full bg-accent hover:bg-accent-hover text-surface font-semibold py-3 rounded-xl">{editing ? 'Salvar' : 'Criar e Gerar Convite'}</button>
           </div>
         )}
       </Modal>
@@ -310,3 +310,7 @@ export function Motoristas() {
     </PageTransition>
   );
 }
+
+
+
+

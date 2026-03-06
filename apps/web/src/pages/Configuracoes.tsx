@@ -92,7 +92,7 @@ export function Configuracoes() {
               <select
                 value={idioma}
                 onChange={(e) => setIdioma(e.target.value)}
-                className="w-48 h-10 px-3 bg-surface3 border border-border/50 rounded-xl text-text text-sm focus:outline-none focus:border-accent cursor-pointer"
+                className="w-48 h-10 px-3 bg-surface3 border border-border/50 rounded-xl text-text text-sm focus:border-success/50 focus:outline-none cursor-pointer"
               >
                 {idiomas.map(i => (
                   <option key={i.code} value={i.code}>{i.label}</option>
@@ -113,7 +113,7 @@ export function Configuracoes() {
               <select
                 value={formatoData}
                 onChange={(e) => setFormatoData(e.target.value)}
-                className="w-48 h-10 px-3 bg-surface3 border border-border/50 rounded-xl text-text text-sm focus:outline-none focus:border-accent cursor-pointer"
+                className="w-48 h-10 px-3 bg-surface3 border border-border/50 rounded-xl text-text text-sm focus:border-success/50 focus:outline-none cursor-pointer"
               >
                 {formatosData.map(f => (
                   <option key={f.code} value={f.code}>{f.label}</option>
@@ -149,3 +149,7 @@ export function Configuracoes() {
     </PageTransition>
   );
 }
+
+
+
+

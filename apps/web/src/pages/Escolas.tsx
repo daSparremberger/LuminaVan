@@ -146,7 +146,7 @@ export function Escolas() {
         title="Escolas"
         subtitle={`${escolas.length} escola(s) cadastrada(s)`}
         action={
-          <button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-4 py-2 rounded-xl text-sm font-medium">
+          <button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-surface px-4 py-2 rounded-xl text-sm font-medium">
             <Plus size={18} /> Nova Escola
           </button>
         }
@@ -155,9 +155,9 @@ export function Escolas() {
       {escolas.length === 0 ? (
         <EmptyState icon={School} message="Nenhuma escola cadastrada" />
       ) : (
-        <div className="border border-border/30 rounded-xl overflow-hidden">
+        <div className="ui-table-wrap">
           <table className="w-full">
-            <thead className="bg-surface2 text-left text-sm text-text-muted">
+            <thead className="ui-table-head">
               <tr>
                 <th className="px-4 py-3">Nome</th>
                 <th className="px-4 py-3">Endereco</th>
@@ -169,7 +169,7 @@ export function Escolas() {
             <tbody className="text-sm">
               {escolas.map((e) => (
                 <Fragment key={e.id}>
-                  <tr className="border-t border-border/30 hover:bg-surface2">
+                  <tr className="ui-table-row">
                     <td className="px-4 py-3 text-text">{e.nome}</td>
                     <td className="px-4 py-3 text-text-muted">{e.endereco}</td>
                     <td className="px-4 py-3 text-text-muted">
@@ -220,12 +220,12 @@ export function Escolas() {
           <div>
             <label className="block text-sm text-text-muted mb-1">Nome</label>
             <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })}
-              className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" />
+              className="w-full ui-input" />
           </div>
           <div>
             <label className="block text-sm text-text-muted mb-1">Endereco</label>
             <input value={form.endereco} onChange={(e) => setForm({ ...form, endereco: e.target.value })}
-              className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" />
+              className="w-full ui-input" />
           </div>
           <div>
             <label className="block text-sm text-text-muted mb-2">Turnos</label>
@@ -249,7 +249,7 @@ export function Escolas() {
                   <select
                     value={c.cargo}
                     onChange={(e) => updateContato(i, 'cargo', e.target.value)}
-                    className="bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:outline-none focus:border-accent"
+                    className="bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success/50 focus:outline-none"
                   >
                     {CARGO_OPTIONS.map((cargo) => (
                       <option key={cargo} value={cargo}>{cargo}</option>
@@ -259,13 +259,13 @@ export function Escolas() {
                     placeholder="Nome"
                     value={c.nome}
                     onChange={(e) => updateContato(i, 'nome', e.target.value)}
-                    className="flex-1 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:outline-none focus:border-accent"
+                    className="flex-1 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success/50 focus:outline-none"
                   />
                   <input
                     placeholder="Telefone"
                     value={c.telefone}
                     onChange={(e) => updateContato(i, 'telefone', e.target.value)}
-                    className="w-32 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:outline-none focus:border-accent"
+                    className="w-32 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success/50 focus:outline-none"
                   />
                   <button
                     onClick={() => removeContato(i)}
@@ -286,7 +286,7 @@ export function Escolas() {
             </div>
           </div>
 
-          <button onClick={save} className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl">
+          <button onClick={save} className="w-full bg-accent hover:bg-accent-hover text-surface font-semibold py-3 rounded-xl">
             {editing ? 'Salvar' : 'Criar'}
           </button>
         </div>
@@ -295,3 +295,7 @@ export function Escolas() {
     </PageTransition>
   );
 }
+
+
+
+

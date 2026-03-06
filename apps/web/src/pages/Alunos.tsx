@@ -84,18 +84,18 @@ export function Alunos() {
     setExpandedSections(s => ({ ...s, [section]: !s[section] }));
   }
 
-  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all duration-200";
+  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:border-success/50 focus:outline-none transition-all duration-200";
 
   return (
     <PageTransition>
     <div>
       <PageHeader title="Alunos" subtitle={`${alunos.length} aluno(s)`}
-        action={<button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-4 py-2 rounded-xl text-sm font-medium"><Plus size={18} /> Novo Aluno</button>} />
+        action={<button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-surface px-4 py-2 rounded-xl text-sm font-medium"><Plus size={18} /> Novo Aluno</button>} />
 
       {alunos.length === 0 ? <EmptyState icon={Users} message="Nenhum aluno cadastrado" /> : (
-        <div className="border border-border/30 rounded-xl overflow-hidden">
+        <div className="ui-table-wrap">
           <table className="w-full">
-            <thead className="bg-surface2 text-left text-sm text-text-muted">
+            <thead className="ui-table-head">
               <tr>
                 <th className="px-4 py-3">Nome</th>
                 <th className="px-4 py-3">Escola</th>
@@ -107,7 +107,7 @@ export function Alunos() {
             </thead>
             <tbody className="text-sm">
               {alunos.map((a) => (
-                <tr key={a.id} className="border-t border-border/30 hover:bg-surface2">
+                <tr key={a.id} className="ui-table-row">
                   <td className="px-4 py-3 text-text">{a.nome}</td>
                   <td className="px-4 py-3 text-text-muted">{a.escola_nome || '-'}</td>
                   <td className="px-4 py-3 text-text-muted capitalize">{a.turno}</td>
@@ -165,7 +165,7 @@ export function Alunos() {
           </div>
 
           {/* Responsavel - Collapsible */}
-          <div className="border border-border/30 rounded-xl overflow-hidden">
+          <div className="ui-table-wrap">
             <button type="button" onClick={() => toggleSection('responsavel')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-text font-medium">
               <span>Dados do Responsavel</span>
               {expandedSections.responsavel ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -189,7 +189,7 @@ export function Alunos() {
           </div>
 
           {/* Contrato - Collapsible */}
-          <div className="border border-border/30 rounded-xl overflow-hidden">
+          <div className="ui-table-wrap">
             <button type="button" onClick={() => toggleSection('contrato')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-text font-medium">
               <span>Contrato</span>
               {expandedSections.contrato ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -209,7 +209,7 @@ export function Alunos() {
           </div>
 
           {/* Saude - Collapsible */}
-          <div className="border border-border/30 rounded-xl overflow-hidden">
+          <div className="ui-table-wrap">
             <button type="button" onClick={() => toggleSection('saude')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-text font-medium">
               <span>Saude e Observacoes</span>
               {expandedSections.saude ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -225,7 +225,7 @@ export function Alunos() {
           </div>
 
           {/* Biometria Facial - Collapsible */}
-          <div className="border border-border/30 rounded-xl overflow-hidden">
+          <div className="ui-table-wrap">
             <button type="button" onClick={() => toggleSection('biometria')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-text font-medium">
               <span className="flex items-center gap-2"><Camera size={18} />Biometria Facial</span>
               {expandedSections.biometria ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
@@ -241,7 +241,7 @@ export function Alunos() {
                   Capture 5 fotos do rosto do aluno para habilitar check-in por reconhecimento facial.
                 </p>
                 <button type="button" onClick={() => alert('Funcionalidade de captura facial sera implementada em breve')}
-                  className="bg-accent hover:bg-accent/90 text-text px-4 py-2 rounded-xl text-sm">
+                  className="bg-accent hover:bg-accent-hover text-surface px-4 py-2 rounded-xl text-sm">
                   Capturar Fotos
                 </button>
               </div>
@@ -249,7 +249,7 @@ export function Alunos() {
           </div>
 
           <button onClick={save} disabled={!form.nome || !form.endereco || !form.escola_id}
-            className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl disabled:opacity-50">
+            className="w-full bg-accent hover:bg-accent-hover text-surface font-semibold py-3 rounded-xl disabled:opacity-50">
             {editing ? 'Salvar Alteracoes' : 'Cadastrar Aluno'}
           </button>
         </div>
@@ -258,3 +258,7 @@ export function Alunos() {
     </PageTransition>
   );
 }
+
+
+
+

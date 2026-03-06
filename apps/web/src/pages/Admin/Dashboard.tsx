@@ -16,15 +16,19 @@ export function AdminDashboard() {
   ];
   return (
     <div>
-      <h2 className="text-2xl font-bold text-white mb-6">Dashboard</h2>
-      <div className="grid grid-cols-4 gap-4">
+      <h2 className="font-heading mb-6 text-3xl font-bold text-text">Dashboard</h2>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
-          <div key={card.label} className="bg-zinc-900 rounded-lg p-6">
-            <p className="text-zinc-500 text-sm">{card.label}</p>
-            <p className="text-3xl font-bold text-white mt-1">{card.value}</p>
+          <div key={card.label} className="ui-panel p-6">
+            <p className="text-sm text-text-muted">{card.label}</p>
+            <p className="mt-1 text-3xl font-bold text-text">{card.value}</p>
           </div>
         ))}
       </div>
     </div>
   );
 }
+
+
+
+

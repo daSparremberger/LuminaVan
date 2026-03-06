@@ -40,43 +40,43 @@ export function ConvitePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <p className="text-zinc-400">Validando convite...</p>
+      <div className="app-container items-center justify-center">
+        <p className="text-text-muted">Validando convite...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <div className="bg-zinc-900 p-8 rounded-lg max-w-md w-full text-center">
-          <h1 className="text-xl font-bold text-red-500 mb-4">Convite Invalido</h1>
-          <p className="text-zinc-400">{error}</p>
+      <div className="app-container items-center justify-center px-4">
+        <div className="w-full max-w-md rounded-[28px] border border-border bg-surface p-8 text-center shadow-[0_28px_52px_rgba(16,18,20,0.14)]">
+          <h1 className="mb-4 text-xl font-bold text-danger">Convite Invalido</h1>
+          <p className="text-text-muted">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-      <div className="bg-zinc-900 p-8 rounded-lg max-w-md w-full">
-        <h1 className="text-2xl font-bold text-white mb-2">Convite Recebido</h1>
-        <p className="text-zinc-400 mb-6">
+    <div className="app-container items-center justify-center px-4">
+      <div className="w-full max-w-md rounded-[28px] border border-border bg-surface p-8 shadow-[0_28px_52px_rgba(16,18,20,0.14)]">
+        <h1 className="font-heading mb-2 text-2xl font-bold text-text">Convite Recebido</h1>
+        <p className="mb-6 text-text-muted">
           Voce foi convidado para ser{' '}
-          <span className="text-blue-400 font-medium">
+          <span className="font-medium text-success">
             {convite?.tipo === 'gestor' ? 'Gestor' : 'Motorista'}
           </span>{' '}
-          em <span className="text-white font-medium">{convite?.tenant.nome}</span>
+          em <span className="font-medium text-text">{convite?.tenant.nome}</span>
           {convite?.tenant.cidade && ` - ${convite.tenant.cidade}`}
         </p>
         {convite?.email_restrito && (
-          <p className="text-zinc-500 text-sm mb-4">
+          <p className="mb-4 text-sm text-text-muted">
             Este convite e restrito ao email: {convite.email_restrito}
           </p>
         )}
         <button
           onClick={() => navigate(`/login?convite=${token}`)}
-          className="w-full bg-blue-600 text-white py-3 px-4 rounded font-medium hover:bg-blue-700"
+          className="ui-btn-primary w-full py-3"
         >
           Aceitar Convite
         </button>
@@ -84,3 +84,7 @@ export function ConvitePage() {
     </div>
   );
 }
+
+
+
+

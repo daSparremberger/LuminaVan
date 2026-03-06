@@ -58,13 +58,13 @@ export function Rotas() {
       {/* Lista de rotas */}
       <div className="w-80 shrink-0">
         <PageHeader title="Rotas" subtitle={`${rotas.length} rota(s)`}
-          action={<button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-3 py-2 rounded-xl text-sm font-medium"><Plus size={16} /></button>} />
+          action={<button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-surface px-3 py-2 rounded-xl text-sm font-medium"><Plus size={16} /></button>} />
 
         {rotas.length === 0 ? <EmptyState icon={Map} message="Nenhuma rota" /> : (
           <div className="space-y-2">
             {rotas.map((r) => (
               <button key={r.id} onClick={() => selectRota(r)}
-                className={`w-full text-left bg-surface2 border rounded-xl p-4 transition-colors ${selected?.id === r.id ? 'border-accent' : 'border-border/30 hover:border-gray-600'}`}>
+                className={`w-full text-left bg-surface2 border rounded-xl p-4 transition-colors ${selected?.id === r.id ? 'border-accent' : 'border-border/30 hover:border-border'}`}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-text font-medium">{r.nome}</p>
@@ -111,13 +111,13 @@ export function Rotas() {
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div><label className="block text-sm text-text-muted mb-1">Nome</label>
-              <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" /></div>
+              <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className="w-full ui-input" /></div>
             <div><label className="block text-sm text-text-muted mb-1">Veiculo</label>
-              <select value={form.veiculo_id} onChange={(e) => setForm({ ...form, veiculo_id: e.target.value })} className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent">
+              <select value={form.veiculo_id} onChange={(e) => setForm({ ...form, veiculo_id: e.target.value })} className="w-full ui-input">
                 {veiculos.map((v) => <option key={v.id} value={v.id}>{v.placa} - {v.modelo}</option>)}
               </select></div>
             <div><label className="block text-sm text-text-muted mb-1">Turno</label>
-              <select value={form.turno} onChange={(e) => setForm({ ...form, turno: e.target.value })} className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent">
+              <select value={form.turno} onChange={(e) => setForm({ ...form, turno: e.target.value })} className="w-full ui-input">
                 <option value="manha">Manha</option><option value="tarde">Tarde</option><option value="noite">Noite</option>
               </select></div>
           </div>
@@ -135,10 +135,14 @@ export function Rotas() {
             </div>
           </div>
           <button onClick={save} disabled={!form.nome || !form.veiculo_id || form.aluno_ids.length === 0}
-            className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl disabled:opacity-50">Criar Rota</button>
+            className="w-full bg-accent hover:bg-accent-hover text-surface font-semibold py-3 rounded-xl disabled:opacity-50">Criar Rota</button>
         </div>
       </Modal>
     </div>
     </PageTransition>
   );
 }
+
+
+
+

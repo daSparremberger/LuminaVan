@@ -37,7 +37,7 @@ export function Perfil() {
     setSaving(false);
   };
 
-  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all duration-200";
+  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:border-success/50 focus:outline-none transition-all duration-200";
 
   return (
     <PageTransition>
@@ -163,3 +163,7 @@ export function Perfil() {
     </PageTransition>
   );
 }
+
+
+
+

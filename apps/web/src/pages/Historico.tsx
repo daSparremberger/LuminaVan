@@ -24,9 +24,9 @@ export function Historico() {
       <PageHeader title="Historico" subtitle="Ultimas execucoes de rotas" />
 
       {historico.length === 0 ? <EmptyState icon={History} message="Nenhum historico de execucao" /> : (
-        <div className="border border-border/30 rounded-xl overflow-hidden">
+        <div className="ui-table-wrap">
           <table className="w-full">
-            <thead className="bg-surface2 text-left text-sm text-text-muted">
+            <thead className="ui-table-head">
               <tr>
                 <th className="px-4 py-3">Data</th>
                 <th className="px-4 py-3">Rota</th>
@@ -38,12 +38,12 @@ export function Historico() {
             </thead>
             <tbody className="text-sm">
               {historico.map((h) => (
-                <tr key={h.id} className="border-t border-border/30 hover:bg-surface2">
+                <tr key={h.id} className="ui-table-row">
                   <td className="px-4 py-3 text-text">{formatDate(h.data_inicio)}</td>
                   <td className="px-4 py-3 text-text-muted">{h.rota_nome || '-'}</td>
                   <td className="px-4 py-3 text-text-muted">{h.motorista_nome || '-'}</td>
-                  <td className="px-4 py-3 text-accent2">{h.alunos_embarcados}</td>
-                  <td className="px-4 py-3 text-warn">{h.alunos_pulados}</td>
+                  <td className="px-4 py-3 text-success">{h.alunos_embarcados}</td>
+                  <td className="px-4 py-3 text-danger">{h.alunos_pulados}</td>
                   <td className="px-4 py-3 text-text-muted">{h.km_total?.toFixed(1) || '-'}</td>
                 </tr>
               ))}
@@ -55,3 +55,7 @@ export function Historico() {
     </PageTransition>
   );
 }
+
+
+
+

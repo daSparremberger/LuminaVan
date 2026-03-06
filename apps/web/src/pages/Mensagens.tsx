@@ -171,7 +171,7 @@ export function Mensagens() {
                           {conversa.participante_nome}
                         </span>
                         {conversa.nao_lidas > 0 && (
-                          <span className="bg-accent text-text text-xs px-2 py-0.5 rounded-full shrink-0">
+                          <span className="bg-accent text-surface text-xs px-2 py-0.5 rounded-full shrink-0">
                             {conversa.nao_lidas}
                           </span>
                         )}
@@ -202,7 +202,7 @@ export function Mensagens() {
                         onClick={() => startConversation(motorista)}
                         className="w-full p-4 flex items-center gap-3 hover:bg-surface2/50 transition-colors text-left border-b border-border/30"
                       >
-                        <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-surface3 flex items-center justify-center shrink-0">
                           <User size={18} className="text-text-muted" />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -255,7 +255,7 @@ export function Mensagens() {
                           className={clsx(
                             'max-w-[70%] px-4 py-2 rounded-2xl',
                             isFromMe
-                              ? 'bg-accent text-text rounded-br-sm'
+                              ? 'bg-accent text-surface rounded-br-sm'
                               : 'bg-surface2 text-text rounded-bl-sm'
                           )}
                         >
@@ -285,7 +285,7 @@ export function Mensagens() {
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Digite sua mensagem..."
-                    className="flex-1 bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent placeholder-gray-500"
+                    className="flex-1 ui-input placeholder:text-text-muted"
                   />
                   <button
                     onClick={sendMessage}
@@ -293,7 +293,7 @@ export function Mensagens() {
                     className={clsx(
                       'px-4 py-3 rounded-xl transition-colors',
                       newMessage.trim() && !sending
-                        ? 'bg-accent hover:bg-accent/90 text-text'
+                        ? 'bg-accent hover:bg-accent-hover text-surface'
                         : 'bg-surface2 text-text-muted cursor-not-allowed'
                     )}
                   >
@@ -314,3 +314,7 @@ export function Mensagens() {
     </PageTransition>
   );
 }
+
+
+
+
