@@ -180,15 +180,15 @@ export function Rastreamento() {
   function formatTime(timestamp: number) {
     const diff = Date.now() - timestamp;
     if (diff < 60000) return 'agora';
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}min atras`;
+    if (diff < 3600000) return `${Math.floor(diff / 60000)}min atrás`;
     return new Date(timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   }
 
   return (
     <PageTransition>
-    <div className="flex gap-6 h-[calc(100vh-48px)]">
+    <div className="flex h-full min-h-0 gap-6">
       {/* Lista de motoristas */}
-      <div className="w-80 shrink-0">
+      <div className="w-80 shrink-0 overflow-y-auto pr-1">
         <PageHeader title="Rastreamento" subtitle={
           <span className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full ${connected ? 'bg-success' : 'bg-danger'}`} />
@@ -233,7 +233,7 @@ export function Rastreamento() {
       </div>
 
       {/* Mapa */}
-      <div className="flex-1 ui-table-wrap">
+      <div className="min-h-0 flex-1 ui-table-wrap">
         <div ref={mapRef} className="w-full h-full" />
       </div>
     </div>

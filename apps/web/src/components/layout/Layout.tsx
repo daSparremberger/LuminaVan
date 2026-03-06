@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 
 export function Layout() {
   const location = useLocation();
-  const isDashboard = location.pathname === '/dashboard';
 
   return (
     <div className="app-container gap-3 p-3 md:gap-4 md:p-4">
@@ -14,9 +13,9 @@ export function Layout() {
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <div className="flex flex-1 flex-col overflow-hidden rounded-[28px] border border-border bg-surface shadow-[0_30px_60px_rgba(16,18,20,0.07)]">
           <Header />
-          <main className={`flex-1 px-4 pb-4 md:px-6 md:pb-6 ${isDashboard ? 'overflow-hidden' : 'overflow-y-auto'}`}>
+          <main className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-4 md:px-6 md:pb-6 md:pt-6">
             <AnimatePresence mode="wait">
-              <div key={location.pathname}>
+              <div key={location.pathname} className="h-full">
                 <Outlet />
               </div>
             </AnimatePresence>

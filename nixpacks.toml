@@ -8,4 +8,4 @@ cmds = ["pnpm install"]
 cmds = ["pnpm --filter web build"]
 
 [start]
-cmd = "npx serve apps/web/dist -l $PORT"
+cmd = "npx serve -s apps/web/dist -l $PORT"

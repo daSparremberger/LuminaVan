@@ -1,37 +1,22 @@
-import { Bell, MessageCircle, Search } from 'lucide-react';
+﻿import { Bell, MessageCircle, Search } from 'lucide-react';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { useAuthStore } from '../../stores/auth';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 
-const pageTitles: Record<string, string> = {
-  '/dashboard': 'Dashboard',
-  '/escolas': 'Escolas',
-  '/alunos': 'Alunos',
-  '/motoristas': 'Motoristas',
-  '/veiculos': 'Veículos',
-  '/rotas': 'Rotas',
-  '/rastreamento': 'Rastreamento',
-  '/historico': 'Histórico',
-  '/financeiro': 'Financeiro',
-  '/mensagens': 'Mensagens',
-  '/perfil': 'Perfil',
-  '/configuracoes': 'Configurações',
-};
-
 const searchablePages = [
-  { route: '/dashboard', terms: ['dashboard', 'painel', 'início'] },
+  { route: '/dashboard', terms: ['dashboard', 'painel', 'inicio', 'início'] },
   { route: '/escolas', terms: ['escola', 'escolas'] },
   { route: '/alunos', terms: ['aluno', 'alunos'] },
   { route: '/motoristas', terms: ['motorista', 'motoristas'] },
-  { route: '/veiculos', terms: ['veículo', 'veiculos', 'veículos'] },
+  { route: '/veiculos', terms: ['veiculo', 'veículo', 'veiculos', 'veículos'] },
   { route: '/rotas', terms: ['rota', 'rotas'] },
   { route: '/rastreamento', terms: ['rastreamento', 'ao vivo', 'mapa'] },
-  { route: '/historico', terms: ['histórico', 'historico'] },
+  { route: '/historico', terms: ['historico', 'histórico'] },
   { route: '/financeiro', terms: ['financeiro', 'receitas', 'despesas'] },
   { route: '/mensagens', terms: ['mensagem', 'mensagens', 'chat'] },
   { route: '/perfil', terms: ['perfil', 'conta'] },
-  { route: '/configuracoes', terms: ['configurações', 'configuracoes', 'ajustes'] },
+  { route: '/configuracoes', terms: ['configuracoes', 'configurações', 'ajustes'] },
 ];
 
 function normalizeText(text: string) {
@@ -44,10 +29,8 @@ function normalizeText(text: string) {
 
 export function Header() {
   const { user } = useAuthStore();
-  const location = useLocation();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
-  const title = pageTitles[location.pathname] || 'Dashboard';
   const normalizedQuery = useMemo(() => normalizeText(query), [query]);
 
   function handleSearch() {
@@ -64,10 +47,8 @@ export function Header() {
 
   return (
     <header className="flex h-[76px] items-center justify-between border-b border-border/80 px-4 md:px-6">
-      <h1 className="font-heading text-xl font-bold text-text md:text-2xl">{title}</h1>
-
-      <div className="mx-4 hidden max-w-md flex-1 md:block lg:mx-8">
-        <label className="relative block" htmlFor="header-search">
+      <div className="mx-3 flex min-w-0 flex-1 max-w-xl md:mx-0">
+        <label className="relative block w-full" htmlFor="header-search">
           <Search
             size={18}
             strokeWidth={1.5}
@@ -120,6 +101,3 @@ export function Header() {
     </header>
   );
 }
-
-
-

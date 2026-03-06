@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+﻿import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, School, Users, Truck, Car, Map, History,
   DollarSign, Radio, MessageCircle, LogOut, Settings, UserCircle,
@@ -130,6 +130,3 @@ export function Sidebar() {
     </aside>
   );
 }
-
-
-

@@ -26,4 +26,4 @@ RUN pnpm --filter web build
 
 EXPOSE 3000
 
-CMD ["serve", "apps/web/dist", "-l", "3000"]
+CMD ["serve", "-s", "apps/web/dist", "-l", "3000"]

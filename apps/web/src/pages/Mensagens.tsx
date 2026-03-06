@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+﻿import { useEffect, useState, useRef } from 'react';
 import { MessageCircle, Send, User } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { EmptyState } from '../components/ui/EmptyState';
@@ -81,7 +81,6 @@ export function Mensagens() {
       });
       setMessages([...messages, mensagem]);
       setNewMessage('');
-      // Update conversation list
       loadConversas();
     } catch (err) {
       console.error('Erro ao enviar mensagem:', err);
@@ -114,7 +113,6 @@ export function Mensagens() {
     }
   }
 
-  // Motoristas without active conversations
   const motoristasWithoutConvo = motoristas.filter(
     m => !conversas.some(c => c.participante_id === m.id && c.participante_tipo === 'motorista')
   );
@@ -131,191 +129,181 @@ export function Mensagens() {
 
   return (
     <PageTransition>
-    <div className="h-[calc(100vh-2rem)]">
-      <PageHeader title="Mensagens" subtitle="Comunicação com motoristas" />
+      <div className="flex h-full min-h-0 flex-col">
+        <PageHeader title="Mensagens" subtitle="Comunicação com motoristas" />
 
-      <div className="flex gap-6 h-[calc(100%-5rem)]">
-        {/* Left column - Conversations list */}
-        <div className="w-80 border border-border/30 rounded-xl flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-border/30">
-            <h2 className="text-sm font-semibold text-text">Conversas</h2>
-          </div>
+        <div className="mt-4 flex min-h-0 flex-1 gap-6">
+          {/* Left column - Conversations list */}
+          <div className="w-80 border border-border/30 rounded-xl flex min-h-0 flex-col overflow-hidden">
+            <div className="p-4 border-b border-border/30">
+              <h2 className="text-sm font-semibold text-text">Conversas</h2>
+            </div>
 
-          <div className="flex-1 overflow-y-auto">
-            {loading ? (
-              <div className="p-4 text-center text-text-muted text-sm">Carregando...</div>
-            ) : conversas.length === 0 && motoristasWithoutConvo.length === 0 ? (
-              <div className="p-4 text-center text-text-muted text-sm">
-                Nenhuma conversa ou motorista disponivel
-              </div>
-            ) : (
-              <>
-                {/* Active conversations */}
-                {conversas.map((conversa) => (
-                  <button
-                    key={`${conversa.participante_tipo}-${conversa.participante_id}`}
-                    onClick={() => setSelectedConversation(conversa)}
-                    className={clsx(
-                      'w-full p-4 flex items-start gap-3 hover:bg-surface2/50 transition-colors text-left border-b border-border/30',
-                      selectedConversation?.participante_id === conversa.participante_id &&
-                        selectedConversation?.participante_tipo === conversa.participante_tipo &&
-                        'bg-surface2'
-                    )}
-                  >
-                    <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
-                      <User size={18} className="text-accent" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-text text-sm font-medium truncate">
-                          {conversa.participante_nome}
-                        </span>
-                        {conversa.nao_lidas > 0 && (
-                          <span className="bg-accent text-surface text-xs px-2 py-0.5 rounded-full shrink-0">
-                            {conversa.nao_lidas}
+            <div className="flex-1 overflow-y-auto">
+              {loading ? (
+                <div className="p-4 text-center text-text-muted text-sm">Carregando...</div>
+              ) : conversas.length === 0 && motoristasWithoutConvo.length === 0 ? (
+                <div className="p-4 text-center text-text-muted text-sm">
+                  Nenhuma conversa ou motorista disponível
+                </div>
+              ) : (
+                <>
+                  {/* Active conversations */}
+                  {conversas.map((conversa) => (
+                    <button
+                      key={`${conversa.participante_tipo}-${conversa.participante_id}`}
+                      onClick={() => setSelectedConversation(conversa)}
+                      className={clsx(
+                        'w-full p-4 flex items-start gap-3 hover:bg-surface2/50 transition-colors text-left border-b border-border/30',
+                        selectedConversation?.participante_id === conversa.participante_id &&
+                          selectedConversation?.participante_tipo === conversa.participante_tipo &&
+                          'bg-surface2'
+                      )}
+                    >
+                      <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
+                        <User size={18} className="text-accent" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-text text-sm font-medium truncate">
+                            {conversa.participante_nome}
                           </span>
+                          {conversa.nao_lidas > 0 && (
+                            <span className="bg-accent text-surface text-xs px-2 py-0.5 rounded-full shrink-0">
+                              {conversa.nao_lidas}
+                            </span>
+                          )}
+                        </div>
+                        {conversa.ultima_mensagem && (
+                          <p className="text-text-muted text-xs mt-1 truncate">
+                            {conversa.ultima_mensagem}
+                          </p>
+                        )}
+                        {conversa.ultima_mensagem_data && (
+                          <p className="text-text-muted text-xs mt-0.5">
+                            {formatTime(conversa.ultima_mensagem_data)}
+                          </p>
                         )}
                       </div>
-                      {conversa.ultima_mensagem && (
-                        <p className="text-text-muted text-xs mt-1 truncate">
-                          {conversa.ultima_mensagem}
-                        </p>
-                      )}
-                      {conversa.ultima_mensagem_data && (
-                        <p className="text-text-muted text-xs mt-0.5">
-                          {formatTime(conversa.ultima_mensagem_data)}
-                        </p>
-                      )}
-                    </div>
-                  </button>
-                ))}
+                    </button>
+                  ))}
 
-                {/* Motoristas without conversations */}
-                {motoristasWithoutConvo.length > 0 && (
-                  <>
-                    <div className="px-4 py-2 bg-surface2/30 text-xs text-text-muted font-medium">
-                      Iniciar nova conversa
+                  {/* Motoristas without conversations */}
+                  {motoristasWithoutConvo.length > 0 && (
+                    <>
+                      <div className="px-4 py-2 bg-surface2/30 text-xs text-text-muted font-medium">
+                        Iniciar nova conversa
+                      </div>
+                      {motoristasWithoutConvo.map((motorista) => (
+                        <button
+                          key={`new-${motorista.id}`}
+                          onClick={() => startConversation(motorista)}
+                          className="w-full p-4 flex items-center gap-3 hover:bg-surface2/50 transition-colors text-left border-b border-border/30"
+                        >
+                          <div className="w-10 h-10 rounded-full bg-surface3 flex items-center justify-center shrink-0">
+                            <User size={18} className="text-text-muted" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-text-muted text-sm truncate">{motorista.nome}</span>
+                            <p className="text-text-muted text-xs mt-0.5">Clique para iniciar</p>
+                          </div>
+                        </button>
+                      ))}
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Right column - Chat */}
+          <div className="flex-1 border border-border/30 rounded-xl flex min-h-0 flex-col overflow-hidden">
+            {selectedConversation ? (
+              <>
+                {/* Chat header */}
+                <div className="p-4 border-b border-border/30 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+                    <User size={18} className="text-accent" />
+                  </div>
+                  <div>
+                    <h2 className="text-text font-medium">
+                      {selectedConversation.participante_nome}
+                    </h2>
+                    <p className="text-text-muted text-xs capitalize">
+                      {selectedConversation.participante_tipo}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {messages.length === 0 ? (
+                    <div className="h-full flex items-center justify-center">
+                      <p className="text-text-muted text-sm">Nenhuma mensagem ainda</p>
                     </div>
-                    {motoristasWithoutConvo.map((motorista) => (
-                      <button
-                        key={`new-${motorista.id}`}
-                        onClick={() => startConversation(motorista)}
-                        className="w-full p-4 flex items-center gap-3 hover:bg-surface2/50 transition-colors text-left border-b border-border/30"
-                      >
-                        <div className="w-10 h-10 rounded-full bg-surface3 flex items-center justify-center shrink-0">
-                          <User size={18} className="text-text-muted" />
+                  ) : (
+                    messages.map((msg) => {
+                      const isFromMe = msg.remetente_tipo === 'gestor' && msg.remetente_id === user?.id;
+                      return (
+                        <div
+                          key={msg.id}
+                          className={clsx('flex', isFromMe ? 'justify-end' : 'justify-start')}
+                        >
+                          <div
+                            className={clsx(
+                              'max-w-[70%] px-4 py-2 rounded-2xl',
+                              isFromMe
+                                ? 'bg-accent text-surface rounded-br-sm'
+                                : 'bg-surface2 text-text rounded-bl-sm'
+                            )}
+                          >
+                            <p className="text-sm whitespace-pre-wrap break-words">{msg.conteudo}</p>
+                            <p className="text-xs mt-1 text-text-muted">
+                              {formatTime(msg.criado_em)}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <span className="text-text-muted text-sm truncate">{motorista.nome}</span>
-                          <p className="text-text-muted text-xs mt-0.5">Clique para iniciar</p>
-                        </div>
-                      </button>
-                    ))}
-                  </>
-                )}
+                      );
+                    })
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Input */}
+                <div className="p-4 border-t border-border/30">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Digite sua mensagem..."
+                      className="flex-1 ui-input placeholder:text-text-muted"
+                    />
+                    <button
+                      onClick={sendMessage}
+                      disabled={!newMessage.trim() || sending}
+                      className={clsx(
+                        'px-4 py-3 rounded-xl transition-colors',
+                        newMessage.trim() && !sending
+                          ? 'bg-accent hover:bg-accent-hover text-surface'
+                          : 'bg-surface2 text-text-muted cursor-not-allowed'
+                      )}
+                    >
+                      <Send size={18} />
+                    </button>
+                  </div>
+                </div>
               </>
+            ) : (
+              <EmptyState
+                icon={MessageCircle}
+                message="Selecione uma conversa para começar"
+              />
             )}
           </div>
         </div>
-
-        {/* Right column - Chat */}
-        <div className="flex-1 border border-border/30 rounded-xl flex flex-col overflow-hidden">
-          {selectedConversation ? (
-            <>
-              {/* Chat header */}
-              <div className="p-4 border-b border-border/30 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
-                  <User size={18} className="text-accent" />
-                </div>
-                <div>
-                  <h2 className="text-text font-medium">
-                    {selectedConversation.participante_nome}
-                  </h2>
-                  <p className="text-text-muted text-xs capitalize">
-                    {selectedConversation.participante_tipo}
-                  </p>
-                </div>
-              </div>
-
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.length === 0 ? (
-                  <div className="h-full flex items-center justify-center">
-                    <p className="text-text-muted text-sm">Nenhuma mensagem ainda</p>
-                  </div>
-                ) : (
-                  messages.map((msg) => {
-                    const isFromMe = msg.remetente_tipo === 'gestor' && msg.remetente_id === user?.id;
-                    return (
-                      <div
-                        key={msg.id}
-                        className={clsx('flex', isFromMe ? 'justify-end' : 'justify-start')}
-                      >
-                        <div
-                          className={clsx(
-                            'max-w-[70%] px-4 py-2 rounded-2xl',
-                            isFromMe
-                              ? 'bg-accent text-surface rounded-br-sm'
-                              : 'bg-surface2 text-text rounded-bl-sm'
-                          )}
-                        >
-                          <p className="text-sm whitespace-pre-wrap break-words">{msg.conteudo}</p>
-                          <p
-                            className={clsx(
-                              'text-xs mt-1',
-                              isFromMe ? 'text-text-muted' : 'text-text-muted'
-                            )}
-                          >
-                            {formatTime(msg.criado_em)}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-
-              {/* Input */}
-              <div className="p-4 border-t border-border/30">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Digite sua mensagem..."
-                    className="flex-1 ui-input placeholder:text-text-muted"
-                  />
-                  <button
-                    onClick={sendMessage}
-                    disabled={!newMessage.trim() || sending}
-                    className={clsx(
-                      'px-4 py-3 rounded-xl transition-colors',
-                      newMessage.trim() && !sending
-                        ? 'bg-accent hover:bg-accent-hover text-surface'
-                        : 'bg-surface2 text-text-muted cursor-not-allowed'
-                    )}
-                  >
-                    <Send size={18} />
-                  </button>
-                </div>
-              </div>
-            </>
-          ) : (
-            <EmptyState
-              icon={MessageCircle}
-              message="Selecione uma conversa para comecar"
-            />
-          )}
-        </div>
       </div>
-    </div>
     </PageTransition>
   );
 }
-
-
-
-
-

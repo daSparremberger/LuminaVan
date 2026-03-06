@@ -102,9 +102,9 @@ export function Motoristas() {
 
   return (
     <PageTransition>
-    <div className="flex gap-6 h-[calc(100vh-48px)]">
+    <div className="flex h-full min-h-0 gap-6">
       {/* Lista de motoristas */}
-      <div className="w-80 shrink-0">
+      <div className="w-80 shrink-0 overflow-y-auto pr-1">
         <PageHeader
           title="Motoristas"
           subtitle={`${motoristas.length} motorista(s)`}
@@ -170,7 +170,7 @@ export function Motoristas() {
       </div>
 
       {/* Perfil do motorista */}
-      <div className="flex-1 p-6 overflow-y-auto">
+      <div className="min-h-0 flex-1 overflow-y-auto p-6">
         {selected && selectedStats ? (
           <div className="space-y-6">
             {/* Header com foto e info basica */}
