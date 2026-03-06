@@ -186,9 +186,9 @@ export function Rastreamento() {
 
   return (
     <PageTransition>
-    <div className="flex h-full min-h-0 gap-6">
+    <div className="flex h-full min-h-0 flex-col gap-4 lg:flex-row lg:gap-6">
       {/* Lista de motoristas */}
-      <div className="w-80 shrink-0 overflow-y-auto pr-1">
+      <div className="w-full shrink-0 overflow-y-auto pr-0 lg:w-80 lg:pr-1">
         <PageHeader title="Rastreamento" subtitle={
           <span className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full ${connected ? 'bg-success' : 'bg-danger'}`} />
@@ -233,7 +233,7 @@ export function Rastreamento() {
       </div>
 
       {/* Mapa */}
-      <div className="min-h-0 flex-1 ui-table-wrap">
+      <div className="min-h-[340px] flex-1 ui-table-wrap lg:min-h-0">
         <div ref={mapRef} className="w-full h-full" />
       </div>
     </div>

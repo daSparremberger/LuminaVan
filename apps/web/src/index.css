@@ -135,7 +135,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .ui-table-wrap {
-    @apply overflow-hidden rounded-[22px] border border-border bg-surface2;
+    @apply overflow-x-auto overflow-y-hidden rounded-[22px] border border-border bg-surface2;
   }
 
   .ui-table-head {
@@ -144,6 +144,16 @@ h1, h2, h3, h4, h5, h6 {
 
   .ui-table-row {
     @apply border-t border-border hover:bg-surface;
+  }
+}
+
+.ui-table-wrap {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .ui-table-wrap > table {
+    min-width: 760px;
   }
 }
 

@@ -100,7 +100,7 @@ export function Financeiro() {
     <div>
       <PageHeader title="Financeiro" subtitle="Controle de receitas e despesas"
         action={
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button onClick={() => setGerarModal(true)} className="flex items-center gap-2 bg-surface2 hover:bg-surface2/80 text-text px-4 py-2 rounded-xl text-sm font-medium">
               Gerar Mensalidades
             </button>
@@ -114,7 +114,7 @@ export function Financeiro() {
         }
       />
 
-      <div className="flex gap-4 mb-6">
+      <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <select value={mesSelecionado} onChange={(e) => setMesSelecionado(parseInt(e.target.value))} className="ui-select">
           {['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'].map((m, i) => (
             <option key={i} value={i + 1}>{m}</option>
@@ -125,14 +125,14 @@ export function Financeiro() {
         </select>
       </div>
 
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard icon={TrendingUp} label="Receitas" value={`R$ ${resumo.receitas.toFixed(2)}`} />
         <StatCard icon={TrendingDown} label="Despesas" value={`R$ ${resumo.despesas.toFixed(2)}`} />
         <StatCard icon={DollarSign} label="Saldo" value={`R$ ${resumo.saldo.toFixed(2)}`} />
         <StatCard icon={AlertCircle} label="Inadimplentes" value={resumo.inadimplentes.toString()} />
       </div>
 
-      <div className="flex gap-4 mb-4">
+      <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)} className="ui-select">
           <option value="">Todos os tipos</option>
           <option value="receita">Receitas</option>
@@ -197,7 +197,7 @@ export function Financeiro() {
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={`Nova ${form.tipo === 'receita' ? 'Receita' : 'Despesa'}`}>
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="block text-sm text-text-muted mb-1">Categoria</label>
               <select value={form.categoria} onChange={(e) => setForm({ ...form, categoria: e.target.value })} className={inputClass}>
@@ -215,7 +215,7 @@ export function Financeiro() {
             <label className="block text-sm text-text-muted mb-1">Descrição</label>
             <input value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} className={inputClass} />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="block text-sm text-text-muted mb-1">Data</label>
               <input type="date" value={form.data} onChange={(e) => setForm({ ...form, data: e.target.value })} className={inputClass} />
@@ -246,7 +246,7 @@ export function Financeiro() {
           <p className="text-text-muted text-sm">
             Isso irá criar uma receita de mensalidade para cada aluno ativo que tenha valor de mensalidade cadastrado.
           </p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="block text-sm text-text-muted mb-1">Mês</label>
               <select value={mesSelecionado} onChange={(e) => setMesSelecionado(parseInt(e.target.value))} className={inputClass}>

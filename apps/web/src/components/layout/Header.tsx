@@ -1,4 +1,4 @@
-﻿import { Bell, MessageCircle, Search } from 'lucide-react';
+import { Bell, Menu, MessageCircle, Search } from 'lucide-react';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { useAuthStore } from '../../stores/auth';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,10 @@ const searchablePages = [
   { route: '/configuracoes', terms: ['configuracoes', 'configurações', 'ajustes'] },
 ];
 
+interface HeaderProps {
+  onOpenMenu?: () => void;
+}
+
 function normalizeText(text: string) {
   return text
     .normalize('NFD')
@@ -27,7 +31,7 @@ function normalizeText(text: string) {
     .trim();
 }
 
-export function Header() {
+export function Header({ onOpenMenu }: HeaderProps) {
   const { user } = useAuthStore();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
@@ -46,11 +50,20 @@ export function Header() {
   }
 
   return (
-    <header className="flex h-[76px] items-center justify-between border-b border-border/80 px-4 md:px-6">
-      <div className="mx-3 flex min-w-0 flex-1 max-w-xl md:mx-0">
+    <header className="flex h-[76px] items-center justify-between border-b border-border/80 px-3 md:px-6">
+      <div className="flex min-w-0 flex-1 items-center gap-2 md:gap-3">
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border bg-surface2 text-text md:hidden"
+          aria-label="Abrir menu"
+        >
+          <Menu size={18} />
+        </button>
+
         <label className="relative block w-full" htmlFor="header-search">
           <Search
-            size={18}
+            size={16}
             strokeWidth={1.5}
             className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"
           />
@@ -63,36 +76,34 @@ export function Header() {
               if (event.key === 'Enter') handleSearch();
             }}
             placeholder="Pesquisar página..."
-            className="h-11 w-full rounded-full border border-border bg-surface2 pl-11 pr-24 text-sm text-text placeholder:text-text-muted transition-all duration-200 focus:border-success focus:outline-none"
+            className="h-11 w-full rounded-full border border-border bg-surface2 pl-10 pr-20 text-sm text-text placeholder:text-text-muted transition-all duration-200 focus:border-success focus:outline-none md:pl-11 md:pr-24"
           />
           <button
             type="button"
             onClick={handleSearch}
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-accent px-4 py-1.5 text-xs font-medium text-surface transition-colors hover:bg-accent-hover"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-accent px-3 py-1.5 text-xs font-medium text-surface transition-colors hover:bg-accent-hover md:px-4"
           >
             Buscar
           </button>
         </label>
       </div>
 
-      <div className="flex items-center gap-2 md:gap-3">
+      <div className="ml-2 flex items-center gap-2 md:ml-3 md:gap-3">
         <div className="flex items-center gap-1 rounded-full border border-border bg-surface2 p-1">
           <ThemeToggle />
 
-          <button className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 hover:bg-surface">
+          <button className="relative hidden h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 hover:bg-surface md:flex">
             <Bell size={18} strokeWidth={1.5} className="text-text-muted" />
           </button>
 
-          <button className="relative flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 hover:bg-surface">
+          <button className="relative hidden h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 hover:bg-surface md:flex">
             <MessageCircle size={18} strokeWidth={1.5} className="text-text-muted" />
           </button>
         </div>
 
         <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-border bg-surface2">
           {user?.nome ? (
-            <span className="text-sm font-semibold text-text">
-              {user.nome.charAt(0).toUpperCase()}
-            </span>
+            <span className="text-sm font-semibold text-text">{user.nome.charAt(0).toUpperCase()}</span>
           ) : (
             <span className="text-sm font-medium text-text-muted">?</span>
           )}

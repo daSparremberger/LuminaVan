@@ -211,7 +211,7 @@ export function Alunos() {
             <div>
               <h3 className="text-text font-medium mb-3">Dados Pessoais</h3>
               <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                   <div>
                     <label className="block text-sm text-text-muted mb-1">Nome Completo *</label>
                     <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className={inputClass} />
@@ -222,7 +222,7 @@ export function Alunos() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                   <div>
                     <label className="block text-sm text-text-muted mb-1">Telefone</label>
                     <input value={form.telefone} onChange={(e) => setForm({ ...form, telefone: e.target.value })} placeholder="(00) 00000-0000" className={inputClass} />
@@ -247,7 +247,7 @@ export function Alunos() {
 
             <div>
               <h3 className="text-text font-medium mb-3">Dados Escolares</h3>
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
                 <div>
                   <label className="block text-sm text-text-muted mb-1">Escola *</label>
                   <select value={form.escola_id} onChange={(e) => setForm({ ...form, escola_id: e.target.value })} className={inputClass}>
@@ -280,7 +280,7 @@ export function Alunos() {
               </button>
               {expandedSections.responsavel && (
                 <div className="p-4 space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <div>
                       <label className="block text-sm text-text-muted mb-1">Nome do Responsável</label>
                       <input value={form.nome_responsavel} onChange={(e) => setForm({ ...form, nome_responsavel: e.target.value })} className={inputClass} />
@@ -291,7 +291,7 @@ export function Alunos() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <div>
                       <label className="block text-sm text-text-muted mb-1">Nascimento Responsável</label>
                       <input type="date" value={form.nascimento_responsavel} onChange={(e) => setForm({ ...form, nascimento_responsavel: e.target.value })} className={inputClass} />

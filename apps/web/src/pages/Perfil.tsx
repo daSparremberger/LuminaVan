@@ -70,7 +70,7 @@ export function Perfil() {
 
           {/* Form */}
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label className="block text-sm text-text-muted mb-2">Nome completo</label>
                 <input
@@ -109,7 +109,7 @@ export function Perfil() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div>
               <label className="block text-sm text-text-muted mb-2">Cidade</label>
               <input

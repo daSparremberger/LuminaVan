@@ -132,9 +132,9 @@ export function Mensagens() {
       <div className="flex h-full min-h-0 flex-col">
         <PageHeader title="Mensagens" subtitle="Comunicação com motoristas" />
 
-        <div className="mt-4 flex min-h-0 flex-1 gap-6">
+        <div className="mt-4 flex min-h-0 flex-1 flex-col gap-4 lg:flex-row lg:gap-6">
           {/* Left column - Conversations list */}
-          <div className="w-80 border border-border/30 rounded-xl flex min-h-0 flex-col overflow-hidden">
+          <div className="w-full border border-border/30 rounded-xl flex min-h-[280px] flex-col overflow-hidden lg:w-80 lg:min-h-0">
             <div className="p-4 border-b border-border/30">
               <h2 className="text-sm font-semibold text-text">Conversas</h2>
             </div>
@@ -217,7 +217,7 @@ export function Mensagens() {
           </div>
 
           {/* Right column - Chat */}
-          <div className="flex-1 border border-border/30 rounded-xl flex min-h-0 flex-col overflow-hidden">
+          <div className="flex-1 border border-border/30 rounded-xl flex min-h-[360px] flex-col overflow-hidden lg:min-h-0">
             {selectedConversation ? (
               <>
                 {/* Chat header */}

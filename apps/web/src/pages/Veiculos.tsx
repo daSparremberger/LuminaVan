@@ -90,9 +90,9 @@ export function Veiculos() {
 
   return (
     <PageTransition>
-      <div className="flex h-full min-h-0 gap-6">
+      <div className="flex h-full min-h-0 flex-col gap-4 lg:flex-row lg:gap-6">
         {/* Lista de veículos */}
-        <div className="w-80 shrink-0 overflow-y-auto pr-1">
+        <div className="w-full shrink-0 overflow-y-auto pr-0 lg:w-80 lg:pr-1">
           <PageHeader
             title="Veículos"
             subtitle={`${veiculos.length} veículo(s)`}
@@ -136,14 +136,14 @@ export function Veiculos() {
         </div>
 
         {/* Detalhes do veículo */}
-        <div className="min-h-0 flex-1 overflow-y-auto p-6">
+        <div className="min-h-0 flex-1 overflow-y-auto p-4 md:p-6">
           {selected ? (
             <div className="space-y-6">
               <div>
                 <h2 className="text-xl font-bold text-text mb-4">
                   {selected.placa}
                 </h2>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="rounded-xl p-4 border border-border/30">
                     <p className="text-text-muted text-xs mb-1">Modelo</p>
                     <p className="text-text">{selected.modelo}</p>
@@ -259,7 +259,7 @@ export function Veiculos() {
           size="md"
         >
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-sm text-text-muted mb-1">Placa</label>
                 <input
@@ -280,7 +280,7 @@ export function Veiculos() {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-sm text-text-muted mb-1">
                   Fabricante
@@ -302,7 +302,7 @@ export function Veiculos() {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-sm text-text-muted mb-1">
                   Capacidade (passageiros)
