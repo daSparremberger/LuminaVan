@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import { pool } from '../db/pool';
 import { requireAuth, requireGestor, AuthRequest } from '../middleware/auth';
+import { buildInviteUrl } from '../lib/invite';
 
 const router = Router();
 router.use(requireAuth, requireGestor);
@@ -27,7 +28,7 @@ router.post('/', async (req: AuthRequest, res) => {
     RETURNING id, nome, telefone, convite_token
   `, [req.user!.tenant_id, nome, telefone ?? null, conviteToken, conviteExpira]);
 
-  const conviteUrl = `${process.env.INVITE_BASE_URL}/${conviteToken}`;
+  const conviteUrl = buildInviteUrl(conviteToken);
   res.status(201).json({ ...rows[0], convite_url: conviteUrl });
 });
 
@@ -49,7 +50,7 @@ router.post('/:id/reenviar-convite', async (req: AuthRequest, res) => {
     WHERE id=$3 AND tenant_id=$4
   `, [conviteToken, conviteExpira, req.params.id, req.user!.tenant_id]);
 
-  const conviteUrl = `${process.env.INVITE_BASE_URL}/${conviteToken}`;
+  const conviteUrl = buildInviteUrl(conviteToken);
   res.json({ convite_url: conviteUrl });
 });
 

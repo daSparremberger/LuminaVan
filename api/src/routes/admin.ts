@@ -3,6 +3,7 @@ import { pool } from '../db/pool';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 import { requireAdmin } from '../middleware/requireAdmin';
 import crypto from 'crypto';
+import { buildInviteUrl } from '../lib/invite';
 
 const router = Router();
 
@@ -161,7 +162,8 @@ router.post('/tenants/:id/convite', async (req, res) => {
 
     res.status(201).json({
       ...result.rows[0],
-      link: `/convite/${token}`
+      link: buildInviteUrl(token),
+      convite_url: buildInviteUrl(token)
     });
   } catch (err) {
     console.error('Create convite error:', err);

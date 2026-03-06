@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/auth';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const WEB_URL = import.meta.env.VITE_WEB_URL;
 
 export function TenantFormPage() {
   const { id } = useParams();
@@ -37,7 +38,11 @@ export function TenantFormPage() {
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ dias_validade: 7 })
     });
-    if (res.ok) { const d = await res.json(); setConviteLink(`${window.location.origin}/convite/${d.token}`); }
+    if (res.ok) {
+      const d = await res.json();
+      const fallbackOrigin = WEB_URL || window.location.origin;
+      setConviteLink(d.link || d.convite_url || `${fallbackOrigin}/convite/${d.token}`);
+    }
   }
 
   return (
