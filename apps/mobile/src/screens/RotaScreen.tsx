@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Dimensions, Linking } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -18,6 +18,8 @@ export function RotaScreen() {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [execucaoId, setExecucaoId] = useState<number | null>(null);
   const mapRef = useRef<MapView>(null);
+  const execucaoIdRef = useRef<number | null>(null);
+  const locationWatcherRef = useRef<Location.LocationSubscription | null>(null);
 
   useEffect(() => {
     loadParadas();
@@ -26,6 +28,7 @@ export function RotaScreen() {
     initSocket();
 
     return () => {
+      locationWatcherRef.current?.remove();
       disconnectSocket();
     };
   }, []);
@@ -47,6 +50,7 @@ export function RotaScreen() {
     try {
       const res = await api.post<{ id: number }>(`/execucao/iniciar`, { rota_id: rota.id });
       setExecucaoId(res.id);
+      execucaoIdRef.current = res.id;
     } catch (err) {
       console.error(err);
     }
@@ -55,17 +59,32 @@ export function RotaScreen() {
   async function startLocationTracking() {
     const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Erro', 'Permissao de localizacao negada');
+      Alert.alert(
+        'Localização necessária',
+        'Permita o acesso à localização para habilitar o rastreamento em tempo real.',
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Abrir configurações', onPress: () => Linking.openSettings() },
+        ]
+      );
       return;
     }
 
-    Location.watchPositionAsync(
+    const bgPermission = await Location.requestBackgroundPermissionsAsync();
+    if (bgPermission.status !== 'granted') {
+      Alert.alert(
+        'Permissão em segundo plano',
+        'Sem permissão em segundo plano, o rastreamento funciona apenas com o app aberto.'
+      );
+    }
+
+    locationWatcherRef.current = await Location.watchPositionAsync(
       { accuracy: Location.Accuracy.High, distanceInterval: 10, timeInterval: 5000 },
       (loc) => {
         setLocation(loc);
-        // Emit location to socket for real-time tracking
+        const currentExecucaoId = execucaoIdRef.current;
         const socket = getSocket();
-        if (socket?.connected && execucaoId) {
+        if (socket?.connected && currentExecucaoId) {
           socket.emit('location_update', {
             rota_id: rota.id,
             lat: loc.coords.latitude,
