@@ -31,3 +31,4 @@ export const api = {
   put: <T>(path: string, body: unknown) => req<T>(path, { method: 'PUT', body: JSON.stringify(body) }),
   delete: <T>(path: string) => req<T>(path, { method: 'DELETE' }),
 };
+

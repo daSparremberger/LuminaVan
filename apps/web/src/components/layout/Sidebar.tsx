@@ -31,19 +31,19 @@ const navigation: NavSection[] = [
       { to: '/escolas', icon: School, label: 'Escolas' },
       { to: '/alunos', icon: Users, label: 'Alunos' },
       { to: '/motoristas', icon: Truck, label: 'Motoristas' },
-      { to: '/veiculos', icon: Car, label: 'Veiculos' },
+      { to: '/veiculos', icon: Car, label: 'Veículos' },
     ],
   },
   {
-    label: 'Operacoes',
+    label: 'Operações',
     items: [
       { to: '/rotas', icon: Map, label: 'Rotas' },
       { to: '/rastreamento', icon: Radio, label: 'Ao Vivo' },
-      { to: '/historico', icon: History, label: 'Historico' },
+      { to: '/historico', icon: History, label: 'Histórico' },
     ],
   },
   {
-    label: 'Gestao',
+    label: 'Gestão',
     items: [
       { to: '/financeiro', icon: DollarSign, label: 'Financeiro' },
       { to: '/mensagens', icon: MessageCircle, label: 'Mensagens' },
@@ -52,7 +52,7 @@ const navigation: NavSection[] = [
 ];
 
 const bottomNav: NavItem[] = [
-  { to: '/configuracoes', icon: Settings, label: 'Configuracoes' },
+  { to: '/configuracoes', icon: Settings, label: 'Configurações' },
   { to: '/perfil', icon: UserCircle, label: 'Perfil' },
 ];
 
@@ -130,5 +130,6 @@ export function Sidebar() {
     </aside>
   );
 }
+
 
 

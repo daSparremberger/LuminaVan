@@ -37,11 +37,11 @@ export function Perfil() {
     setSaving(false);
   };
 
-  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:border-success/50 focus:outline-none transition-all duration-200";
+  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:border-success focus:outline-none transition-all duration-200";
 
   return (
     <PageTransition>
-      <PageHeader title="Perfil" subtitle="Gerencie suas informacoes pessoais" />
+      <PageHeader title="Perfil" subtitle="Gerencie suas informações pessoais" />
 
       <div className="max-w-2xl">
         <motion.div
@@ -92,7 +92,7 @@ export function Perfil() {
           </div>
         </motion.div>
 
-        {/* Localizacao */}
+        {/* Localização */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -104,8 +104,8 @@ export function Perfil() {
               <MapPin size={18} className="text-accent" />
             </div>
             <div>
-              <h3 className="font-semibold text-text">Localizacao</h3>
-              <p className="text-sm text-text-muted">Regiao de operacao</p>
+              <h3 className="font-semibold text-text">Localização</h3>
+              <p className="text-sm text-text-muted">Região de operação</p>
             </div>
           </div>
 
@@ -163,6 +163,7 @@ export function Perfil() {
     </PageTransition>
   );
 }
+
 
 
 

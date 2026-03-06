@@ -30,7 +30,7 @@ function formatShortDate(date: string) {
 }
 
 function normalizeTurno(turno: string) {
-  if (turno === 'manha') return 'Manha';
+  if (turno === 'manha') return 'Manhã';
   if (turno === 'tarde') return 'Tarde';
   if (turno === 'noite') return 'Noite';
   return 'Indefinido';
@@ -91,14 +91,14 @@ export function Dashboard() {
   const latestActivity = charts.rotas_por_dia.slice(-4).reverse();
 
   return (
-    <PageTransition className="pt-4 md:pt-6">
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-        <section className="min-w-0 space-y-6">
+    <PageTransition className="h-full overflow-hidden pt-4 md:pt-6">
+      <div className="grid h-full grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <section className="min-w-0 space-y-6 overflow-hidden">
           <div className="rounded-[26px] border border-border bg-surface2 p-4 md:p-6">
             <div className="mb-5 flex items-center justify-between gap-3">
-              <h2 className="font-heading text-xl font-bold text-text">Overview</h2>
+              <h2 className="font-heading text-xl font-bold text-text">Visão geral</h2>
               <button className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-medium text-text-muted transition-colors hover:text-text">
-                Last month
+                Último mês
               </button>
             </div>
 
@@ -113,20 +113,20 @@ export function Dashboard() {
                 value={stats.alunos_total.toLocaleString('pt-BR')}
                 icon={Users}
                 trend={{ value: Math.abs(financialSummary.trend), positive: financialSummary.positive }}
-                subtitle="vs ultimo mes"
+                subtitle="vs. último mês"
               />
               <StatCard
                 label="Saldo"
                 value={moneyFormatter.format(financialSummary.latestBalance)}
                 icon={Car}
                 trend={{ value: Math.abs(financialSummary.trend), positive: financialSummary.positive }}
-                subtitle={`periodo ${financialSummary.period}`}
+                subtitle={`período ${financialSummary.period}`}
               />
             </motion.div>
 
             <div className="mt-6">
-              <p className="text-lg font-semibold text-text">{stats.motoristas_em_acao} motoristas em acao agora</p>
-              <p className="mt-1 text-sm text-text-muted">Monitore rotas em andamento e acompanhe os times.</p>
+              <p className="text-lg font-semibold text-text">{stats.motoristas_em_acao} motoristas em ação agora</p>
+              <p className="mt-1 text-sm text-text-muted">Monitore rotas em andamento e acompanhe as equipes.</p>
 
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 {popularSchools.map((item, index) => (
@@ -148,11 +148,11 @@ export function Dashboard() {
           <div className="rounded-[26px] border border-border bg-surface2 p-4 md:p-6">
             <div className="mb-5 flex items-center justify-between gap-3">
               <div>
-                <h2 className="font-heading text-xl font-bold text-text">Product view</h2>
-                <p className="text-sm text-text-muted">Rotas realizadas nos ultimos 7 dias</p>
+                <h2 className="font-heading text-xl font-bold text-text">Desempenho de rotas</h2>
+                <p className="text-sm text-text-muted">Rotas realizadas nos últimos 7 dias</p>
               </div>
               <button className="rounded-full border border-border bg-surface px-4 py-2 text-xs font-medium text-text-muted transition-colors hover:text-text">
-                Last 7 days
+                Últimos 7 dias
               </button>
             </div>
 
@@ -205,7 +205,7 @@ export function Dashboard() {
 
             <div className="rounded-[24px] border border-border bg-surface2 p-5">
               <h3 className="font-heading text-lg font-bold text-text">Atividade por turno</h3>
-              <p className="mt-1 text-sm text-text-muted">Ultimos 30 dias</p>
+              <p className="mt-1 text-sm text-text-muted">Últimos 30 dias</p>
               <div className="mt-4 h-[190px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={charts.atividade_por_turno} layout="vertical">
@@ -231,7 +231,7 @@ export function Dashboard() {
 
         <aside className="space-y-6">
           <div className="rounded-[24px] border border-border bg-surface2 p-5">
-            <h3 className="font-heading text-lg font-bold text-text">Popular schools</h3>
+            <h3 className="font-heading text-lg font-bold text-text">Escolas em destaque</h3>
             <div className="mt-4 space-y-3">
               {popularSchools.map((item) => (
                 <div key={item.escola} className="flex items-center gap-3 rounded-2xl bg-surface px-3 py-2.5">
@@ -243,7 +243,7 @@ export function Dashboard() {
                     <p className="text-xs text-text-muted">{item.total} alunos</p>
                   </div>
                   <span className="rounded-full bg-success-muted px-2 py-0.5 text-[11px] font-semibold text-success">
-                    Active
+                    Ativa
                   </span>
                 </div>
               ))}
@@ -252,12 +252,12 @@ export function Dashboard() {
               )}
             </div>
             <button className="mt-4 w-full rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:text-text">
-              All schools
+              Todas as escolas
             </button>
           </div>
 
           <div className="rounded-[24px] border border-border bg-surface2 p-5">
-            <h3 className="font-heading text-lg font-bold text-text">Comentarios</h3>
+            <h3 className="font-heading text-lg font-bold text-text">Comentários</h3>
             <div className="mt-4 space-y-4">
               {latestActivity.map((item) => (
                 <div key={item.data} className="flex items-start gap-3">
@@ -266,18 +266,18 @@ export function Dashboard() {
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-text">{item.total} rotas registradas em {formatShortDate(item.data)}</p>
-                    <p className="mt-1 text-xs text-text-muted">Atualizacao automatica do painel operacional.</p>
+                    <p className="mt-1 text-xs text-text-muted">Atualização automática do painel operacional.</p>
                   </div>
                 </div>
               ))}
               {latestActivity.length === 0 && (
-                <p className="text-sm text-text-muted">Sem atualizacoes recentes.</p>
+                <p className="text-sm text-text-muted">Sem atualizações recentes.</p>
               )}
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <StatCard label="Veiculos ativos" value={stats.veiculos_ativos} icon={Truck} />
+            <StatCard label="Veículos ativos" value={stats.veiculos_ativos} icon={Truck} />
             <StatCard label="Rotas hoje" value={stats.rotas_hoje} icon={Activity} />
           </div>
         </aside>
@@ -285,6 +285,7 @@ export function Dashboard() {
     </PageTransition>
   );
 }
+
 
 
 

@@ -132,7 +132,7 @@ export function Mensagens() {
   return (
     <PageTransition>
     <div className="h-[calc(100vh-2rem)]">
-      <PageHeader title="Mensagens" subtitle="Comunicacao com motoristas" />
+      <PageHeader title="Mensagens" subtitle="Comunicação com motoristas" />
 
       <div className="flex gap-6 h-[calc(100%-5rem)]">
         {/* Left column - Conversations list */}
@@ -314,6 +314,7 @@ export function Mensagens() {
     </PageTransition>
   );
 }
+
 
 
 

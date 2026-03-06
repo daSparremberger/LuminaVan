@@ -41,3 +41,4 @@ function updateDocumentTheme(theme: Theme) {
     document.documentElement.classList.remove('dark');
   }
 }
+

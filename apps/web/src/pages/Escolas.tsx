@@ -160,7 +160,7 @@ export function Escolas() {
             <thead className="ui-table-head">
               <tr>
                 <th className="px-4 py-3">Nome</th>
-                <th className="px-4 py-3">Endereco</th>
+                <th className="px-4 py-3">Endereço</th>
                 <th className="px-4 py-3">Turnos</th>
                 <th className="px-4 py-3">Contatos</th>
                 <th className="px-4 py-3 w-24"></th>
@@ -223,7 +223,7 @@ export function Escolas() {
               className="w-full ui-input" />
           </div>
           <div>
-            <label className="block text-sm text-text-muted mb-1">Endereco</label>
+            <label className="block text-sm text-text-muted mb-1">Endereço</label>
             <input value={form.endereco} onChange={(e) => setForm({ ...form, endereco: e.target.value })}
               className="w-full ui-input" />
           </div>
@@ -249,7 +249,7 @@ export function Escolas() {
                   <select
                     value={c.cargo}
                     onChange={(e) => updateContato(i, 'cargo', e.target.value)}
-                    className="bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success/50 focus:outline-none"
+                    className="bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success focus:outline-none"
                   >
                     {CARGO_OPTIONS.map((cargo) => (
                       <option key={cargo} value={cargo}>{cargo}</option>
@@ -259,13 +259,13 @@ export function Escolas() {
                     placeholder="Nome"
                     value={c.nome}
                     onChange={(e) => updateContato(i, 'nome', e.target.value)}
-                    className="flex-1 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success/50 focus:outline-none"
+                    className="flex-1 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success focus:outline-none"
                   />
                   <input
                     placeholder="Telefone"
                     value={c.telefone}
                     onChange={(e) => updateContato(i, 'telefone', e.target.value)}
-                    className="w-32 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success/50 focus:outline-none"
+                    className="w-32 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:border-success focus:outline-none"
                   />
                   <button
                     onClick={() => removeContato(i)}
@@ -295,6 +295,8 @@ export function Escolas() {
     </PageTransition>
   );
 }
+
+
 
 
 

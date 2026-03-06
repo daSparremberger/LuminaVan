@@ -28,11 +28,12 @@ export function SearchBar({ placeholder = 'Pesquisar...', onSearch }: SearchBarP
         placeholder={placeholder}
         className="h-11 w-full rounded-full border border-border bg-surface2 pl-11 pr-4
                    text-sm text-text placeholder:text-text-muted
-                   focus:border-success/50 focus:outline-none
+                   focus:border-success focus:outline-none
                    transition-all duration-200"
       />
     </div>
   );
 }
+
 
 

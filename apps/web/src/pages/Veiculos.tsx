@@ -92,11 +92,11 @@ export function Veiculos() {
   return (
     <PageTransition>
     <div className="flex gap-6 h-[calc(100vh-48px)]">
-      {/* Lista de veiculos */}
+      {/* Lista de veículos */}
       <div className="w-80 shrink-0">
         <PageHeader
-          title="Veiculos"
-          subtitle={`${veiculos.length} veiculo(s)`}
+          title="Veículos"
+          subtitle={`${veiculos.length} veículo(s)`}
           action={
             <button
               onClick={openNew}
@@ -108,7 +108,7 @@ export function Veiculos() {
         />
 
         {veiculos.length === 0 ? (
-          <EmptyState icon={Car} message="Nenhum veiculo cadastrado" />
+          <EmptyState icon={Car} message="Nenhum veículo cadastrado" />
         ) : (
           <div className="space-y-2">
             {veiculos.map((v) => (
@@ -136,7 +136,7 @@ export function Veiculos() {
         )}
       </div>
 
-      {/* Detalhes do veiculo */}
+      {/* Detalhes do veículo */}
       <div className="flex-1 p-6 overflow-y-auto">
         {selected ? (
           <div className="space-y-6">
@@ -184,7 +184,7 @@ export function Veiculos() {
               <div className="rounded-xl p-3 border border-border/30 max-h-48 overflow-y-auto space-y-1">
                 {motoristas.length === 0 ? (
                   <p className="text-text-muted text-sm p-2">
-                    Nenhum motorista disponivel
+                    Nenhum motorista disponível
                   </p>
                 ) : (
                   motoristas.map((m) => (
@@ -240,23 +240,23 @@ export function Veiculos() {
                 </div>
               ) : (
                 <div className="rounded-xl p-4 border border-border/30 text-center text-text-muted text-sm">
-                  Nenhuma rota vinculada a este veiculo
+                  Nenhuma rota vinculada a este veículo
                 </div>
               )}
             </div>
           </div>
         ) : (
           <div className="flex items-center justify-center h-full text-text-muted">
-            <p>Selecione um veiculo para ver detalhes</p>
+            <p>Selecione um veículo para ver detalhes</p>
           </div>
         )}
       </div>
 
-      {/* Modal novo veiculo */}
+      {/* Modal novo veículo */}
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title="Novo Veiculo"
+        title="Novo Veículo"
         size="md"
       >
         <div className="space-y-4">
@@ -335,7 +335,7 @@ export function Veiculos() {
             disabled={!form.placa || !form.fabricante || !form.modelo || !form.capacidade}
             className="w-full bg-accent hover:bg-accent-hover text-surface font-semibold py-3 rounded-xl disabled:opacity-50"
           >
-            Criar Veiculo
+            Criar Veículo
           </button>
         </div>
       </Modal>
@@ -343,6 +343,7 @@ export function Veiculos() {
     </PageTransition>
   );
 }
+
 
 
 

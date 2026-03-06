@@ -76,7 +76,7 @@ export function Financeiro() {
   }
 
   async function remove(id: number) {
-    if (!confirm('Excluir esta transacao?')) return;
+    if (!confirm('Excluir esta transação?')) return;
     await api.delete(`/financeiro/${id}`);
     load();
     loadResumo();
@@ -93,7 +93,7 @@ export function Financeiro() {
     loadResumo();
   }
 
-  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:border-success/50 focus:outline-none transition-all duration-200";
+  const inputClass = 'w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:border-success focus:outline-none transition-all duration-200';
 
   return (
     <PageTransition>
@@ -114,21 +114,17 @@ export function Financeiro() {
         }
       />
 
-      {/* Filtro de periodo */}
       <div className="flex gap-4 mb-6">
-        <select value={mesSelecionado} onChange={(e) => setMesSelecionado(parseInt(e.target.value))}
-          className="ui-select">
+        <select value={mesSelecionado} onChange={(e) => setMesSelecionado(parseInt(e.target.value))} className="ui-select">
           {['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'].map((m, i) => (
             <option key={i} value={i + 1}>{m}</option>
           ))}
         </select>
-        <select value={anoSelecionado} onChange={(e) => setAnoSelecionado(parseInt(e.target.value))}
-          className="ui-select">
+        <select value={anoSelecionado} onChange={(e) => setAnoSelecionado(parseInt(e.target.value))} className="ui-select">
           {[2024, 2025, 2026, 2027].map(a => <option key={a} value={a}>{a}</option>)}
         </select>
       </div>
 
-      {/* Cards de resumo */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <StatCard icon={TrendingUp} label="Receitas" value={`R$ ${resumo.receitas.toFixed(2)}`} />
         <StatCard icon={TrendingDown} label="Despesas" value={`R$ ${resumo.despesas.toFixed(2)}`} />
@@ -136,23 +132,19 @@ export function Financeiro() {
         <StatCard icon={AlertCircle} label="Inadimplentes" value={resumo.inadimplentes.toString()} />
       </div>
 
-      {/* Filtros */}
       <div className="flex gap-4 mb-4">
-        <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}
-          className="ui-select">
+        <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)} className="ui-select">
           <option value="">Todos os tipos</option>
           <option value="receita">Receitas</option>
           <option value="despesa">Despesas</option>
         </select>
-        <select value={filtroPago} onChange={(e) => setFiltroPago(e.target.value)}
-          className="ui-select">
+        <select value={filtroPago} onChange={(e) => setFiltroPago(e.target.value)} className="ui-select">
           <option value="">Todos</option>
           <option value="true">Pagos</option>
           <option value="false">Pendentes</option>
         </select>
       </div>
 
-      {/* Tabela */}
       <div className="ui-table-wrap">
         <table className="w-full">
           <thead className="ui-table-head">
@@ -160,7 +152,7 @@ export function Financeiro() {
               <th className="px-4 py-3">Data</th>
               <th className="px-4 py-3">Tipo</th>
               <th className="px-4 py-3">Categoria</th>
-              <th className="px-4 py-3">Descricao</th>
+              <th className="px-4 py-3">Descrição</th>
               <th className="px-4 py-3">Aluno</th>
               <th className="px-4 py-3 text-right">Valor</th>
               <th className="px-4 py-3">Status</th>
@@ -203,7 +195,6 @@ export function Financeiro() {
         </table>
       </div>
 
-      {/* Modal Nova Transacao */}
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={`Nova ${form.tipo === 'receita' ? 'Receita' : 'Despesa'}`}>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -221,7 +212,7 @@ export function Financeiro() {
             </div>
           </div>
           <div>
-            <label className="block text-sm text-text-muted mb-1">Descricao</label>
+            <label className="block text-sm text-text-muted mb-1">Descrição</label>
             <input value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} className={inputClass} />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -241,7 +232,7 @@ export function Financeiro() {
           </div>
           <label className="flex items-center gap-2 text-sm text-text-muted">
             <input type="checkbox" checked={form.pago} onChange={(e) => setForm({ ...form, pago: e.target.checked })} className="rounded" />
-            Ja foi pago
+            Já foi pago
           </label>
           <button onClick={save} disabled={!form.valor || !form.categoria}
             className="w-full bg-accent hover:bg-accent-hover text-surface font-semibold py-3 rounded-xl disabled:opacity-50">
@@ -250,15 +241,14 @@ export function Financeiro() {
         </div>
       </Modal>
 
-      {/* Modal Gerar Mensalidades */}
       <Modal open={gerarModal} onClose={() => setGerarModal(false)} title="Gerar Mensalidades">
         <div className="space-y-4">
           <p className="text-text-muted text-sm">
-            Isso ira criar uma receita de mensalidade para cada aluno ativo que tenha valor de mensalidade cadastrado.
+            Isso irá criar uma receita de mensalidade para cada aluno ativo que tenha valor de mensalidade cadastrado.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-text-muted mb-1">Mes</label>
+              <label className="block text-sm text-text-muted mb-1">Mês</label>
               <select value={mesSelecionado} onChange={(e) => setMesSelecionado(parseInt(e.target.value))} className={inputClass}>
                 {['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'].map((m, i) => (
                   <option key={i} value={i + 1}>{m}</option>
@@ -282,9 +272,3 @@ export function Financeiro() {
     </PageTransition>
   );
 }
-
-
-
-
-
-

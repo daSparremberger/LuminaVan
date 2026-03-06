@@ -55,7 +55,6 @@ export function Rotas() {
   return (
     <PageTransition>
     <div className="flex gap-6 h-[calc(100vh-48px)]">
-      {/* Lista de rotas */}
       <div className="w-80 shrink-0">
         <PageHeader title="Rotas" subtitle={`${rotas.length} rota(s)`}
           action={<button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-surface px-3 py-2 rounded-xl text-sm font-medium"><Plus size={16} /></button>} />
@@ -68,7 +67,7 @@ export function Rotas() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-text font-medium">{r.nome}</p>
-                    <p className="text-text-muted text-xs mt-1">Veiculo: {r.veiculo_placa || 'Sem veiculo'} - {r.turno}</p>
+                    <p className="text-text-muted text-xs mt-1">Veículo: {r.veiculo_placa || 'Sem veículo'} - {r.turno}</p>
                   </div>
                   <ChevronRight size={18} className="text-text-muted" />
                 </div>
@@ -78,7 +77,6 @@ export function Rotas() {
         )}
       </div>
 
-      {/* Detalhes da rota */}
       <div className="flex-1 p-6 overflow-y-auto">
         {selected ? (
           <div>
@@ -106,19 +104,18 @@ export function Rotas() {
         )}
       </div>
 
-      {/* Modal nova rota */}
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Nova Rota" size="lg">
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div><label className="block text-sm text-text-muted mb-1">Nome</label>
               <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className="w-full ui-input" /></div>
-            <div><label className="block text-sm text-text-muted mb-1">Veiculo</label>
+            <div><label className="block text-sm text-text-muted mb-1">Veículo</label>
               <select value={form.veiculo_id} onChange={(e) => setForm({ ...form, veiculo_id: e.target.value })} className="w-full ui-input">
                 {veiculos.map((v) => <option key={v.id} value={v.id}>{v.placa} - {v.modelo}</option>)}
               </select></div>
             <div><label className="block text-sm text-text-muted mb-1">Turno</label>
               <select value={form.turno} onChange={(e) => setForm({ ...form, turno: e.target.value })} className="w-full ui-input">
-                <option value="manha">Manha</option><option value="tarde">Tarde</option><option value="noite">Noite</option>
+                <option value="manha">Manhã</option><option value="tarde">Tarde</option><option value="noite">Noite</option>
               </select></div>
           </div>
           <div>
@@ -142,7 +139,3 @@ export function Rotas() {
     </PageTransition>
   );
 }
-
-
-
-

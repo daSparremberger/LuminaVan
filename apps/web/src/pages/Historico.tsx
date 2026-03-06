@@ -21,7 +21,7 @@ export function Historico() {
   return (
     <PageTransition>
     <div>
-      <PageHeader title="Historico" subtitle="Ultimas execucoes de rotas" />
+      <PageHeader title="Histórico" subtitle="Últimas execuções de rotas" />
 
       {historico.length === 0 ? <EmptyState icon={History} message="Nenhum historico de execucao" /> : (
         <div className="ui-table-wrap">
@@ -55,6 +55,7 @@ export function Historico() {
     </PageTransition>
   );
 }
+
 
 
 
