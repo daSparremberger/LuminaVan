@@ -111,15 +111,15 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .ui-input {
-    @apply h-11 w-full rounded-xl border border-border bg-surface px-4 text-sm text-text placeholder:text-text-muted focus:border-success/50 focus:outline-none transition-all duration-200;
+    @apply h-11 w-full rounded-xl border border-border bg-surface px-4 text-sm text-text placeholder:text-text-muted focus:border-success focus:outline-none transition-all duration-200;
   }
 
   .ui-select {
-    @apply h-11 w-full rounded-xl border border-border bg-surface px-4 text-sm text-text focus:border-success/50 focus:outline-none transition-all duration-200;
+    @apply h-11 w-full rounded-xl border border-border bg-surface px-4 text-sm text-text focus:border-success focus:outline-none transition-all duration-200;
   }
 
   .ui-textarea {
-    @apply w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-text-muted focus:border-success/50 focus:outline-none transition-all duration-200;
+    @apply w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-text-muted focus:border-success focus:outline-none transition-all duration-200;
   }
 
   .ui-btn-primary {
@@ -142,3 +142,4 @@ h1, h2, h3, h4, h5, h6 {
     @apply border-t border-border hover:bg-surface;
   }
 }
+
