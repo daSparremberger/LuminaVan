@@ -130,10 +130,10 @@ export function Financeiro() {
 
       {/* Cards de resumo */}
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <StatCard icon={TrendingUp} label="Receitas" value={`R$ ${resumo.receitas.toFixed(2)}`} color="accent2" />
-        <StatCard icon={TrendingDown} label="Despesas" value={`R$ ${resumo.despesas.toFixed(2)}`} color="warn" />
-        <StatCard icon={DollarSign} label="Saldo" value={`R$ ${resumo.saldo.toFixed(2)}`} color={resumo.saldo >= 0 ? "accent2" : "warn"} />
-        <StatCard icon={AlertCircle} label="Inadimplentes" value={resumo.inadimplentes.toString()} color="warn" />
+        <StatCard icon={TrendingUp} label="Receitas" value={`R$ ${resumo.receitas.toFixed(2)}`} />
+        <StatCard icon={TrendingDown} label="Despesas" value={`R$ ${resumo.despesas.toFixed(2)}`} />
+        <StatCard icon={DollarSign} label="Saldo" value={`R$ ${resumo.saldo.toFixed(2)}`} />
+        <StatCard icon={AlertCircle} label="Inadimplentes" value={resumo.inadimplentes.toString()} />
       </div>
 
       {/* Filtros */}

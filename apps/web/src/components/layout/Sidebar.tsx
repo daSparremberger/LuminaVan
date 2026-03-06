@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, School, Users, Truck, Car, Map, History,
-  DollarSign, Radio, MessageCircle, LogOut, Settings, UserCircle
+  DollarSign, Radio, MessageCircle, LogOut, Settings, UserCircle,
+  LucideIcon
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/auth';
 import { clsx } from 'clsx';
@@ -12,7 +13,7 @@ interface NavCategory {
   label: string;
   items: {
     to: string;
-    icon: React.ComponentType<{ size?: number; className?: string }>;
+    icon: LucideIcon;
     label: string;
   }[];
 }
