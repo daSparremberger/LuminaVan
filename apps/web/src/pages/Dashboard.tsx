@@ -19,7 +19,7 @@ import { api } from '../lib/api';
 import { motion } from 'framer-motion';
 import type { DashboardStats, DashboardChartData } from '@rotavans/shared';
 
-const COLORS = ['#D4A574', '#4285F4', '#22C55E', '#EC4899', '#8B5CF6', '#EF4444'];
+const COLORS = ['#3B82F6', '#22C55E', '#F59E0B', '#EC4899', '#8B5CF6', '#EF4444'];
 
 const tooltipStyle = {
   contentStyle: {
