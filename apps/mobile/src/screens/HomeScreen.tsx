@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { api } from '../lib/api';
-import { useAuthStore } from '../stores/auth';
+import { getActiveProfile, useAuthStore } from '../stores/auth';
 import type { Rota } from '@rotavans/shared';
 
 export function HomeScreen() {
   const [rotas, setRotas] = useState<Rota[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const { motorista, logout } = useAuthStore();
+  const { clearActiveProfile } = useAuthStore();
+  const active = getActiveProfile();
   const navigation = useNavigation<any>();
 
   useEffect(() => {
@@ -39,10 +40,10 @@ export function HomeScreen() {
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Ola,</Text>
-          <Text style={styles.name}>{motorista?.nome}</Text>
+          <Text style={styles.name}>{active?.motorista.nome}</Text>
         </View>
-        <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
-          <Text style={styles.logoutText}>Sair</Text>
+        <TouchableOpacity onPress={clearActiveProfile} style={styles.logoutBtn}>
+          <Text style={styles.logoutText}>Trocar</Text>
         </TouchableOpacity>
       </View>
 

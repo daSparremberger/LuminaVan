@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 import { pool } from '../db/pool';
 import { auth } from '../lib/firebase';
+import { signMotoristaAppToken } from '../lib/appToken';
 
 const router = Router();
 
@@ -68,14 +69,17 @@ router.post('/login', async (req, res) => {
 
     // Tentar como motorista
     const motoristaResult = await pool.query(
-      'SELECT id, tenant_id, nome FROM motoristas WHERE firebase_uid = $1 AND ativo = true AND cadastro_completo = true',
+      'SELECT id, tenant_id, nome, pin_hash FROM motoristas WHERE firebase_uid = $1 AND ativo = true AND cadastro_completo = true',
       [firebaseUid]
     );
 
     if (motoristaResult.rows.length > 0) {
       const m = motoristaResult.rows[0];
+      const app_token = signMotoristaAppToken({ sub: m.id, tenant_id: m.tenant_id, role: 'motorista' });
       return res.json({
         role: 'motorista',
+        app_token,
+        has_pin: Boolean(m.pin_hash),
         user: { id: m.id, tenant_id: m.tenant_id, firebase_uid: firebaseUid, nome: m.nome }
       });
     }
@@ -211,7 +215,7 @@ router.post('/convite/:token/aceitar', async (req, res) => {
 
     // Tentar como convite de motorista
     const motoristaConvite = await pool.query(
-      'SELECT id, tenant_id, nome, convite_expira_em FROM motoristas WHERE convite_token = $1 AND firebase_uid IS NULL',
+      'SELECT id, tenant_id, nome, convite_expira_em, pin_hash FROM motoristas WHERE convite_token = $1 AND firebase_uid IS NULL',
       [token]
     );
 
@@ -224,12 +228,16 @@ router.post('/convite/:token/aceitar', async (req, res) => {
 
       // Vincular firebase_uid ao motorista
       await pool.query(
-        'UPDATE motoristas SET firebase_uid = $1, convite_token = NULL, convite_expira_em = NULL WHERE id = $2',
+        'UPDATE motoristas SET firebase_uid = $1, cadastro_completo = true, convite_token = NULL, convite_expira_em = NULL WHERE id = $2',
         [firebaseUid, m.id]
       );
 
+      const app_token = signMotoristaAppToken({ sub: m.id, tenant_id: m.tenant_id, role: 'motorista' });
+
       return res.json({
         role: 'motorista',
+        app_token,
+        has_pin: Boolean(m.pin_hash),
         user: { id: m.id, tenant_id: m.tenant_id, firebase_uid: firebaseUid, nome: m.nome }
       });
     }

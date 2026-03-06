@@ -7,6 +7,9 @@ import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { PinScreen } from './src/screens/PinScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { RotaScreen } from './src/screens/RotaScreen';
+import { PinSetupScreen } from './src/screens/PinSetupScreen';
+import { VehicleBindingScreen } from './src/screens/VehicleBindingScreen';
+import { useEffect } from 'react';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,15 +24,29 @@ const theme = {
 };
 
 export default function App() {
-  const { motorista, pinVerified } = useAuthStore();
+  const { profiles, activeMotoristaId, pinVerified, loading, loadFromStorage } = useAuthStore();
+
+  useEffect(() => {
+    loadFromStorage();
+  }, []);
+
+  const activeProfile = profiles.find((item) => item.motorista.id === activeMotoristaId) || null;
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={theme}>
         <StatusBar style="light" />
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {!motorista ? (
+          {!activeProfile ? (
             <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          ) : !activeProfile.pinConfigured ? (
+            <Stack.Screen name="PinSetup" component={PinSetupScreen} />
+          ) : !activeProfile.vehicleBound ? (
+            <Stack.Screen name="VehicleBinding" component={VehicleBindingScreen} />
           ) : !pinVerified ? (
             <Stack.Screen name="Pin" component={PinScreen} />
           ) : (

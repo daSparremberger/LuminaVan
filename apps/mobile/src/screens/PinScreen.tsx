@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { api } from '../lib/api';
-import { useAuthStore } from '../stores/auth';
+import { getActiveProfile, useAuthStore } from '../stores/auth';
 
 export function PinScreen() {
   const [pin, setPin] = useState('');
   const [loading, setLoading] = useState(false);
-  const { motorista, verifyPin, logout } = useAuthStore();
+  const { verifyPin, clearActiveProfile, logoutActiveProfile } = useAuthStore();
+  const active = getActiveProfile();
 
   async function checkPin() {
-    if (pin.length !== 4) return Alert.alert('Erro', 'PIN deve ter 4 digitos');
+    if (!/^\d{4,6}$/.test(pin)) return Alert.alert('Erro', 'PIN deve ter entre 4 e 6 digitos');
     setLoading(true);
     try {
       await api.post('/motorista/verificar-pin', { pin });
@@ -26,7 +27,7 @@ export function PinScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.logo}>RotaVans</Text>
-        <Text style={styles.welcome}>Ola, {motorista?.nome}</Text>
+        <Text style={styles.welcome}>Ola, {active?.motorista.nome}</Text>
       </View>
 
       <View style={styles.form}>
@@ -38,15 +39,18 @@ export function PinScreen() {
           placeholder="****"
           placeholderTextColor="#666"
           keyboardType="numeric"
-          maxLength={4}
+          maxLength={6}
           secureTextEntry
           autoFocus
         />
         <TouchableOpacity style={styles.button} onPress={checkPin} disabled={loading}>
           <Text style={styles.buttonText}>{loading ? 'Verificando...' : 'Entrar'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
-          <Text style={styles.logoutText}>Sair desta conta</Text>
+        <TouchableOpacity style={styles.logoutBtn} onPress={clearActiveProfile}>
+          <Text style={styles.logoutText}>Trocar usuario</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.logoutBtn} onPress={logoutActiveProfile}>
+          <Text style={styles.logoutText}>Remover esta conta do tablet</Text>
         </TouchableOpacity>
       </View>
     </View>

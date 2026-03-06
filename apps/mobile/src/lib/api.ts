@@ -4,9 +4,18 @@ import { io, Socket } from 'socket.io-client';
 const BASE = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001';
 
 let socket: Socket | null = null;
+const AUTH_TOKEN_KEY = 'auth_token';
 
 async function getToken(): Promise<string | null> {
-  return SecureStore.getItemAsync('auth_token');
+  return SecureStore.getItemAsync(AUTH_TOKEN_KEY);
+}
+
+export async function setToken(token: string | null) {
+  if (!token) {
+    await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+    return;
+  }
+  await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token);
 }
 
 async function req<T>(path: string, opts?: RequestInit): Promise<T> {

@@ -2,6 +2,7 @@ import { Server as HttpServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import { auth } from './lib/firebase';
 import { pool } from './db/pool';
+import { verifyAppToken } from './lib/appToken';
 
 interface MotoristaLocation {
   motorista_id: number;
@@ -35,27 +36,39 @@ export function setupSocket(httpServer: HttpServer) {
     }
 
     try {
-      const decoded = await auth.verifyIdToken(token);
-      const uid = decoded.uid;
-
       // Buscar usuario (gestor ou motorista)
       let user: any = null;
 
-      const gestorResult = await pool.query(
-        'SELECT id, tenant_id, nome FROM gestores WHERE firebase_uid = $1 AND ativo = true',
-        [uid]
-      );
-      if (gestorResult.rows.length > 0) {
-        user = { ...gestorResult.rows[0], role: 'gestor' };
-      }
-
-      if (!user) {
+      const appToken = verifyAppToken(token);
+      if (appToken) {
         const motoristaResult = await pool.query(
-          'SELECT id, tenant_id, nome FROM motoristas WHERE firebase_uid = $1 AND ativo = true',
-          [uid]
+          'SELECT id, tenant_id, nome FROM motoristas WHERE id = $1 AND tenant_id = $2 AND ativo = true',
+          [appToken.sub, appToken.tenant_id]
         );
         if (motoristaResult.rows.length > 0) {
           user = { ...motoristaResult.rows[0], role: 'motorista' };
+        }
+      }
+      if (!user) {
+        const decoded = await auth.verifyIdToken(token);
+        const uid = decoded.uid;
+
+        const gestorResult = await pool.query(
+          'SELECT id, tenant_id, nome FROM gestores WHERE firebase_uid = $1 AND ativo = true',
+          [uid]
+        );
+        if (gestorResult.rows.length > 0) {
+          user = { ...gestorResult.rows[0], role: 'gestor' };
+        }
+
+        if (!user) {
+          const motoristaResult = await pool.query(
+            'SELECT id, tenant_id, nome FROM motoristas WHERE firebase_uid = $1 AND ativo = true',
+            [uid]
+          );
+          if (motoristaResult.rows.length > 0) {
+            user = { ...motoristaResult.rows[0], role: 'motorista' };
+          }
         }
       }
 

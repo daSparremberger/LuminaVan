@@ -1,7 +1,7 @@
 {
   "name": "rotavans-mobile",
   "version": "1.0.0",
-  "main": "expo/AppEntry.js",
+  "main": "index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
@@ -9,13 +9,21 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@babel/runtime": "^7.28.6",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "expo": "~52.0.0",
+    "expo-application": "~6.0.2",
+    "expo-asset": "~11.0.5",
+    "expo-auth-session": "~6.0.3",
     "expo-camera": "~16.0.18",
+    "expo-linking": "~7.0.5",
     "expo-location": "~18.0.10",
     "expo-secure-store": "~14.0.1",
     "expo-status-bar": "~2.0.0",
+    "expo-web-browser": "~14.0.2",
+    "firebase": "^10.14.1",
     "react": "18.3.1",
     "react-native": "0.76.9",
     "react-native-maps": "1.18.0",

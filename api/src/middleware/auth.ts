@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { auth } from '../lib/firebase';
 import { pool } from '../db/pool';
 import type { UserRole, UserProfile } from '../types';
+import { verifyAppToken } from '../lib/appToken';
 
 export interface AuthRequest extends Request {
   user?: UserProfile;
@@ -15,6 +16,27 @@ export async function requireAuth(req: AuthRequest, res: Response, next: NextFun
 
   try {
     const idToken = header.slice(7);
+
+    const appToken = verifyAppToken(idToken);
+    if (appToken) {
+      const motoristaResult = await pool.query(
+        'SELECT id, tenant_id, firebase_uid, nome FROM motoristas WHERE id = $1 AND tenant_id = $2 AND ativo = true AND cadastro_completo = true',
+        [appToken.sub, appToken.tenant_id]
+      );
+
+      if (motoristaResult.rows.length > 0) {
+        const m = motoristaResult.rows[0];
+        req.user = {
+          id: m.id,
+          tenant_id: m.tenant_id,
+          firebase_uid: m.firebase_uid || `motorista:${m.id}`,
+          nome: m.nome,
+          role: 'motorista',
+        };
+        return next();
+      }
+    }
+
     const decoded = await auth.verifyIdToken(idToken);
     const firebaseUid = decoded.uid;
     const email = decoded.email;

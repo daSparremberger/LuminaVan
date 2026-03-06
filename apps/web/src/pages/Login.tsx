@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import { Download } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { useAuthStore } from '../stores/auth';
@@ -15,6 +15,60 @@ export function LoginPage() {
   const setAuth = useAuthStore((s) => s.setAuth);
 
   const conviteToken = searchParams.get('convite');
+  const isElectron = window.location.protocol === 'file:' || navigator.userAgent.toLowerCase().includes('electron');
+
+  async function concluirLogin(idToken: string) {
+    if (conviteToken) {
+      const res = await fetch(`${API_URL}/auth/convite/${conviteToken}/aceitar`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${idToken}` }
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Erro ao aceitar convite');
+      }
+      const data = await res.json();
+      setAuth(data.user, data.role, idToken);
+      if (data.role === 'motorista') {
+        navigate('/downloads?role=motorista');
+      } else if (data.role === 'gestor') {
+        navigate('/downloads?role=gestor');
+      } else {
+        navigate('/');
+      }
+      return;
+    }
+
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${idToken}` }
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Erro no login');
+    }
+    const data = await res.json();
+    setAuth(data.user, data.role, idToken);
+    navigate('/');
+  }
+
+  useEffect(() => {
+    if (!isElectron) return;
+
+    (async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (!result?.user) return;
+        setLoading(true);
+        const idToken = await result.user.getIdToken();
+        await concluirLogin(idToken);
+      } catch (err: any) {
+        setError(err.message || 'Erro no login');
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [isElectron]);
 
   async function handleGoogleLogin() {
     setLoading(true);
@@ -22,35 +76,14 @@ export function LoginPage() {
 
     try {
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const idToken = await result.user.getIdToken();
-
-      if (conviteToken) {
-        const res = await fetch(`${API_URL}/auth/convite/${conviteToken}/aceitar`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${idToken}` }
-        });
-        if (!res.ok) {
-          const data = await res.json();
-          throw new Error(data.error || 'Erro ao aceitar convite');
-        }
-        const data = await res.json();
-        setAuth(data.user, data.role, idToken);
-        navigate('/');
+      if (isElectron) {
+        await signInWithRedirect(auth, provider);
         return;
       }
 
-      const res = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${idToken}` }
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Erro no login');
-      }
-      const data = await res.json();
-      setAuth(data.user, data.role, idToken);
-      navigate('/');
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+      await concluirLogin(idToken);
     } catch (err: any) {
       setError(err.message || 'Erro no login');
     } finally {
@@ -110,15 +143,17 @@ export function LoginPage() {
           )}
         </button>
 
-        <a
-          href="/downloads"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-accent-hover"
-        >
-          <Download size={16} />
-          Baixar Aplicativos
-        </a>
+        {!isElectron && (
+          <a
+            href="/downloads"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-accent-hover"
+          >
+            <Download size={16} />
+            Baixar Aplicativos
+          </a>
+        )}
 
         <p className="mt-8 text-center text-xs text-text-muted">
           Ao continuar, voce concorda com os termos de uso do sistema.

@@ -1,54 +1,127 @@
-import { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
 import * as Linking from 'expo-linking';
-import { api } from '../lib/api';
+import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useAuthStore } from '../stores/auth';
+import { firebaseAuth } from '../lib/firebase';
+import { getDeviceId } from '../lib/device';
+import { api } from '../lib/api';
+
+WebBrowser.maybeCompleteAuthSession();
+
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001';
+
+type LoginResponse = {
+  role: 'admin' | 'gestor' | 'motorista';
+  has_pin?: boolean;
+  app_token?: string;
+  user: {
+    id: number;
+    tenant_id: number;
+    firebase_uid?: string;
+    nome: string;
+  };
+};
+
+function parseInviteToken(url: string | null) {
+  if (!url) return null;
+  try {
+    const parsed = Linking.parse(url);
+    if (parsed.queryParams?.token) return String(parsed.queryParams.token);
+    const path = parsed.path || '';
+    const parts = path.split('/').filter(Boolean);
+    if (parts[0] === 'convite' && parts[1]) return parts[1];
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 export function OnboardingScreen() {
-  const [token, setToken] = useState('');
-  const [step, setStep] = useState<'token' | 'pin' | 'confirm'>('token');
-  const [pin, setPin] = useState('');
-  const [confirmPin, setConfirmPin] = useState('');
-  const [nome, setNome] = useState('');
+  const {
+    profiles,
+    setActiveProfile,
+    upsertProfile,
+    setVehicleBound,
+  } = useAuthStore();
   const [loading, setLoading] = useState(false);
-  const { setMotorista } = useAuthStore();
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
+
+  const [, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+  });
+
+  const profileList = useMemo(() => profiles.map((item) => item.motorista), [profiles]);
 
   useEffect(() => {
-    // Handle deep link
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        const { queryParams } = Linking.parse(url);
-        if (queryParams?.token) {
-          setToken(queryParams.token as string);
-        }
-      }
+    Linking.getInitialURL().then((url) => setInviteToken(parseInviteToken(url)));
+    const subscription = Linking.addEventListener('url', ({ url }) => {
+      setInviteToken(parseInviteToken(url));
     });
+    return () => subscription.remove();
   }, []);
 
-  async function validateToken() {
-    if (!token.trim()) return Alert.alert('Erro', 'Digite o codigo do convite');
-    setLoading(true);
-    try {
-      const res = await api.get<{ nome: string }>(`/convite/${token}`);
-      setNome(res.nome);
-      setStep('pin');
-    } catch (err: any) {
-      Alert.alert('Erro', err.message || 'Convite invalido');
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (!response || response.type !== 'success') return;
+    const idToken = response.params.id_token;
+    if (!idToken) {
+      Alert.alert('Erro', 'Não foi possível concluir o login com Google.');
+      return;
     }
-  }
+    concluirLoginGoogle(idToken).catch((err) => {
+      Alert.alert('Erro', err.message || 'Falha no login');
+    });
+  }, [response]);
 
-  async function finishOnboarding() {
-    if (pin.length !== 4) return Alert.alert('Erro', 'PIN deve ter 4 digitos');
-    if (pin !== confirmPin) return Alert.alert('Erro', 'PINs nao conferem');
-
+  async function concluirLoginGoogle(idToken: string) {
     setLoading(true);
     try {
-      const res = await api.post<any>(`/convite/${token}/completar`, { pin });
-      setMotorista(res.motorista);
-    } catch (err: any) {
-      Alert.alert('Erro', err.message || 'Erro ao completar cadastro');
+      const credential = GoogleAuthProvider.credential(idToken);
+      await signInWithCredential(firebaseAuth, credential);
+
+      const endpoint = inviteToken
+        ? `${API_URL}/auth/convite/${inviteToken}/aceitar`
+        : `${API_URL}/auth/login`;
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: 'Falha no login' }));
+        throw new Error(data.error || 'Falha no login');
+      }
+
+      const data = (await res.json()) as LoginResponse;
+      if (data.role !== 'motorista' || !data.app_token) {
+        throw new Error('Esta conta não é de motorista.');
+      }
+
+      await upsertProfile({
+        motorista: {
+          id: data.user.id,
+          tenant_id: data.user.tenant_id,
+          firebase_uid: data.user.firebase_uid,
+          nome: data.user.nome,
+          ativo: true,
+          cadastro_completo: true,
+          criado_em: new Date().toISOString(),
+        } as any,
+        token: data.app_token,
+        pinConfigured: Boolean(data.has_pin),
+        vehicleBound: false,
+      });
+
+      const deviceId = await getDeviceId();
+      const vinculo = await api.get<{ id: number; veiculo_id: number; placa: string } | null>(
+        `/motorista/tablet-vinculo?device_id=${encodeURIComponent(deviceId)}`
+      );
+      await setVehicleBound(data.user.id, Boolean(vinculo));
     } finally {
       setLoading(false);
     }
@@ -58,69 +131,64 @@ export function OnboardingScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.logo}>RotaVans</Text>
-        <Text style={styles.subtitle}>Motorista</Text>
+        <Text style={styles.subtitle}>Selecione um motorista</Text>
       </View>
 
-      {step === 'token' && (
-        <View style={styles.form}>
-          <Text style={styles.label}>Codigo do Convite</Text>
-          <TextInput
-            style={styles.input}
-            value={token}
-            onChangeText={setToken}
-            placeholder="Digite o codigo recebido"
-            placeholderTextColor="#666"
-            autoCapitalize="none"
-          />
-          <TouchableOpacity style={styles.button} onPress={validateToken} disabled={loading}>
-            <Text style={styles.buttonText}>{loading ? 'Validando...' : 'Continuar'}</Text>
+      <FlatList
+        data={profileList}
+        keyExtractor={(item) => String(item.id)}
+        ListEmptyComponent={
+          <Text style={styles.empty}>Nenhum motorista sincronizado neste tablet.</Text>
+        }
+        renderItem={({ item }) => (
+          <TouchableOpacity style={styles.card} onPress={() => setActiveProfile(item.id)}>
+            <View>
+              <Text style={styles.cardTitle}>{item.nome}</Text>
+              <Text style={styles.cardSub}>Toque para entrar com PIN</Text>
+            </View>
           </TouchableOpacity>
-        </View>
-      )}
+        )}
+        contentContainerStyle={{ gap: 10, paddingBottom: 12 }}
+      />
 
-      {step === 'pin' && (
-        <View style={styles.form}>
-          <Text style={styles.welcome}>Ola, {nome}!</Text>
-          <Text style={styles.label}>Crie um PIN de 4 digitos</Text>
-          <TextInput
-            style={styles.input}
-            value={pin}
-            onChangeText={setPin}
-            placeholder="PIN"
-            placeholderTextColor="#666"
-            keyboardType="numeric"
-            maxLength={4}
-            secureTextEntry
-          />
-          <Text style={styles.label}>Confirme o PIN</Text>
-          <TextInput
-            style={styles.input}
-            value={confirmPin}
-            onChangeText={setConfirmPin}
-            placeholder="Confirme o PIN"
-            placeholderTextColor="#666"
-            keyboardType="numeric"
-            maxLength={4}
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.button} onPress={finishOnboarding} disabled={loading}>
-            <Text style={styles.buttonText}>{loading ? 'Finalizando...' : 'Finalizar Cadastro'}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <TouchableOpacity
+        style={[styles.googleButton, loading && styles.disabled]}
+        onPress={() => promptAsync()}
+        disabled={loading}
+      >
+        <Text style={styles.plus}>+</Text>
+        <Text style={styles.googleButtonText}>{loading ? 'Sincronizando...' : 'Entrar com Google'}</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0a0a0a', padding: 24 },
-  header: { alignItems: 'center', marginTop: 60, marginBottom: 40 },
-  logo: { fontSize: 32, fontWeight: '700', color: '#fff' },
-  subtitle: { fontSize: 16, color: '#666', marginTop: 4 },
-  form: { flex: 1 },
-  welcome: { fontSize: 24, fontWeight: '600', color: '#fff', marginBottom: 24 },
-  label: { fontSize: 14, color: '#888', marginBottom: 8, marginTop: 16 },
-  input: { backgroundColor: '#1a1a1a', borderRadius: 12, padding: 16, color: '#fff', fontSize: 16, borderWidth: 1, borderColor: '#2a2a2a' },
-  button: { backgroundColor: '#3B82F6', borderRadius: 12, padding: 16, marginTop: 24, alignItems: 'center' },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  container: { flex: 1, backgroundColor: '#0a0a0a', padding: 24, paddingTop: 48 },
+  header: { marginBottom: 20 },
+  logo: { color: '#fff', fontSize: 30, fontWeight: '700' },
+  subtitle: { color: '#8b8f98', fontSize: 15, marginTop: 6 },
+  empty: { color: '#8b8f98', textAlign: 'center', marginTop: 20 },
+  card: {
+    borderWidth: 1,
+    borderColor: '#262a2f',
+    backgroundColor: '#15181c',
+    borderRadius: 16,
+    padding: 16,
+  },
+  cardTitle: { color: '#fff', fontWeight: '600', fontSize: 17 },
+  cardSub: { color: '#8b8f98', marginTop: 4, fontSize: 13 },
+  googleButton: {
+    marginTop: 14,
+    backgroundColor: '#3B82F6',
+    borderRadius: 14,
+    minHeight: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 8,
+  },
+  googleButtonText: { color: '#fff', fontWeight: '600', fontSize: 15 },
+  plus: { color: '#fff', fontWeight: '700', fontSize: 20, lineHeight: 20 },
+  disabled: { opacity: 0.7 },
 });
