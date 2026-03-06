@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { MessageCircle, Send, User } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { EmptyState } from '../components/ui/EmptyState';
+import { PageTransition } from '../components/ui/PageTransition';
 import { api } from '../lib/api';
 import { useAuthStore } from '../stores/auth';
 import { clsx } from 'clsx';
@@ -129,21 +130,22 @@ export function Mensagens() {
   }
 
   return (
+    <PageTransition>
     <div className="h-[calc(100vh-2rem)]">
       <PageHeader title="Mensagens" subtitle="Comunicacao com motoristas" />
 
       <div className="flex gap-6 h-[calc(100%-5rem)]">
         {/* Left column - Conversations list */}
-        <div className="w-80 border border-beige/10 rounded-xl flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-beige/10">
-            <h2 className="text-sm font-semibold text-beige">Conversas</h2>
+        <div className="w-80 border border-border/30 rounded-xl flex flex-col overflow-hidden">
+          <div className="p-4 border-b border-border/30">
+            <h2 className="text-sm font-semibold text-text">Conversas</h2>
           </div>
 
           <div className="flex-1 overflow-y-auto">
             {loading ? (
-              <div className="p-4 text-center text-beige/30 text-sm">Carregando...</div>
+              <div className="p-4 text-center text-text-muted text-sm">Carregando...</div>
             ) : conversas.length === 0 && motoristasWithoutConvo.length === 0 ? (
-              <div className="p-4 text-center text-beige/30 text-sm">
+              <div className="p-4 text-center text-text-muted text-sm">
                 Nenhuma conversa ou motorista disponivel
               </div>
             ) : (
@@ -154,10 +156,10 @@ export function Mensagens() {
                     key={`${conversa.participante_tipo}-${conversa.participante_id}`}
                     onClick={() => setSelectedConversation(conversa)}
                     className={clsx(
-                      'w-full p-4 flex items-start gap-3 hover:bg-beige/5/50 transition-colors text-left border-b border-beige/10',
+                      'w-full p-4 flex items-start gap-3 hover:bg-surface2/50 transition-colors text-left border-b border-border/30',
                       selectedConversation?.participante_id === conversa.participante_id &&
                         selectedConversation?.participante_tipo === conversa.participante_tipo &&
-                        'bg-beige/5'
+                        'bg-surface2'
                     )}
                   >
                     <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
@@ -165,22 +167,22 @@ export function Mensagens() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-beige text-sm font-medium truncate">
+                        <span className="text-text text-sm font-medium truncate">
                           {conversa.participante_nome}
                         </span>
                         {conversa.nao_lidas > 0 && (
-                          <span className="bg-accent text-beige text-xs px-2 py-0.5 rounded-full shrink-0">
+                          <span className="bg-accent text-text text-xs px-2 py-0.5 rounded-full shrink-0">
                             {conversa.nao_lidas}
                           </span>
                         )}
                       </div>
                       {conversa.ultima_mensagem && (
-                        <p className="text-beige/30 text-xs mt-1 truncate">
+                        <p className="text-text-muted text-xs mt-1 truncate">
                           {conversa.ultima_mensagem}
                         </p>
                       )}
                       {conversa.ultima_mensagem_data && (
-                        <p className="text-gray-600 text-xs mt-0.5">
+                        <p className="text-text-muted text-xs mt-0.5">
                           {formatTime(conversa.ultima_mensagem_data)}
                         </p>
                       )}
@@ -191,21 +193,21 @@ export function Mensagens() {
                 {/* Motoristas without conversations */}
                 {motoristasWithoutConvo.length > 0 && (
                   <>
-                    <div className="px-4 py-2 bg-beige/5/30 text-xs text-beige/30 font-medium">
+                    <div className="px-4 py-2 bg-surface2/30 text-xs text-text-muted font-medium">
                       Iniciar nova conversa
                     </div>
                     {motoristasWithoutConvo.map((motorista) => (
                       <button
                         key={`new-${motorista.id}`}
                         onClick={() => startConversation(motorista)}
-                        className="w-full p-4 flex items-center gap-3 hover:bg-beige/5/50 transition-colors text-left border-b border-beige/10"
+                        className="w-full p-4 flex items-center gap-3 hover:bg-surface2/50 transition-colors text-left border-b border-border/30"
                       >
                         <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center shrink-0">
-                          <User size={18} className="text-beige/40" />
+                          <User size={18} className="text-text-muted" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <span className="text-gray-300 text-sm truncate">{motorista.nome}</span>
-                          <p className="text-gray-600 text-xs mt-0.5">Clique para iniciar</p>
+                          <span className="text-text-muted text-sm truncate">{motorista.nome}</span>
+                          <p className="text-text-muted text-xs mt-0.5">Clique para iniciar</p>
                         </div>
                       </button>
                     ))}
@@ -217,19 +219,19 @@ export function Mensagens() {
         </div>
 
         {/* Right column - Chat */}
-        <div className="flex-1 border border-beige/10 rounded-xl flex flex-col overflow-hidden">
+        <div className="flex-1 border border-border/30 rounded-xl flex flex-col overflow-hidden">
           {selectedConversation ? (
             <>
               {/* Chat header */}
-              <div className="p-4 border-b border-beige/10 flex items-center gap-3">
+              <div className="p-4 border-b border-border/30 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
                   <User size={18} className="text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-beige font-medium">
+                  <h2 className="text-text font-medium">
                     {selectedConversation.participante_nome}
                   </h2>
-                  <p className="text-beige/30 text-xs capitalize">
+                  <p className="text-text-muted text-xs capitalize">
                     {selectedConversation.participante_tipo}
                   </p>
                 </div>
@@ -239,7 +241,7 @@ export function Mensagens() {
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.length === 0 ? (
                   <div className="h-full flex items-center justify-center">
-                    <p className="text-beige/30 text-sm">Nenhuma mensagem ainda</p>
+                    <p className="text-text-muted text-sm">Nenhuma mensagem ainda</p>
                   </div>
                 ) : (
                   messages.map((msg) => {
@@ -253,15 +255,15 @@ export function Mensagens() {
                           className={clsx(
                             'max-w-[70%] px-4 py-2 rounded-2xl',
                             isFromMe
-                              ? 'bg-accent text-beige rounded-br-sm'
-                              : 'bg-beige/5 text-gray-200 rounded-bl-sm'
+                              ? 'bg-accent text-text rounded-br-sm'
+                              : 'bg-surface2 text-text rounded-bl-sm'
                           )}
                         >
                           <p className="text-sm whitespace-pre-wrap break-words">{msg.conteudo}</p>
                           <p
                             className={clsx(
                               'text-xs mt-1',
-                              isFromMe ? 'text-beige/60' : 'text-beige/30'
+                              isFromMe ? 'text-text-muted' : 'text-text-muted'
                             )}
                           >
                             {formatTime(msg.criado_em)}
@@ -275,7 +277,7 @@ export function Mensagens() {
               </div>
 
               {/* Input */}
-              <div className="p-4 border-t border-beige/10">
+              <div className="p-4 border-t border-border/30">
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -283,7 +285,7 @@ export function Mensagens() {
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Digite sua mensagem..."
-                    className="flex-1 bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent placeholder-gray-500"
+                    className="flex-1 bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent placeholder-gray-500"
                   />
                   <button
                     onClick={sendMessage}
@@ -291,8 +293,8 @@ export function Mensagens() {
                     className={clsx(
                       'px-4 py-3 rounded-xl transition-colors',
                       newMessage.trim() && !sending
-                        ? 'bg-accent hover:bg-accent/90 text-beige'
-                        : 'bg-beige/5 text-beige/30 cursor-not-allowed'
+                        ? 'bg-accent hover:bg-accent/90 text-text'
+                        : 'bg-surface2 text-text-muted cursor-not-allowed'
                     )}
                   >
                     <Send size={18} />
@@ -309,5 +311,6 @@ export function Mensagens() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

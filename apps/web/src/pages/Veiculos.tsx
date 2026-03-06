@@ -3,6 +3,7 @@ import { Plus, Car, ChevronRight, Save, Map } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Modal } from '../components/ui/Modal';
 import { EmptyState } from '../components/ui/EmptyState';
+import { PageTransition } from '../components/ui/PageTransition';
 import { api } from '../lib/api';
 import type { Veiculo, Motorista } from '@rotavans/shared';
 
@@ -89,6 +90,7 @@ export function Veiculos() {
   }
 
   return (
+    <PageTransition>
     <div className="flex gap-6 h-[calc(100vh-48px)]">
       {/* Lista de veiculos */}
       <div className="w-80 shrink-0">
@@ -98,7 +100,7 @@ export function Veiculos() {
           action={
             <button
               onClick={openNew}
-              className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-beige px-3 py-2 rounded-xl text-sm font-medium"
+              className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-3 py-2 rounded-xl text-sm font-medium"
             >
               <Plus size={16} />
             </button>
@@ -113,20 +115,20 @@ export function Veiculos() {
               <button
                 key={v.id}
                 onClick={() => selectVeiculo(v)}
-                className={`w-full text-left bg-beige/5 border rounded-xl p-4 transition-colors ${
+                className={`w-full text-left bg-surface2 border rounded-xl p-4 transition-colors ${
                   selected?.id === v.id
                     ? 'border-accent'
-                    : 'border-beige/10 hover:border-gray-600'
+                    : 'border-border/30 hover:border-gray-600'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-beige font-medium">{v.placa}</p>
-                    <p className="text-beige/40 text-xs mt-1">
+                    <p className="text-text font-medium">{v.placa}</p>
+                    <p className="text-text-muted text-xs mt-1">
                       {v.modelo} {v.fabricante} {v.ano || ''}
                     </p>
                   </div>
-                  <ChevronRight size={18} className="text-beige/30" />
+                  <ChevronRight size={18} className="text-text-muted" />
                 </div>
               </button>
             ))}
@@ -139,25 +141,25 @@ export function Veiculos() {
         {selected ? (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-bold text-beige mb-4">
+              <h2 className="text-xl font-bold text-text mb-4">
                 {selected.placa}
               </h2>
               <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-xl p-4 border border-beige/10">
-                  <p className="text-beige/40 text-xs mb-1">Modelo</p>
-                  <p className="text-beige">{selected.modelo}</p>
+                <div className="rounded-xl p-4 border border-border/30">
+                  <p className="text-text-muted text-xs mb-1">Modelo</p>
+                  <p className="text-text">{selected.modelo}</p>
                 </div>
-                <div className="rounded-xl p-4 border border-beige/10">
-                  <p className="text-beige/40 text-xs mb-1">Fabricante</p>
-                  <p className="text-beige">{selected.fabricante}</p>
+                <div className="rounded-xl p-4 border border-border/30">
+                  <p className="text-text-muted text-xs mb-1">Fabricante</p>
+                  <p className="text-text">{selected.fabricante}</p>
                 </div>
-                <div className="rounded-xl p-4 border border-beige/10">
-                  <p className="text-beige/40 text-xs mb-1">Capacidade</p>
-                  <p className="text-beige">{selected.capacidade} passageiros</p>
+                <div className="rounded-xl p-4 border border-border/30">
+                  <p className="text-text-muted text-xs mb-1">Capacidade</p>
+                  <p className="text-text">{selected.capacidade} passageiros</p>
                 </div>
-                <div className="rounded-xl p-4 border border-beige/10">
-                  <p className="text-beige/40 text-xs mb-1">Consumo</p>
-                  <p className="text-beige">
+                <div className="rounded-xl p-4 border border-border/30">
+                  <p className="text-text-muted text-xs mb-1">Consumo</p>
+                  <p className="text-text">
                     {selected.consumo_km ? `${selected.consumo_km} km/L` : '-'}
                   </p>
                 </div>
@@ -167,21 +169,21 @@ export function Veiculos() {
             {/* Pool de motoristas */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm text-beige/40">
+                <h3 className="text-sm text-text-muted">
                   Motoristas Habilitados ({selectedMotoristaIds.length})
                 </h3>
                 <button
                   onClick={saveMotoristas}
                   disabled={saving}
-                  className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-beige px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-50"
+                  className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-3 py-1.5 rounded-lg text-sm font-medium disabled:opacity-50"
                 >
                   <Save size={14} />
                   {saving ? 'Salvando...' : 'Salvar'}
                 </button>
               </div>
-              <div className="rounded-xl p-3 border border-beige/10 max-h-48 overflow-y-auto space-y-1">
+              <div className="rounded-xl p-3 border border-border/30 max-h-48 overflow-y-auto space-y-1">
                 {motoristas.length === 0 ? (
-                  <p className="text-beige/30 text-sm p-2">
+                  <p className="text-text-muted text-sm p-2">
                     Nenhum motorista disponivel
                   </p>
                 ) : (
@@ -191,7 +193,7 @@ export function Veiculos() {
                       className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer ${
                         selectedMotoristaIds.includes(m.id)
                           ? 'bg-accent/20'
-                          : 'hover:bg-beige/5'
+                          : 'hover:bg-surface2'
                       }`}
                     >
                       <input
@@ -200,9 +202,9 @@ export function Veiculos() {
                         onChange={() => toggleMotorista(m.id)}
                         className="rounded"
                       />
-                      <span className="text-beige text-sm">{m.nome}</span>
+                      <span className="text-text text-sm">{m.nome}</span>
                       {m.telefone && (
-                        <span className="text-beige/40 text-xs">
+                        <span className="text-text-muted text-xs">
                           {m.telefone}
                         </span>
                       )}
@@ -214,7 +216,7 @@ export function Veiculos() {
 
             {/* Rotas vinculadas */}
             <div>
-              <h3 className="text-sm text-beige/40 mb-3">
+              <h3 className="text-sm text-text-muted mb-3">
                 Rotas Vinculadas ({selected.rotas_vinculadas?.length || 0})
               </h3>
               {selected.rotas_vinculadas && selected.rotas_vinculadas.length > 0 ? (
@@ -222,14 +224,14 @@ export function Veiculos() {
                   {selected.rotas_vinculadas.map((r) => (
                     <div
                       key={r.id}
-                      className="flex items-center gap-3 bg-beige/5 rounded-lg p-3"
+                      className="flex items-center gap-3 bg-surface2 rounded-lg p-3"
                     >
                       <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
                         <Map size={16} className="text-accent" />
                       </div>
                       <div>
-                        <p className="text-beige text-sm">{r.nome}</p>
-                        <p className="text-beige/40 text-xs">
+                        <p className="text-text text-sm">{r.nome}</p>
+                        <p className="text-text-muted text-xs">
                           {r.motorista_nome || 'Sem motorista'} - {r.turno}
                         </p>
                       </div>
@@ -237,14 +239,14 @@ export function Veiculos() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl p-4 border border-beige/10 text-center text-beige/30 text-sm">
+                <div className="rounded-xl p-4 border border-border/30 text-center text-text-muted text-sm">
                   Nenhuma rota vinculada a este veiculo
                 </div>
               )}
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-center h-full text-beige/30">
+          <div className="flex items-center justify-center h-full text-text-muted">
             <p>Selecione um veiculo para ver detalhes</p>
           </div>
         )}
@@ -260,50 +262,50 @@ export function Veiculos() {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-beige/40 mb-1">Placa</label>
+              <label className="block text-sm text-text-muted mb-1">Placa</label>
               <input
                 value={form.placa}
                 onChange={(e) => setForm({ ...form, placa: e.target.value.toUpperCase() })}
                 placeholder="ABC1D23"
-                className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent"
+                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
               />
             </div>
             <div>
-              <label className="block text-sm text-beige/40 mb-1">Ano</label>
+              <label className="block text-sm text-text-muted mb-1">Ano</label>
               <input
                 value={form.ano}
                 onChange={(e) => setForm({ ...form, ano: e.target.value })}
                 type="number"
                 placeholder="2020"
-                className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent"
+                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-beige/40 mb-1">
+              <label className="block text-sm text-text-muted mb-1">
                 Fabricante
               </label>
               <input
                 value={form.fabricante}
                 onChange={(e) => setForm({ ...form, fabricante: e.target.value })}
                 placeholder="Fiat"
-                className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent"
+                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
               />
             </div>
             <div>
-              <label className="block text-sm text-beige/40 mb-1">Modelo</label>
+              <label className="block text-sm text-text-muted mb-1">Modelo</label>
               <input
                 value={form.modelo}
                 onChange={(e) => setForm({ ...form, modelo: e.target.value })}
                 placeholder="Ducato"
-                className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent"
+                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-beige/40 mb-1">
+              <label className="block text-sm text-text-muted mb-1">
                 Capacidade (passageiros)
               </label>
               <input
@@ -311,11 +313,11 @@ export function Veiculos() {
                 onChange={(e) => setForm({ ...form, capacidade: e.target.value })}
                 type="number"
                 placeholder="15"
-                className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent"
+                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
               />
             </div>
             <div>
-              <label className="block text-sm text-beige/40 mb-1">
+              <label className="block text-sm text-text-muted mb-1">
                 Consumo (km/L)
               </label>
               <input
@@ -324,19 +326,20 @@ export function Veiculos() {
                 type="number"
                 step="0.1"
                 placeholder="8.5"
-                className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent"
+                className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent"
               />
             </div>
           </div>
           <button
             onClick={createVeiculo}
             disabled={!form.placa || !form.fabricante || !form.modelo || !form.capacidade}
-            className="w-full bg-accent hover:bg-accent/90 text-beige font-semibold py-3 rounded-xl disabled:opacity-50"
+            className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl disabled:opacity-50"
           >
             Criar Veiculo
           </button>
         </div>
       </Modal>
     </div>
+    </PageTransition>
   );
 }

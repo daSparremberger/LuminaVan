@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash2, Users, ChevronDown, ChevronUp, Camera } from 'luc
 import { PageHeader } from '../components/ui/PageHeader';
 import { Modal } from '../components/ui/Modal';
 import { EmptyState } from '../components/ui/EmptyState';
+import { PageTransition } from '../components/ui/PageTransition';
 import { api } from '../lib/api';
 import type { Aluno, Escola } from '@rotavans/shared';
 
@@ -83,17 +84,18 @@ export function Alunos() {
     setExpandedSections(s => ({ ...s, [section]: !s[section] }));
   }
 
-  const inputClass = "w-full bg-surface2 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent";
+  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all duration-200";
 
   return (
+    <PageTransition>
     <div>
       <PageHeader title="Alunos" subtitle={`${alunos.length} aluno(s)`}
-        action={<button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-beige px-4 py-2 rounded-xl text-sm font-medium"><Plus size={18} /> Novo Aluno</button>} />
+        action={<button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-4 py-2 rounded-xl text-sm font-medium"><Plus size={18} /> Novo Aluno</button>} />
 
       {alunos.length === 0 ? <EmptyState icon={Users} message="Nenhum aluno cadastrado" /> : (
-        <div className="border border-beige/10 rounded-xl overflow-hidden">
+        <div className="border border-border/30 rounded-xl overflow-hidden">
           <table className="w-full">
-            <thead className="bg-surface2 text-left text-sm text-beige/40">
+            <thead className="bg-surface2 text-left text-sm text-text-muted">
               <tr>
                 <th className="px-4 py-3">Nome</th>
                 <th className="px-4 py-3">Escola</th>
@@ -105,15 +107,15 @@ export function Alunos() {
             </thead>
             <tbody className="text-sm">
               {alunos.map((a) => (
-                <tr key={a.id} className="border-t border-beige/10 hover:bg-beige/52/50">
-                  <td className="px-4 py-3 text-beige">{a.nome}</td>
-                  <td className="px-4 py-3 text-beige/40">{a.escola_nome || '-'}</td>
-                  <td className="px-4 py-3 text-beige/40 capitalize">{a.turno}</td>
-                  <td className="px-4 py-3 text-beige/40">{a.turma || '-'}</td>
-                  <td className="px-4 py-3 text-beige/40">{a.nome_responsavel || '-'}</td>
+                <tr key={a.id} className="border-t border-border/30 hover:bg-surface2">
+                  <td className="px-4 py-3 text-text">{a.nome}</td>
+                  <td className="px-4 py-3 text-text-muted">{a.escola_nome || '-'}</td>
+                  <td className="px-4 py-3 text-text-muted capitalize">{a.turno}</td>
+                  <td className="px-4 py-3 text-text-muted">{a.turma || '-'}</td>
+                  <td className="px-4 py-3 text-text-muted">{a.nome_responsavel || '-'}</td>
                   <td className="px-4 py-3 flex gap-2">
-                    <button onClick={() => openEdit(a)} className="text-beige/40 hover:text-beige"><Pencil size={16} /></button>
-                    <button onClick={() => remove(a.id)} className="text-beige/40 hover:text-red-400"><Trash2 size={16} /></button>
+                    <button onClick={() => openEdit(a)} className="text-text-muted hover:text-text"><Pencil size={16} /></button>
+                    <button onClick={() => remove(a.id)} className="text-text-muted hover:text-red-400"><Trash2 size={16} /></button>
                   </td>
                 </tr>
               ))}
@@ -126,18 +128,18 @@ export function Alunos() {
         <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
           {/* Dados Pessoais */}
           <div>
-            <h3 className="text-beige font-medium mb-3">Dados Pessoais</h3>
+            <h3 className="text-text font-medium mb-3">Dados Pessoais</h3>
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div><label className="block text-sm text-beige/40 mb-1">Nome Completo *</label>
+                <div><label className="block text-sm text-text-muted mb-1">Nome Completo *</label>
                   <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className={inputClass} /></div>
-                <div><label className="block text-sm text-beige/40 mb-1">Data de Nascimento</label>
+                <div><label className="block text-sm text-text-muted mb-1">Data de Nascimento</label>
                   <input type="date" value={form.nascimento} onChange={(e) => setForm({ ...form, nascimento: e.target.value })} className={inputClass} /></div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div><label className="block text-sm text-beige/40 mb-1">Telefone</label>
+                <div><label className="block text-sm text-text-muted mb-1">Telefone</label>
                   <input value={form.telefone} onChange={(e) => setForm({ ...form, telefone: e.target.value })} placeholder="(00) 00000-0000" className={inputClass} /></div>
-                <div><label className="block text-sm text-beige/40 mb-1">Endereco *</label>
+                <div><label className="block text-sm text-text-muted mb-1">Endereco *</label>
                   <input value={form.endereco} onChange={(e) => setForm({ ...form, endereco: e.target.value })} className={inputClass} /></div>
               </div>
             </div>
@@ -145,41 +147,41 @@ export function Alunos() {
 
           {/* Dados Escolares */}
           <div>
-            <h3 className="text-beige font-medium mb-3">Dados Escolares</h3>
+            <h3 className="text-text font-medium mb-3">Dados Escolares</h3>
             <div className="grid grid-cols-4 gap-3">
-              <div><label className="block text-sm text-beige/40 mb-1">Escola *</label>
+              <div><label className="block text-sm text-text-muted mb-1">Escola *</label>
                 <select value={form.escola_id} onChange={(e) => setForm({ ...form, escola_id: e.target.value })} className={inputClass}>
                   {escolas.map((e) => <option key={e.id} value={e.id}>{e.nome}</option>)}
                 </select></div>
-              <div><label className="block text-sm text-beige/40 mb-1">Turno *</label>
+              <div><label className="block text-sm text-text-muted mb-1">Turno *</label>
                 <select value={form.turno} onChange={(e) => setForm({ ...form, turno: e.target.value })} className={inputClass}>
                   <option value="manha">Manha</option><option value="tarde">Tarde</option><option value="noite">Noite</option>
                 </select></div>
-              <div><label className="block text-sm text-beige/40 mb-1">Ano</label>
+              <div><label className="block text-sm text-text-muted mb-1">Ano</label>
                 <input value={form.ano} onChange={(e) => setForm({ ...form, ano: e.target.value })} placeholder="5 ano" className={inputClass} /></div>
-              <div><label className="block text-sm text-beige/40 mb-1">Turma</label>
+              <div><label className="block text-sm text-text-muted mb-1">Turma</label>
                 <input value={form.turma} onChange={(e) => setForm({ ...form, turma: e.target.value })} placeholder="A" className={inputClass} /></div>
             </div>
           </div>
 
           {/* Responsavel - Collapsible */}
-          <div className="border border-beige/10 rounded-xl overflow-hidden">
-            <button type="button" onClick={() => toggleSection('responsavel')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-beige font-medium">
+          <div className="border border-border/30 rounded-xl overflow-hidden">
+            <button type="button" onClick={() => toggleSection('responsavel')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-text font-medium">
               <span>Dados do Responsavel</span>
               {expandedSections.responsavel ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
             {expandedSections.responsavel && (
               <div className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
-                  <div><label className="block text-sm text-beige/40 mb-1">Nome do Responsavel</label>
+                  <div><label className="block text-sm text-text-muted mb-1">Nome do Responsavel</label>
                     <input value={form.nome_responsavel} onChange={(e) => setForm({ ...form, nome_responsavel: e.target.value })} className={inputClass} /></div>
-                  <div><label className="block text-sm text-beige/40 mb-1">CPF do Responsavel</label>
+                  <div><label className="block text-sm text-text-muted mb-1">CPF do Responsavel</label>
                     <input value={form.cpf_responsavel} onChange={(e) => setForm({ ...form, cpf_responsavel: e.target.value })} placeholder="000.000.000-00" className={inputClass} /></div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div><label className="block text-sm text-beige/40 mb-1">Nascimento Responsavel</label>
+                  <div><label className="block text-sm text-text-muted mb-1">Nascimento Responsavel</label>
                     <input type="date" value={form.nascimento_responsavel} onChange={(e) => setForm({ ...form, nascimento_responsavel: e.target.value })} className={inputClass} /></div>
-                  <div><label className="block text-sm text-beige/40 mb-1">Telefone Responsavel</label>
+                  <div><label className="block text-sm text-text-muted mb-1">Telefone Responsavel</label>
                     <input value={form.telefone_responsavel} onChange={(e) => setForm({ ...form, telefone_responsavel: e.target.value })} placeholder="(00) 00000-0000" className={inputClass} /></div>
                 </div>
               </div>
@@ -187,19 +189,19 @@ export function Alunos() {
           </div>
 
           {/* Contrato - Collapsible */}
-          <div className="border border-beige/10 rounded-xl overflow-hidden">
-            <button type="button" onClick={() => toggleSection('contrato')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-beige font-medium">
+          <div className="border border-border/30 rounded-xl overflow-hidden">
+            <button type="button" onClick={() => toggleSection('contrato')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-text font-medium">
               <span>Contrato</span>
               {expandedSections.contrato ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
             {expandedSections.contrato && (
               <div className="p-4 space-y-3">
                 <div className="grid grid-cols-3 gap-3">
-                  <div><label className="block text-sm text-beige/40 mb-1">Valor Mensalidade (R$)</label>
+                  <div><label className="block text-sm text-text-muted mb-1">Valor Mensalidade (R$)</label>
                     <input type="number" step="0.01" value={form.valor_mensalidade} onChange={(e) => setForm({ ...form, valor_mensalidade: e.target.value })} placeholder="0.00" className={inputClass} /></div>
-                  <div><label className="block text-sm text-beige/40 mb-1">Meses de Contrato</label>
+                  <div><label className="block text-sm text-text-muted mb-1">Meses de Contrato</label>
                     <input type="number" value={form.meses_contrato} onChange={(e) => setForm({ ...form, meses_contrato: e.target.value })} placeholder="12" className={inputClass} /></div>
-                  <div><label className="block text-sm text-beige/40 mb-1">Inicio do Contrato</label>
+                  <div><label className="block text-sm text-text-muted mb-1">Inicio do Contrato</label>
                     <input type="date" value={form.inicio_contrato} onChange={(e) => setForm({ ...form, inicio_contrato: e.target.value })} className={inputClass} /></div>
                 </div>
               </div>
@@ -207,24 +209,24 @@ export function Alunos() {
           </div>
 
           {/* Saude - Collapsible */}
-          <div className="border border-beige/10 rounded-xl overflow-hidden">
-            <button type="button" onClick={() => toggleSection('saude')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-beige font-medium">
+          <div className="border border-border/30 rounded-xl overflow-hidden">
+            <button type="button" onClick={() => toggleSection('saude')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-text font-medium">
               <span>Saude e Observacoes</span>
               {expandedSections.saude ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
             {expandedSections.saude && (
               <div className="p-4 space-y-3">
-                <div><label className="block text-sm text-beige/40 mb-1">Restricoes (alergias, necessidades especiais)</label>
+                <div><label className="block text-sm text-text-muted mb-1">Restricoes (alergias, necessidades especiais)</label>
                   <textarea value={form.restricoes} onChange={(e) => setForm({ ...form, restricoes: e.target.value })} rows={2} className={inputClass} /></div>
-                <div><label className="block text-sm text-beige/40 mb-1">Observacoes Gerais</label>
+                <div><label className="block text-sm text-text-muted mb-1">Observacoes Gerais</label>
                   <textarea value={form.observacoes} onChange={(e) => setForm({ ...form, observacoes: e.target.value })} rows={2} className={inputClass} /></div>
               </div>
             )}
           </div>
 
           {/* Biometria Facial - Collapsible */}
-          <div className="border border-beige/10 rounded-xl overflow-hidden">
-            <button type="button" onClick={() => toggleSection('biometria')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-beige font-medium">
+          <div className="border border-border/30 rounded-xl overflow-hidden">
+            <button type="button" onClick={() => toggleSection('biometria')} className="w-full flex items-center justify-between px-4 py-3 bg-surface2 text-text font-medium">
               <span className="flex items-center gap-2"><Camera size={18} />Biometria Facial</span>
               {expandedSections.biometria ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
@@ -235,11 +237,11 @@ export function Alunos() {
                     {form.face_embeddings ? 'Cadastrado' : 'Nao cadastrado'}
                   </span>
                 </div>
-                <p className="text-beige/40 text-sm">
+                <p className="text-text-muted text-sm">
                   Capture 5 fotos do rosto do aluno para habilitar check-in por reconhecimento facial.
                 </p>
                 <button type="button" onClick={() => alert('Funcionalidade de captura facial sera implementada em breve')}
-                  className="bg-accent hover:bg-accent/90 text-beige px-4 py-2 rounded-xl text-sm">
+                  className="bg-accent hover:bg-accent/90 text-text px-4 py-2 rounded-xl text-sm">
                   Capturar Fotos
                 </button>
               </div>
@@ -247,11 +249,12 @@ export function Alunos() {
           </div>
 
           <button onClick={save} disabled={!form.nome || !form.endereco || !form.escola_id}
-            className="w-full bg-accent hover:bg-accent/90 text-beige font-semibold py-3 rounded-xl disabled:opacity-50">
+            className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl disabled:opacity-50">
             {editing ? 'Salvar Alteracoes' : 'Cadastrar Aluno'}
           </button>
         </div>
       </Modal>
     </div>
+    </PageTransition>
   );
 }

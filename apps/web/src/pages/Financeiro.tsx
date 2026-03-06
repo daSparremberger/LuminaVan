@@ -3,6 +3,7 @@ import { Plus, TrendingUp, TrendingDown, DollarSign, AlertCircle, Check, Trash2 
 import { PageHeader } from '../components/ui/PageHeader';
 import { StatCard } from '../components/ui/StatCard';
 import { Modal } from '../components/ui/Modal';
+import { PageTransition } from '../components/ui/PageTransition';
 import { api } from '../lib/api';
 import type { Transacao, ResumoFinanceiro, Aluno } from '@rotavans/shared';
 
@@ -92,20 +93,21 @@ export function Financeiro() {
     loadResumo();
   }
 
-  const inputClass = "w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent";
+  const inputClass = "w-full h-12 px-4 bg-surface2 border border-border/50 rounded-xl text-text text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all duration-200";
 
   return (
+    <PageTransition>
     <div>
       <PageHeader title="Financeiro" subtitle="Controle de receitas e despesas"
         action={
           <div className="flex gap-2">
-            <button onClick={() => setGerarModal(true)} className="flex items-center gap-2 bg-beige/5 hover:bg-beige/3/80 text-beige px-4 py-2 rounded-xl text-sm font-medium">
+            <button onClick={() => setGerarModal(true)} className="flex items-center gap-2 bg-surface2 hover:bg-surface2/80 text-text px-4 py-2 rounded-xl text-sm font-medium">
               Gerar Mensalidades
             </button>
-            <button onClick={() => openNew('receita')} className="flex items-center gap-2 bg-accent2 hover:bg-accent2/90 text-beige px-4 py-2 rounded-xl text-sm font-medium">
+            <button onClick={() => openNew('receita')} className="flex items-center gap-2 bg-accent2 hover:bg-accent2/90 text-text px-4 py-2 rounded-xl text-sm font-medium">
               <Plus size={18} /> Receita
             </button>
-            <button onClick={() => openNew('despesa')} className="flex items-center gap-2 bg-warn hover:bg-warn/90 text-beige px-4 py-2 rounded-xl text-sm font-medium">
+            <button onClick={() => openNew('despesa')} className="flex items-center gap-2 bg-warn hover:bg-warn/90 text-text px-4 py-2 rounded-xl text-sm font-medium">
               <Plus size={18} /> Despesa
             </button>
           </div>
@@ -115,13 +117,13 @@ export function Financeiro() {
       {/* Filtro de periodo */}
       <div className="flex gap-4 mb-6">
         <select value={mesSelecionado} onChange={(e) => setMesSelecionado(parseInt(e.target.value))}
-          className="bg-beige/5 border border-beige/10 rounded-xl px-4 py-2 text-beige text-sm">
+          className="bg-surface2 border border-border/30 rounded-xl px-4 py-2 text-text text-sm">
           {['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'].map((m, i) => (
             <option key={i} value={i + 1}>{m}</option>
           ))}
         </select>
         <select value={anoSelecionado} onChange={(e) => setAnoSelecionado(parseInt(e.target.value))}
-          className="bg-beige/5 border border-beige/10 rounded-xl px-4 py-2 text-beige text-sm">
+          className="bg-surface2 border border-border/30 rounded-xl px-4 py-2 text-text text-sm">
           {[2024, 2025, 2026, 2027].map(a => <option key={a} value={a}>{a}</option>)}
         </select>
       </div>
@@ -137,13 +139,13 @@ export function Financeiro() {
       {/* Filtros */}
       <div className="flex gap-4 mb-4">
         <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}
-          className="bg-beige/5 border border-beige/10 rounded-xl px-4 py-2 text-beige text-sm">
+          className="bg-surface2 border border-border/30 rounded-xl px-4 py-2 text-text text-sm">
           <option value="">Todos os tipos</option>
           <option value="receita">Receitas</option>
           <option value="despesa">Despesas</option>
         </select>
         <select value={filtroPago} onChange={(e) => setFiltroPago(e.target.value)}
-          className="bg-beige/5 border border-beige/10 rounded-xl px-4 py-2 text-beige text-sm">
+          className="bg-surface2 border border-border/30 rounded-xl px-4 py-2 text-text text-sm">
           <option value="">Todos</option>
           <option value="true">Pagos</option>
           <option value="false">Pendentes</option>
@@ -151,9 +153,9 @@ export function Financeiro() {
       </div>
 
       {/* Tabela */}
-      <div className="border border-beige/10 rounded-xl overflow-hidden">
+      <div className="border border-border/30 rounded-xl overflow-hidden">
         <table className="w-full">
-          <thead className="bg-beige/5 text-left text-sm text-beige/40">
+          <thead className="bg-surface2 text-left text-sm text-text-muted">
             <tr>
               <th className="px-4 py-3">Data</th>
               <th className="px-4 py-3">Tipo</th>
@@ -167,16 +169,16 @@ export function Financeiro() {
           </thead>
           <tbody className="text-sm">
             {transacoes.map((t) => (
-              <tr key={t.id} className="border-t border-beige/10 hover:bg-beige/3">
-                <td className="px-4 py-3 text-beige">{new Date(t.data).toLocaleDateString('pt-BR')}</td>
+              <tr key={t.id} className="border-t border-border/30 hover:bg-surface2">
+                <td className="px-4 py-3 text-text">{new Date(t.data).toLocaleDateString('pt-BR')}</td>
                 <td className="px-4 py-3">
                   <span className={`text-xs px-2 py-1 rounded-full ${t.tipo === 'receita' ? 'bg-accent2/20 text-accent2' : 'bg-warn/20 text-warn'}`}>
                     {t.tipo === 'receita' ? 'Receita' : 'Despesa'}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-beige/40 capitalize">{t.categoria}</td>
-                <td className="px-4 py-3 text-beige/40">{t.descricao || '-'}</td>
-                <td className="px-4 py-3 text-beige/40">{t.aluno_nome || '-'}</td>
+                <td className="px-4 py-3 text-text-muted capitalize">{t.categoria}</td>
+                <td className="px-4 py-3 text-text-muted">{t.descricao || '-'}</td>
+                <td className="px-4 py-3 text-text-muted">{t.aluno_nome || '-'}</td>
                 <td className={`px-4 py-3 text-right font-medium ${t.tipo === 'receita' ? 'text-accent2' : 'text-warn'}`}>
                   {t.tipo === 'receita' ? '+' : '-'} R$ {t.valor.toFixed(2)}
                 </td>
@@ -189,11 +191,11 @@ export function Financeiro() {
                 </td>
                 <td className="px-4 py-3 flex gap-2">
                   {!t.pago && t.tipo === 'receita' && (
-                    <button onClick={() => marcarPago(t.id)} className="text-beige/40 hover:text-accent2" title="Marcar como pago">
+                    <button onClick={() => marcarPago(t.id)} className="text-text-muted hover:text-accent2" title="Marcar como pago">
                       <Check size={16} />
                     </button>
                   )}
-                  <button onClick={() => remove(t.id)} className="text-beige/40 hover:text-red-400"><Trash2 size={16} /></button>
+                  <button onClick={() => remove(t.id)} className="text-text-muted hover:text-red-400"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -206,7 +208,7 @@ export function Financeiro() {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-beige/40 mb-1">Categoria</label>
+              <label className="block text-sm text-text-muted mb-1">Categoria</label>
               <select value={form.categoria} onChange={(e) => setForm({ ...form, categoria: e.target.value })} className={inputClass}>
                 {(form.tipo === 'receita' ? CATEGORIAS_RECEITA : CATEGORIAS_DESPESA).map(c => (
                   <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
@@ -214,22 +216,22 @@ export function Financeiro() {
               </select>
             </div>
             <div>
-              <label className="block text-sm text-beige/40 mb-1">Valor (R$)</label>
+              <label className="block text-sm text-text-muted mb-1">Valor (R$)</label>
               <input type="number" step="0.01" value={form.valor} onChange={(e) => setForm({ ...form, valor: e.target.value })} className={inputClass} />
             </div>
           </div>
           <div>
-            <label className="block text-sm text-beige/40 mb-1">Descricao</label>
+            <label className="block text-sm text-text-muted mb-1">Descricao</label>
             <input value={form.descricao} onChange={(e) => setForm({ ...form, descricao: e.target.value })} className={inputClass} />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-beige/40 mb-1">Data</label>
+              <label className="block text-sm text-text-muted mb-1">Data</label>
               <input type="date" value={form.data} onChange={(e) => setForm({ ...form, data: e.target.value })} className={inputClass} />
             </div>
             {form.tipo === 'receita' && (
               <div>
-                <label className="block text-sm text-beige/40 mb-1">Aluno (opcional)</label>
+                <label className="block text-sm text-text-muted mb-1">Aluno (opcional)</label>
                 <select value={form.aluno_id} onChange={(e) => setForm({ ...form, aluno_id: e.target.value })} className={inputClass}>
                   <option value="">Nenhum</option>
                   {alunos.map(a => <option key={a.id} value={a.id}>{a.nome}</option>)}
@@ -237,12 +239,12 @@ export function Financeiro() {
               </div>
             )}
           </div>
-          <label className="flex items-center gap-2 text-sm text-beige/40">
+          <label className="flex items-center gap-2 text-sm text-text-muted">
             <input type="checkbox" checked={form.pago} onChange={(e) => setForm({ ...form, pago: e.target.checked })} className="rounded" />
             Ja foi pago
           </label>
           <button onClick={save} disabled={!form.valor || !form.categoria}
-            className="w-full bg-accent hover:bg-accent/90 text-beige font-semibold py-3 rounded-xl disabled:opacity-50">
+            className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl disabled:opacity-50">
             Salvar
           </button>
         </div>
@@ -251,12 +253,12 @@ export function Financeiro() {
       {/* Modal Gerar Mensalidades */}
       <Modal open={gerarModal} onClose={() => setGerarModal(false)} title="Gerar Mensalidades">
         <div className="space-y-4">
-          <p className="text-beige/40 text-sm">
+          <p className="text-text-muted text-sm">
             Isso ira criar uma receita de mensalidade para cada aluno ativo que tenha valor de mensalidade cadastrado.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-beige/40 mb-1">Mes</label>
+              <label className="block text-sm text-text-muted mb-1">Mes</label>
               <select value={mesSelecionado} onChange={(e) => setMesSelecionado(parseInt(e.target.value))} className={inputClass}>
                 {['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'].map((m, i) => (
                   <option key={i} value={i + 1}>{m}</option>
@@ -264,18 +266,19 @@ export function Financeiro() {
               </select>
             </div>
             <div>
-              <label className="block text-sm text-beige/40 mb-1">Ano</label>
+              <label className="block text-sm text-text-muted mb-1">Ano</label>
               <select value={anoSelecionado} onChange={(e) => setAnoSelecionado(parseInt(e.target.value))} className={inputClass}>
                 {[2024, 2025, 2026, 2027].map(a => <option key={a} value={a}>{a}</option>)}
               </select>
             </div>
           </div>
           <button onClick={gerarMensalidades}
-            className="w-full bg-accent hover:bg-accent/90 text-beige font-semibold py-3 rounded-xl">
+            className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl">
             Gerar Mensalidades
           </button>
         </div>
       </Modal>
     </div>
+    </PageTransition>
   );
 }

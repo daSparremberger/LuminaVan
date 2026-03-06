@@ -3,6 +3,7 @@ import { Radio, MapPin, Navigation } from 'lucide-react';
 import mapboxgl from 'mapbox-gl';
 import { io, Socket } from 'socket.io-client';
 import { PageHeader } from '../components/ui/PageHeader';
+import { PageTransition } from '../components/ui/PageTransition';
 import { auth } from '../lib/firebase';
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -184,6 +185,7 @@ export function Rastreamento() {
   }
 
   return (
+    <PageTransition>
     <div className="flex gap-6 h-[calc(100vh-48px)]">
       {/* Lista de motoristas */}
       <div className="w-80 shrink-0">
@@ -195,9 +197,9 @@ export function Rastreamento() {
         } />
 
         {locations.length === 0 ? (
-          <div className="border border-beige/10 rounded-xl p-6 text-center">
-            <Radio size={32} className="text-beige/30 mx-auto mb-3" />
-            <p className="text-beige/40 text-sm">Nenhum motorista em rota</p>
+          <div className="border border-border/30 rounded-xl p-6 text-center">
+            <Radio size={32} className="text-text-muted mx-auto mb-3" />
+            <p className="text-text-muted text-sm">Nenhum motorista em rota</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -206,21 +208,21 @@ export function Rastreamento() {
                 key={loc.motorista_id}
                 onClick={() => focusMotorista(loc)}
                 className={`w-full text-left border rounded-xl p-4 transition-colors ${
-                  selectedMotorista === loc.motorista_id ? 'border-accent' : 'border-beige/10 hover:border-beige/20'
+                  selectedMotorista === loc.motorista_id ? 'border-accent' : 'border-border/30 hover:border-border'
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-beige shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-text shrink-0">
                     <Navigation size={18} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-beige font-medium truncate">{loc.nome}</p>
+                    <p className="text-text font-medium truncate">{loc.nome}</p>
                     {loc.rota_nome && (
-                      <p className="text-beige/40 text-xs truncate">{loc.rota_nome}</p>
+                      <p className="text-text-muted text-xs truncate">{loc.rota_nome}</p>
                     )}
                     <div className="flex items-center gap-3 mt-1">
                       <span className="text-accent2 text-xs">{loc.speed.toFixed(0)} km/h</span>
-                      <span className="text-beige/30 text-xs">{formatTime(loc.timestamp)}</span>
+                      <span className="text-text-muted text-xs">{formatTime(loc.timestamp)}</span>
                     </div>
                   </div>
                 </div>
@@ -231,9 +233,10 @@ export function Rastreamento() {
       </div>
 
       {/* Mapa */}
-      <div className="flex-1 border border-beige/10 rounded-xl overflow-hidden">
+      <div className="flex-1 border border-border/30 rounded-xl overflow-hidden">
         <div ref={mapRef} className="w-full h-full" />
       </div>
     </div>
+    </PageTransition>
   );
 }

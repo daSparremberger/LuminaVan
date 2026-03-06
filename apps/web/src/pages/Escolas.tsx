@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash2, School, X, Users } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Modal } from '../components/ui/Modal';
 import { EmptyState } from '../components/ui/EmptyState';
+import { PageTransition } from '../components/ui/PageTransition';
 import { api } from '../lib/api';
 import type { Escola, EscolaContato } from '@rotavans/shared';
 
@@ -139,12 +140,13 @@ export function Escolas() {
   }
 
   return (
+    <PageTransition>
     <div>
       <PageHeader
         title="Escolas"
         subtitle={`${escolas.length} escola(s) cadastrada(s)`}
         action={
-          <button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-beige px-4 py-2 rounded-xl text-sm font-medium">
+          <button onClick={openNew} className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-4 py-2 rounded-xl text-sm font-medium">
             <Plus size={18} /> Nova Escola
           </button>
         }
@@ -153,9 +155,9 @@ export function Escolas() {
       {escolas.length === 0 ? (
         <EmptyState icon={School} message="Nenhuma escola cadastrada" />
       ) : (
-        <div className="border border-beige/10 rounded-xl overflow-hidden">
+        <div className="border border-border/30 rounded-xl overflow-hidden">
           <table className="w-full">
-            <thead className="bg-beige/5 text-left text-sm text-beige/40">
+            <thead className="bg-surface2 text-left text-sm text-text-muted">
               <tr>
                 <th className="px-4 py-3">Nome</th>
                 <th className="px-4 py-3">Endereco</th>
@@ -167,38 +169,38 @@ export function Escolas() {
             <tbody className="text-sm">
               {escolas.map((e) => (
                 <Fragment key={e.id}>
-                  <tr className="border-t border-beige/10 hover:bg-beige/3">
-                    <td className="px-4 py-3 text-beige">{e.nome}</td>
-                    <td className="px-4 py-3 text-beige/40">{e.endereco}</td>
-                    <td className="px-4 py-3 text-beige/40">
+                  <tr className="border-t border-border/30 hover:bg-surface2">
+                    <td className="px-4 py-3 text-text">{e.nome}</td>
+                    <td className="px-4 py-3 text-text-muted">{e.endereco}</td>
+                    <td className="px-4 py-3 text-text-muted">
                       {[e.turno_manha && 'M', e.turno_tarde && 'T', e.turno_noite && 'N'].filter(Boolean).join(', ') || '-'}
                     </td>
                     <td className="px-4 py-3">
                       <button
                         onClick={() => toggleContatos(e.id)}
-                        className="flex items-center gap-1 text-beige/40 hover:text-accent"
+                        className="flex items-center gap-1 text-text-muted hover:text-accent"
                       >
                         <Users size={16} />
                         <span className="text-xs">Ver</span>
                       </button>
                     </td>
                     <td className="px-4 py-3 flex gap-2">
-                      <button onClick={() => openEdit(e)} className="text-beige/40 hover:text-beige"><Pencil size={16} /></button>
-                      <button onClick={() => remove(e.id)} className="text-beige/40 hover:text-red-400"><Trash2 size={16} /></button>
+                      <button onClick={() => openEdit(e)} className="text-text-muted hover:text-text"><Pencil size={16} /></button>
+                      <button onClick={() => remove(e.id)} className="text-text-muted hover:text-red-400"><Trash2 size={16} /></button>
                     </td>
                   </tr>
                   {expandedSchool === e.id && (
-                    <tr className="bg-beige/5/30">
+                    <tr className="bg-surface2/30">
                       <td colSpan={5} className="px-4 py-3">
                         {schoolContatos.length === 0 ? (
-                          <p className="text-beige/30 text-sm">Nenhum contato cadastrado</p>
+                          <p className="text-text-muted text-sm">Nenhum contato cadastrado</p>
                         ) : (
                           <div className="space-y-2">
                             {schoolContatos.map((c) => (
                               <div key={c.id} className="flex items-center gap-4 text-sm">
                                 <span className="bg-accent/20 text-accent px-2 py-0.5 rounded text-xs font-medium">{c.cargo}</span>
-                                <span className="text-beige">{c.nome}</span>
-                                {c.telefone && <span className="text-beige/40">{c.telefone}</span>}
+                                <span className="text-text">{c.nome}</span>
+                                {c.telefone && <span className="text-text-muted">{c.telefone}</span>}
                               </div>
                             ))}
                           </div>
@@ -216,22 +218,22 @@ export function Escolas() {
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? 'Editar Escola' : 'Nova Escola'}>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-beige/40 mb-1">Nome</label>
+            <label className="block text-sm text-text-muted mb-1">Nome</label>
             <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })}
-              className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent" />
+              className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" />
           </div>
           <div>
-            <label className="block text-sm text-beige/40 mb-1">Endereco</label>
+            <label className="block text-sm text-text-muted mb-1">Endereco</label>
             <input value={form.endereco} onChange={(e) => setForm({ ...form, endereco: e.target.value })}
-              className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent" />
+              className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" />
           </div>
           <div>
-            <label className="block text-sm text-beige/40 mb-2">Turnos</label>
+            <label className="block text-sm text-text-muted mb-2">Turnos</label>
             <div className="flex gap-4">
               {(['manha', 'tarde', 'noite'] as const).map((t) => (
-                <label key={t} className="flex items-center gap-2 text-sm text-gray-300">
+                <label key={t} className="flex items-center gap-2 text-sm text-text-muted">
                   <input type="checkbox" checked={form[`turno_${t}`]} onChange={(e) => setForm({ ...form, [`turno_${t}`]: e.target.checked })}
-                    className="rounded bg-beige/5 border-beige/10" />
+                    className="rounded bg-surface2 border-border/30" />
                   {t.charAt(0).toUpperCase() + t.slice(1)}
                 </label>
               ))}
@@ -240,14 +242,14 @@ export function Escolas() {
 
           {/* Contatos section */}
           <div>
-            <label className="block text-sm text-beige/40 mb-2">Contatos</label>
+            <label className="block text-sm text-text-muted mb-2">Contatos</label>
             <div className="space-y-2">
               {contatos.map((c, i) => (
                 <div key={i} className="flex gap-2 items-center">
                   <select
                     value={c.cargo}
                     onChange={(e) => updateContato(i, 'cargo', e.target.value)}
-                    className="bg-beige/5 border border-beige/10 rounded-xl px-3 py-2 text-beige text-sm focus:outline-none focus:border-accent"
+                    className="bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:outline-none focus:border-accent"
                   >
                     {CARGO_OPTIONS.map((cargo) => (
                       <option key={cargo} value={cargo}>{cargo}</option>
@@ -257,17 +259,17 @@ export function Escolas() {
                     placeholder="Nome"
                     value={c.nome}
                     onChange={(e) => updateContato(i, 'nome', e.target.value)}
-                    className="flex-1 bg-beige/5 border border-beige/10 rounded-xl px-3 py-2 text-beige text-sm focus:outline-none focus:border-accent"
+                    className="flex-1 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:outline-none focus:border-accent"
                   />
                   <input
                     placeholder="Telefone"
                     value={c.telefone}
                     onChange={(e) => updateContato(i, 'telefone', e.target.value)}
-                    className="w-32 bg-beige/5 border border-beige/10 rounded-xl px-3 py-2 text-beige text-sm focus:outline-none focus:border-accent"
+                    className="w-32 bg-surface2 border border-border/30 rounded-xl px-3 py-2 text-text text-sm focus:outline-none focus:border-accent"
                   />
                   <button
                     onClick={() => removeContato(i)}
-                    className="text-beige/40 hover:text-red-400 p-1"
+                    className="text-text-muted hover:text-red-400 p-1"
                     type="button"
                   >
                     <X size={18} />
@@ -284,11 +286,12 @@ export function Escolas() {
             </div>
           </div>
 
-          <button onClick={save} className="w-full bg-accent hover:bg-accent/90 text-beige font-semibold py-3 rounded-xl">
+          <button onClick={save} className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl">
             {editing ? 'Salvar' : 'Criar'}
           </button>
         </div>
       </Modal>
     </div>
+    </PageTransition>
   );
 }

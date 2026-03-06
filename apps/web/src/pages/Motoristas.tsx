@@ -3,6 +3,7 @@ import { Plus, Pencil, Copy, Truck, ChevronRight, Calendar, MapPin, Users, Navig
 import { PageHeader } from '../components/ui/PageHeader';
 import { Modal } from '../components/ui/Modal';
 import { EmptyState } from '../components/ui/EmptyState';
+import { PageTransition } from '../components/ui/PageTransition';
 import { api } from '../lib/api';
 import type { Motorista, RotaHistorico } from '@rotavans/shared';
 
@@ -100,6 +101,7 @@ export function Motoristas() {
   }
 
   return (
+    <PageTransition>
     <div className="flex gap-6 h-[calc(100vh-48px)]">
       {/* Lista de motoristas */}
       <div className="w-80 shrink-0">
@@ -109,7 +111,7 @@ export function Motoristas() {
           action={
             <button
               onClick={openNew}
-              className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-beige px-3 py-2 rounded-xl text-sm font-medium"
+              className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-text px-3 py-2 rounded-xl text-sm font-medium"
             >
               <Plus size={16} />
             </button>
@@ -124,41 +126,41 @@ export function Motoristas() {
               <button
                 key={m.id}
                 onClick={() => selectMotorista(m)}
-                className={`w-full text-left bg-beige/5 border rounded-xl p-4 transition-colors ${
+                className={`w-full text-left bg-surface2 border rounded-xl p-4 transition-colors ${
                   selected?.id === m.id
                     ? 'border-accent'
-                    : 'border-beige/10 hover:border-gray-600'
+                    : 'border-border/30 hover:border-gray-600'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="text-beige font-medium truncate">{m.nome}</p>
+                      <p className="text-text font-medium truncate">{m.nome}</p>
                       {m.cadastro_completo ? (
                         <span className="text-accent2 text-xs bg-accent2/10 px-2 py-0.5 rounded-full shrink-0">Ativo</span>
                       ) : (
                         <span className="text-warn text-xs bg-warn/10 px-2 py-0.5 rounded-full shrink-0">Pendente</span>
                       )}
                     </div>
-                    <p className="text-beige/40 text-xs mt-1">{m.telefone || 'Sem telefone'}</p>
+                    <p className="text-text-muted text-xs mt-1">{m.telefone || 'Sem telefone'}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <button
                       onClick={(e) => openEdit(m, e)}
-                      className="text-beige/40 hover:text-beige p-1"
+                      className="text-text-muted hover:text-text p-1"
                     >
                       <Pencil size={14} />
                     </button>
                     {!m.cadastro_completo && (
                       <button
                         onClick={(e) => reenviarConvite(m.id, e)}
-                        className="text-beige/40 hover:text-accent p-1"
+                        className="text-text-muted hover:text-accent p-1"
                         title="Reenviar convite"
                       >
                         <Copy size={14} />
                       </button>
                     )}
-                    <ChevronRight size={18} className="text-beige/30" />
+                    <ChevronRight size={18} className="text-text-muted" />
                   </div>
                 </div>
               </button>
@@ -173,7 +175,7 @@ export function Motoristas() {
           <div className="space-y-6">
             {/* Header com foto e info basica */}
             <div className="flex items-start gap-4">
-              <div className="w-20 h-20 rounded-full bg-beige/5 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-20 h-20 rounded-full bg-surface2 flex items-center justify-center overflow-hidden shrink-0">
                 {selectedStats.motorista.foto_url ? (
                   <img
                     src={selectedStats.motorista.foto_url}
@@ -181,19 +183,19 @@ export function Motoristas() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <Truck size={32} className="text-beige/30" />
+                  <Truck size={32} className="text-text-muted" />
                 )}
               </div>
               <div className="flex-1">
-                <h2 className="text-xl font-bold text-beige">{selectedStats.motorista.nome}</h2>
-                <p className="text-beige/40 text-sm mt-1">{selectedStats.motorista.telefone || 'Sem telefone'}</p>
+                <h2 className="text-xl font-bold text-text">{selectedStats.motorista.nome}</h2>
+                <p className="text-text-muted text-sm mt-1">{selectedStats.motorista.telefone || 'Sem telefone'}</p>
                 <div className="flex items-center gap-3 mt-2">
                   {selectedStats.motorista.cadastro_completo ? (
                     <span className="text-accent2 text-xs bg-accent2/10 px-3 py-1 rounded-full">Ativo</span>
                   ) : (
                     <span className="text-warn text-xs bg-warn/10 px-3 py-1 rounded-full">Pendente</span>
                   )}
-                  <span className="text-beige/30 text-xs">
+                  <span className="text-text-muted text-xs">
                     Desde {formatDate(selectedStats.motorista.criado_em)}
                   </span>
                 </div>
@@ -202,64 +204,64 @@ export function Motoristas() {
 
             {/* Stats cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="rounded-xl p-4 border border-beige/10">
+              <div className="rounded-xl p-4 border border-border/30">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar size={16} className="text-accent" />
-                  <p className="text-beige/40 text-xs">Dias Trabalhados</p>
+                  <p className="text-text-muted text-xs">Dias Trabalhados</p>
                 </div>
-                <p className="text-2xl font-bold text-beige">{selectedStats.stats.dias_trabalhados}</p>
+                <p className="text-2xl font-bold text-text">{selectedStats.stats.dias_trabalhados}</p>
               </div>
-              <div className="rounded-xl p-4 border border-beige/10">
+              <div className="rounded-xl p-4 border border-border/30">
                 <div className="flex items-center gap-2 mb-2">
                   <MapPin size={16} className="text-accent2" />
-                  <p className="text-beige/40 text-xs">Rotas Realizadas</p>
+                  <p className="text-text-muted text-xs">Rotas Realizadas</p>
                 </div>
-                <p className="text-2xl font-bold text-beige">{selectedStats.stats.total_rotas}</p>
+                <p className="text-2xl font-bold text-text">{selectedStats.stats.total_rotas}</p>
               </div>
-              <div className="rounded-xl p-4 border border-beige/10">
+              <div className="rounded-xl p-4 border border-border/30">
                 <div className="flex items-center gap-2 mb-2">
                   <Users size={16} className="text-warn" />
-                  <p className="text-beige/40 text-xs">Alunos Transportados</p>
+                  <p className="text-text-muted text-xs">Alunos Transportados</p>
                 </div>
-                <p className="text-2xl font-bold text-beige">{selectedStats.stats.total_alunos}</p>
+                <p className="text-2xl font-bold text-text">{selectedStats.stats.total_alunos}</p>
               </div>
-              <div className="rounded-xl p-4 border border-beige/10">
+              <div className="rounded-xl p-4 border border-border/30">
                 <div className="flex items-center gap-2 mb-2">
                   <Navigation size={16} className="text-purple-400" />
-                  <p className="text-beige/40 text-xs">KM Percorridos</p>
+                  <p className="text-text-muted text-xs">KM Percorridos</p>
                 </div>
-                <p className="text-2xl font-bold text-beige">{selectedStats.stats.total_km.toFixed(1)}</p>
+                <p className="text-2xl font-bold text-text">{selectedStats.stats.total_km.toFixed(1)}</p>
               </div>
             </div>
 
             {/* Rotas recentes */}
             <div>
-              <h3 className="text-sm text-beige/40 mb-3">Rotas Recentes</h3>
+              <h3 className="text-sm text-text-muted mb-3">Rotas Recentes</h3>
               {selectedStats.recent_routes.length > 0 ? (
                 <div className="space-y-2">
                   {selectedStats.recent_routes.map((r) => (
                     <div
                       key={r.id}
-                      className="flex items-center justify-between rounded-xl p-4 border border-beige/10"
+                      className="flex items-center justify-between rounded-xl p-4 border border-border/30"
                     >
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
                           <MapPin size={18} className="text-accent" />
                         </div>
                         <div>
-                          <p className="text-beige text-sm font-medium">{r.rota_nome || 'Rota sem nome'}</p>
-                          <p className="text-beige/40 text-xs">{formatDateTime(r.data_inicio)}</p>
+                          <p className="text-text text-sm font-medium">{r.rota_nome || 'Rota sem nome'}</p>
+                          <p className="text-text-muted text-xs">{formatDateTime(r.data_inicio)}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4 text-xs">
                         <div className="text-center">
                           <p className="text-accent2 font-medium">{r.alunos_embarcados}</p>
-                          <p className="text-beige/30">alunos</p>
+                          <p className="text-text-muted">alunos</p>
                         </div>
                         {r.km_total && (
                           <div className="text-center">
                             <p className="text-purple-400 font-medium">{r.km_total.toFixed(1)}</p>
-                            <p className="text-beige/30">km</p>
+                            <p className="text-text-muted">km</p>
                           </div>
                         )}
                       </div>
@@ -267,18 +269,18 @@ export function Motoristas() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl p-4 border border-beige/10 text-center text-beige/30 text-sm">
+                <div className="rounded-xl p-4 border border-border/30 text-center text-text-muted text-sm">
                   Nenhuma rota realizada ainda
                 </div>
               )}
             </div>
           </div>
         ) : loadingStats ? (
-          <div className="flex items-center justify-center h-full text-beige/30">
+          <div className="flex items-center justify-center h-full text-text-muted">
             <p>Carregando...</p>
           </div>
         ) : (
-          <div className="flex items-center justify-center h-full text-beige/30">
+          <div className="flex items-center justify-center h-full text-text-muted">
             <p>Selecione um motorista para ver detalhes</p>
           </div>
         )}
@@ -287,23 +289,24 @@ export function Motoristas() {
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? 'Editar Motorista' : 'Novo Motorista'}>
         {conviteUrl ? (
           <div className="space-y-4">
-            <p className="text-beige/40 text-sm">Motorista criado! Envie o link abaixo para ele completar o cadastro:</p>
-            <div className="rounded-xl p-4 border border-beige/10 flex items-center gap-2">
-              <input value={conviteUrl} readOnly className="flex-1 bg-transparent text-beige text-sm focus:outline-none" />
+            <p className="text-text-muted text-sm">Motorista criado! Envie o link abaixo para ele completar o cadastro:</p>
+            <div className="rounded-xl p-4 border border-border/30 flex items-center gap-2">
+              <input value={conviteUrl} readOnly className="flex-1 bg-transparent text-text text-sm focus:outline-none" />
               <button onClick={copyUrl} className="text-accent hover:text-accent/80"><Copy size={18} /></button>
             </div>
-            <button onClick={() => setModalOpen(false)} className="w-full bg-accent hover:bg-accent/90 text-beige font-semibold py-3 rounded-xl">Fechar</button>
+            <button onClick={() => setModalOpen(false)} className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl">Fechar</button>
           </div>
         ) : (
           <div className="space-y-4">
-            <div><label className="block text-sm text-beige/40 mb-1">Nome</label>
-              <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent" /></div>
-            <div><label className="block text-sm text-beige/40 mb-1">Telefone</label>
-              <input value={form.telefone} onChange={(e) => setForm({ ...form, telefone: e.target.value })} className="w-full bg-beige/5 border border-beige/10 rounded-xl px-4 py-3 text-beige text-sm focus:outline-none focus:border-accent" /></div>
-            <button onClick={save} className="w-full bg-accent hover:bg-accent/90 text-beige font-semibold py-3 rounded-xl">{editing ? 'Salvar' : 'Criar e Gerar Convite'}</button>
+            <div><label className="block text-sm text-text-muted mb-1">Nome</label>
+              <input value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" /></div>
+            <div><label className="block text-sm text-text-muted mb-1">Telefone</label>
+              <input value={form.telefone} onChange={(e) => setForm({ ...form, telefone: e.target.value })} className="w-full bg-surface2 border border-border/30 rounded-xl px-4 py-3 text-text text-sm focus:outline-none focus:border-accent" /></div>
+            <button onClick={save} className="w-full bg-accent hover:bg-accent/90 text-text font-semibold py-3 rounded-xl">{editing ? 'Salvar' : 'Criar e Gerar Convite'}</button>
           </div>
         )}
       </Modal>
     </div>
+    </PageTransition>
   );
 }
