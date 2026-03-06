@@ -1,16 +1,21 @@
 {
   "name": "rotavans-desktop",
   "version": "1.0.0",
+  "description": "Aplicativo desktop oficial do RotaVans (Electron).",
+  "author": "RotaVans",
   "private": true,
-  "main": "electron/main.js",
+  "main": "electron/dist/main.js",
   "scripts": {
-    "electron:dev": "electron .",
-    "build:web": "cd ../web && pnpm build",
+    "electron:dev": "pnpm build:electron && electron .",
+    "build:web": "cd ../web && pnpm exec tsc && pnpm exec vite build --base=./",
     "build:electron": "tsc -p electron/tsconfig.json",
-    "electron:build": "pnpm build:web && xcopy /E /I /Y ..\\web\\dist dist && pnpm build:electron && electron-builder --win"
+    "electron:package": "pnpm build:electron && electron-builder --win nsis",
+    "electron:build": "pnpm build:web && xcopy /E /I /Y ..\\web\\dist dist && pnpm build:electron && electron-builder --win nsis"
   },
   "dependencies": {
-    "electron-is-dev": "^3.0.1"
+    "electron-is-dev": "^3.0.1",
+    "electron-updater": "^6.3.9",
+    "rotavans": "file:../.."
   },
   "devDependencies": {
     "electron": "^30.0.0",
