@@ -1,28 +1,40 @@
 import { LucideIcon } from 'lucide-react';
-import { clsx } from 'clsx';
+import { motion } from 'framer-motion';
+import { staggerItem } from './PageTransition';
 
-interface Props {
+interface StatCardProps {
   label: string;
-  value: string | number;
+  value: number | string;
   icon: LucideIcon;
-  color?: 'accent' | 'accent2' | 'warn';
+  trend?: { value: number; positive: boolean };
 }
 
-export function StatCard({ label, value, icon: Icon, color = 'accent' }: Props) {
-  const c = {
-    accent: 'text-accent',
-    accent2: 'text-accent2',
-    warn: 'text-warn',
-  };
+export function StatCard({ label, value, icon: Icon, trend }: StatCardProps) {
   return (
-    <div className="flex items-center gap-4">
-      <div className={clsx('p-3 rounded-lg bg-beige/5', c[color])}>
-        <Icon size={20} />
+    <motion.div
+      variants={staggerItem}
+      whileHover={{ scale: 1.02, y: -2 }}
+      transition={{ duration: 0.2 }}
+      className="bg-surface2 border border-border/30 rounded-2xl p-5
+                 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5
+                 transition-all duration-300"
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="w-10 h-10 rounded-xl bg-accent-muted flex items-center justify-center">
+          <Icon size={20} className="text-accent" />
+        </div>
+        {trend && (
+          <span className={`text-xs font-medium px-2 py-1 rounded-lg ${
+            trend.positive
+              ? 'bg-green-500/10 text-green-500'
+              : 'bg-red-500/10 text-red-500'
+          }`}>
+            {trend.positive ? '+' : ''}{trend.value}%
+          </span>
+        )}
       </div>
-      <div>
-        <p className="text-beige/30 text-xs uppercase tracking-wider">{label}</p>
-        <p className="text-beige text-2xl font-bold">{value}</p>
-      </div>
-    </div>
+      <p className="text-2xl font-bold text-text mb-1">{value}</p>
+      <p className="text-sm text-text-muted">{label}</p>
+    </motion.div>
   );
 }
