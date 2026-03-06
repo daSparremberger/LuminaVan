@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { Download } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { useAuthStore } from '../stores/auth';
 
@@ -108,6 +109,16 @@ export function LoginPage() {
             </>
           )}
         </button>
+
+        <a
+          href="/downloads"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-surface transition-colors hover:bg-accent-hover"
+        >
+          <Download size={16} />
+          Baixar Aplicativos
+        </a>
 
         <p className="mt-8 text-center text-xs text-text-muted">
           Ao continuar, voce concorda com os termos de uso do sistema.

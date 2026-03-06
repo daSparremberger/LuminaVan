@@ -20,6 +20,7 @@ import { AdminLayout } from './pages/Admin';
 import { AdminDashboard } from './pages/Admin/Dashboard';
 import { TenantsPage } from './pages/Admin/Tenants';
 import { TenantFormPage } from './pages/Admin/TenantForm';
+import { DownloadsPage } from './pages/Downloads';
 import { useEffect } from 'react';
 
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles: string[] }) {
@@ -53,6 +54,7 @@ export default function App() {
       {/* Public routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/convite/:token" element={<ConvitePage />} />
+      <Route path="/downloads" element={<DownloadsPage />} />
 
       {/* Root redirect based on role */}
       <Route path="/" element={<RootRedirect />} />
