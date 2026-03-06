@@ -7,32 +7,45 @@
 
 * { box-sizing: border-box; }
 
-/* Dark Theme - Default */
+/* Light Theme - Default (Clean Dashboard Style) */
 :root {
-  --color-bg: #0A0A0A;
-  --color-surface: #141414;
-  --color-surface2: #1F1F1F;
-  --color-surface3: #2A2A2A;
-  --color-border: #333333;
-  --color-text: #FAFAFA;
-  --color-text-muted: #A1A1A1;
-  --color-accent: #3B82F6;
-  --color-accent-hover: #2563EB;
-  --color-accent-muted: rgba(59, 130, 246, 0.15);
+  --color-bg: #F2F2F7;
+  --color-surface: #FFFFFF;
+  --color-surface2: #F8F8FA;
+  --color-surface3: #EFEFEF;
+  --color-border: #E8E8E8;
+  --color-text: #1A1A1A;
+  --color-text-muted: #6B7280;
+  --color-accent: #1A1A1A;
+  --color-accent-hover: #333333;
+  --color-accent-muted: rgba(26, 26, 26, 0.08);
+  --color-success: #10B981;
+  --color-success-muted: rgba(16, 185, 129, 0.1);
+  --color-danger: #EF4444;
+  --color-danger-muted: rgba(239, 68, 68, 0.1);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
 }
 
-/* Light Theme */
-.light {
-  --color-bg: #F5F5F5;
-  --color-surface: #FFFFFF;
-  --color-surface2: #FAFAFA;
-  --color-surface3: #F0F0F0;
-  --color-border: #E5E5E5;
-  --color-text: #171717;
-  --color-text-muted: #737373;
-  --color-accent: #3B82F6;
-  --color-accent-hover: #2563EB;
-  --color-accent-muted: rgba(59, 130, 246, 0.1);
+/* Dark Theme */
+.dark {
+  --color-bg: #0A0A0A;
+  --color-surface: #161616;
+  --color-surface2: #1E1E1E;
+  --color-surface3: #262626;
+  --color-border: #2E2E2E;
+  --color-text: #FAFAFA;
+  --color-text-muted: #9CA3AF;
+  --color-accent: #FFFFFF;
+  --color-accent-hover: #E5E5E5;
+  --color-accent-muted: rgba(255, 255, 255, 0.1);
+  --color-success: #10B981;
+  --color-success-muted: rgba(16, 185, 129, 0.15);
+  --color-danger: #EF4444;
+  --color-danger-muted: rgba(239, 68, 68, 0.15);
 }
 
 body {
@@ -70,15 +83,34 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Floating app container */
 .app-container {
-  margin: 16px;
-  height: calc(100vh - 32px);
+  margin: 12px;
+  height: calc(100vh - 24px);
   background: var(--color-surface);
-  border-radius: 1rem;
+  border-radius: var(--radius-2xl);
   overflow: hidden;
   display: flex;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.light .app-container {
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+.dark .app-container {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Card styles */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+/* Badge styles */
+.badge-success {
+  background: var(--color-success-muted);
+  color: var(--color-success);
+}
+
+.badge-danger {
+  background: var(--color-danger-muted);
+  color: var(--color-danger);
 }

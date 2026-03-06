@@ -2,31 +2,35 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, School, Users, Truck, Car, Map, History,
   DollarSign, Radio, MessageCircle, LogOut, Settings, UserCircle,
-  LucideIcon
+  ChevronDown, LucideIcon
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/auth';
 import { clsx } from 'clsx';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface NavCategory {
+interface NavItem {
+  to: string;
+  icon: LucideIcon;
   label: string;
-  items: {
-    to: string;
-    icon: LucideIcon;
-    label: string;
-  }[];
 }
 
-const categories: NavCategory[] = [
+interface NavSection {
+  label: string;
+  icon: LucideIcon;
+  items?: NavItem[];
+  to?: string;
+}
+
+const navigation: NavSection[] = [
   {
-    label: 'Principal',
-    items: [
-      { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    ],
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    to: '/dashboard',
   },
   {
     label: 'Cadastros',
+    icon: Users,
     items: [
       { to: '/escolas', icon: School, label: 'Escolas' },
       { to: '/alunos', icon: Users, label: 'Alunos' },
@@ -36,6 +40,7 @@ const categories: NavCategory[] = [
   },
   {
     label: 'Operacoes',
+    icon: Map,
     items: [
       { to: '/rotas', icon: Map, label: 'Rotas' },
       { to: '/rastreamento', icon: Radio, label: 'Ao Vivo' },
@@ -43,114 +48,210 @@ const categories: NavCategory[] = [
     ],
   },
   {
-    label: 'Gestao',
-    items: [
-      { to: '/financeiro', icon: DollarSign, label: 'Financeiro' },
-      { to: '/mensagens', icon: MessageCircle, label: 'Mensagens' },
-    ],
+    label: 'Financeiro',
+    icon: DollarSign,
+    to: '/financeiro',
   },
   {
-    label: 'Sistema',
-    items: [
-      { to: '/configuracoes', icon: Settings, label: 'Configuracoes' },
-      { to: '/perfil', icon: UserCircle, label: 'Perfil' },
-    ],
+    label: 'Mensagens',
+    icon: MessageCircle,
+    to: '/mensagens',
   },
 ];
 
+const bottomNav: NavItem[] = [
+  { to: '/configuracoes', icon: Settings, label: 'Configuracoes' },
+  { to: '/perfil', icon: UserCircle, label: 'Perfil' },
+];
+
 export function Sidebar() {
-  const { logout, user } = useAuthStore();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { logout } = useAuthStore();
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const toggleExpand = (label: string) => {
+    setExpanded(expanded === label ? null : label);
+  };
 
   return (
     <motion.aside
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-      animate={{ width: isExpanded ? 240 : 72 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setExpanded(null);
+      }}
+      animate={{ width: isHovered ? 220 : 64 }}
       transition={{ duration: 0.2, ease: 'easeOut' }}
-      className="relative flex flex-col h-full bg-surface shrink-0 border-r border-border/30"
+      className="flex flex-col h-full bg-surface border-r border-border/50 shrink-0"
     >
       {/* Logo */}
-      <div className="h-16 flex items-center justify-center border-b border-border/30">
-        <motion.div
-          animate={{ opacity: isExpanded ? 1 : 0, width: isExpanded ? 'auto' : 0 }}
-          transition={{ duration: 0.15 }}
-          className="overflow-hidden"
-        >
-          <span className="font-heading font-bold text-accent text-xl whitespace-nowrap">
-            RotaVans
-          </span>
-        </motion.div>
-        {!isExpanded && (
-          <span className="font-heading font-bold text-accent text-xl">R</span>
-        )}
+      <div className="h-14 flex items-center px-4 border-b border-border/50">
+        <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+          <span className="text-surface font-bold text-sm">R</span>
+        </div>
+        <AnimatePresence>
+          {isHovered && (
+            <motion.span
+              initial={{ opacity: 0, width: 0 }}
+              animate={{ opacity: 1, width: 'auto' }}
+              exit={{ opacity: 0, width: 0 }}
+              className="ml-3 font-semibold text-text whitespace-nowrap overflow-hidden"
+            >
+              RotaVans
+            </motion.span>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 py-4 px-3 overflow-y-auto overflow-x-hidden">
-        {categories.map((category, idx) => (
-          <div key={category.label} className={clsx(idx > 0 && 'mt-4')}>
-            {/* Category label */}
-            <motion.span
-              animate={{ opacity: isExpanded ? 1 : 0, height: isExpanded ? 'auto' : 0 }}
-              transition={{ duration: 0.15 }}
-              className="block px-3 mb-2 text-[10px] font-semibold uppercase tracking-wider text-text-muted/50 overflow-hidden"
-            >
-              {category.label}
-            </motion.span>
-
-            {/* Category items */}
-            <div className="space-y-1">
-              {category.items.map(({ to, icon: Icon, label }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  className={({ isActive }) =>
-                    clsx(
-                      'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
-                      isActive
-                        ? 'bg-accent-muted text-accent'
-                        : 'text-text-muted hover:text-text hover:bg-surface2'
-                    )
-                  }
+      <nav className="flex-1 py-3 px-2 overflow-y-auto overflow-x-hidden">
+        {navigation.map((section) => (
+          <div key={section.label} className="mb-1">
+            {section.to ? (
+              // Direct link
+              <NavLink
+                to={section.to}
+                className={({ isActive }) =>
+                  clsx(
+                    'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
+                    isActive
+                      ? 'bg-accent-muted text-text'
+                      : 'text-text-muted hover:text-text hover:bg-surface2'
+                  )
+                }
+              >
+                <section.icon size={20} strokeWidth={1.5} className="shrink-0" />
+                <AnimatePresence>
+                  {isHovered && (
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="whitespace-nowrap"
+                    >
+                      {section.label}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </NavLink>
+            ) : (
+              // Expandable section
+              <>
+                <button
+                  onClick={() => toggleExpand(section.label)}
+                  className={clsx(
+                    'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150',
+                    expanded === section.label
+                      ? 'bg-surface2 text-text'
+                      : 'text-text-muted hover:text-text hover:bg-surface2'
+                  )}
                 >
-                  <Icon size={20} className="shrink-0" />
-                  <motion.span
-                    animate={{ opacity: isExpanded ? 1 : 0, width: isExpanded ? 'auto' : 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="whitespace-nowrap overflow-hidden"
-                  >
-                    {label}
-                  </motion.span>
-                </NavLink>
-              ))}
-            </div>
+                  <section.icon size={20} strokeWidth={1.5} className="shrink-0" />
+                  <AnimatePresence>
+                    {isHovered && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex-1 flex items-center justify-between"
+                      >
+                        <span className="whitespace-nowrap">{section.label}</span>
+                        <ChevronDown
+                          size={16}
+                          className={clsx(
+                            'transition-transform duration-200',
+                            expanded === section.label && 'rotate-180'
+                          )}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </button>
+                <AnimatePresence>
+                  {expanded === section.label && isHovered && section.items && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pl-4 mt-1 space-y-0.5">
+                        {section.items.map((item) => (
+                          <NavLink
+                            key={item.to}
+                            to={item.to}
+                            className={({ isActive }) =>
+                              clsx(
+                                'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150',
+                                isActive
+                                  ? 'bg-accent-muted text-text font-medium'
+                                  : 'text-text-muted hover:text-text hover:bg-surface2'
+                              )
+                            }
+                          >
+                            <item.icon size={16} strokeWidth={1.5} />
+                            <span>{item.label}</span>
+                          </NavLink>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
+            )}
           </div>
         ))}
       </nav>
 
-      {/* User section */}
-      <div className="p-3 border-t border-border/30">
-        <motion.div
-          animate={{ opacity: isExpanded ? 1 : 0, height: isExpanded ? 'auto' : 0 }}
-          transition={{ duration: 0.15 }}
-          className="px-3 pb-2 text-xs text-text-muted/50 truncate overflow-hidden"
-        >
-          {user?.nome}
-        </motion.div>
+      {/* Bottom section */}
+      <div className="py-3 px-2 border-t border-border/50">
+        {bottomNav.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            className={({ isActive }) =>
+              clsx(
+                'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 mb-1',
+                isActive
+                  ? 'bg-accent-muted text-text'
+                  : 'text-text-muted hover:text-text hover:bg-surface2'
+              )
+            }
+          >
+            <item.icon size={20} strokeWidth={1.5} className="shrink-0" />
+            <AnimatePresence>
+              {isHovered && (
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="whitespace-nowrap"
+                >
+                  {item.label}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </NavLink>
+        ))}
         <button
           onClick={logout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium
-                     text-text-muted hover:text-text hover:bg-surface2 transition-all duration-200"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                     text-text-muted hover:text-danger hover:bg-danger-muted transition-all duration-150"
         >
-          <LogOut size={20} className="shrink-0" />
-          <motion.span
-            animate={{ opacity: isExpanded ? 1 : 0, width: isExpanded ? 'auto' : 0 }}
-            transition={{ duration: 0.15 }}
-            className="whitespace-nowrap overflow-hidden"
-          >
-            Sair
-          </motion.span>
+          <LogOut size={20} strokeWidth={1.5} className="shrink-0" />
+          <AnimatePresence>
+            {isHovered && (
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="whitespace-nowrap"
+              >
+                Sair
+              </motion.span>
+            )}
+          </AnimatePresence>
         </button>
       </div>
     </motion.aside>

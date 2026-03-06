@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Premium Design System - uses CSS variables for theming
+        // Clean Dashboard Design System
         bg: 'var(--color-bg)',
         surface: 'var(--color-surface)',
         surface2: 'var(--color-surface2)',
@@ -16,6 +16,10 @@ export default {
         accent: 'var(--color-accent)',
         'accent-hover': 'var(--color-accent-hover)',
         'accent-muted': 'var(--color-accent-muted)',
+        success: 'var(--color-success)',
+        'success-muted': 'var(--color-success-muted)',
+        danger: 'var(--color-danger)',
+        'danger-muted': 'var(--color-danger-muted)',
       },
       fontFamily: {
         sans: ['Satoshi', 'system-ui', 'sans-serif'],

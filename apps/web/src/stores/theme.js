@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 export const useThemeStore = create()(persist((set, get) => ({
-    theme: 'dark',
+    theme: 'light',
     setTheme: (theme) => {
         set({ theme });
         updateDocumentTheme(theme);
     },
     toggleTheme: () => {
-        const newTheme = get().theme === 'dark' ? 'light' : 'dark';
+        const newTheme = get().theme === 'light' ? 'dark' : 'light';
         set({ theme: newTheme });
         updateDocumentTheme(newTheme);
     },
@@ -20,10 +20,10 @@ export const useThemeStore = create()(persist((set, get) => ({
     },
 }));
 function updateDocumentTheme(theme) {
-    if (theme === 'light') {
-        document.documentElement.classList.add('light');
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
     }
     else {
-        document.documentElement.classList.remove('light');
+        document.documentElement.classList.remove('dark');
     }
 }

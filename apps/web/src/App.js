@@ -42,11 +42,11 @@ export default function App() {
     // Initialize theme on mount
     const { theme } = useThemeStore();
     useEffect(() => {
-        if (theme === 'light') {
-            document.documentElement.classList.add('light');
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
         }
         else {
-            document.documentElement.classList.remove('light');
+            document.documentElement.classList.remove('dark');
         }
     }, [theme]);
     return (_jsxs(Routes, { children: [_jsx(Route, { path: "/login", element: _jsx(Login, {}) }), _jsx(Route, { path: "/convite/:token", element: _jsx(ConvitePage, {}) }), _jsx(Route, { path: "/", element: _jsx(RootRedirect, {}) }), _jsxs(Route, { path: "/admin", element: _jsx(ProtectedRoute, { allowedRoles: ['admin'], children: _jsx(AdminLayout, {}) }), children: [_jsx(Route, { index: true, element: _jsx(AdminDashboard, {}) }), _jsx(Route, { path: "tenants", element: _jsx(TenantsPage, {}) }), _jsx(Route, { path: "tenants/:id", element: _jsx(TenantFormPage, {}) })] }), _jsxs(Route, { element: _jsx(ProtectedRoute, { allowedRoles: ['gestor'], children: _jsx(Layout, {}) }), children: [_jsx(Route, { path: "dashboard", element: _jsx(Dashboard, {}) }), _jsx(Route, { path: "escolas", element: _jsx(Escolas, {}) }), _jsx(Route, { path: "alunos", element: _jsx(Alunos, {}) }), _jsx(Route, { path: "motoristas", element: _jsx(Motoristas, {}) }), _jsx(Route, { path: "rotas", element: _jsx(Rotas, {}) }), _jsx(Route, { path: "veiculos", element: _jsx(Veiculos, {}) }), _jsx(Route, { path: "historico", element: _jsx(Historico, {}) }), _jsx(Route, { path: "financeiro", element: _jsx(Financeiro, {}) }), _jsx(Route, { path: "rastreamento", element: _jsx(Rastreamento, {}) }), _jsx(Route, { path: "mensagens", element: _jsx(Mensagens, {}) }), _jsx(Route, { path: "perfil", element: _jsx(Perfil, {}) }), _jsx(Route, { path: "configuracoes", element: _jsx(Configuracoes, {}) })] }), _jsx(Route, { path: "*", element: _jsx(Navigate, { to: "/", replace: true }) })] }));

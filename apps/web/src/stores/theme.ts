@@ -12,13 +12,13 @@ interface ThemeState {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set, get) => ({
-      theme: 'dark',
+      theme: 'light',
       setTheme: (theme) => {
         set({ theme });
         updateDocumentTheme(theme);
       },
       toggleTheme: () => {
-        const newTheme = get().theme === 'dark' ? 'light' : 'dark';
+        const newTheme = get().theme === 'light' ? 'dark' : 'light';
         set({ theme: newTheme });
         updateDocumentTheme(newTheme);
       },
@@ -35,9 +35,9 @@ export const useThemeStore = create<ThemeState>()(
 );
 
 function updateDocumentTheme(theme: Theme) {
-  if (theme === 'light') {
-    document.documentElement.classList.add('light');
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
   } else {
-    document.documentElement.classList.remove('light');
+    document.documentElement.classList.remove('dark');
   }
 }
