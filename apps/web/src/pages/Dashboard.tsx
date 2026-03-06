@@ -14,14 +14,20 @@ import {
   Cell,
 } from 'recharts';
 import { StatCard } from '../components/ui/StatCard';
+import { PageTransition, staggerContainer, staggerItem } from '../components/ui/PageTransition';
 import { api } from '../lib/api';
+import { motion } from 'framer-motion';
 import type { DashboardStats, DashboardChartData } from '@rotavans/shared';
 
-// LuminaGO-inspired color palette
-const COLORS = ['#F7AF27', '#4285F4', '#22C55E', '#EC4899', '#8B5CF6', '#EF4444'];
+const COLORS = ['#D4A574', '#4285F4', '#22C55E', '#EC4899', '#8B5CF6', '#EF4444'];
 
 const tooltipStyle = {
-  contentStyle: { backgroundColor: '#2A241E', border: '1px solid #3D352C', color: '#F7F1E4' },
+  contentStyle: {
+    backgroundColor: 'var(--color-surface2)',
+    border: '1px solid var(--color-border)',
+    color: 'var(--color-text)',
+    borderRadius: '12px',
+  },
 };
 
 export function Dashboard() {
@@ -45,67 +51,51 @@ export function Dashboard() {
   }, []);
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold text-beige">Dashboard</h1>
+    <PageTransition>
+      <h1 className="text-2xl font-bold text-text mb-8">Dashboard</h1>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        <StatCard
-          label="Veiculos Ativos"
-          value={stats.veiculos_ativos}
-          icon={Car}
-          color="accent2"
-        />
-        <StatCard
-          label="Veiculos Total"
-          value={stats.veiculos_total}
-          icon={Truck}
-          color="accent"
-        />
-        <StatCard
-          label="Motoristas em Acao"
-          value={stats.motoristas_em_acao}
-          icon={Activity}
-          color="warn"
-        />
-        <StatCard
-          label="Rotas Hoje"
-          value={stats.rotas_hoje}
-          icon={Map}
-          color="accent"
-        />
-        <StatCard
-          label="Alunos"
-          value={stats.alunos_total}
-          icon={Users}
-          color="accent2"
-        />
-      </div>
+      <motion.div
+        variants={staggerContainer}
+        initial="initial"
+        animate="animate"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8"
+      >
+        <StatCard label="Veiculos Ativos" value={stats.veiculos_ativos} icon={Car} />
+        <StatCard label="Veiculos Total" value={stats.veiculos_total} icon={Truck} />
+        <StatCard label="Motoristas em Acao" value={stats.motoristas_em_acao} icon={Activity} />
+        <StatCard label="Rotas Hoje" value={stats.rotas_hoje} icon={Map} />
+        <StatCard label="Alunos" value={stats.alunos_total} icon={Users} />
+      </motion.div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Line Chart - Rotas por dia */}
-        <div>
-          <h2 className="text-beige text-lg font-bold mb-5">Rotas por Dia</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Line Chart */}
+        <motion.div
+          variants={staggerItem}
+          initial="initial"
+          animate="animate"
+          className="bg-surface2 border border-border/30 rounded-2xl p-6"
+        >
+          <h2 className="text-text font-semibold mb-4">Rotas por Dia</h2>
           <ResponsiveContainer width="100%" height={240}>
             <LineChart data={charts.rotas_por_dia}>
-              <XAxis dataKey="data" stroke="#4a453d" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="#4a453d" fontSize={11} tickLine={false} axisLine={false} />
+              <XAxis dataKey="data" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
               <Tooltip {...tooltipStyle} />
-              <Line
-                type="monotone"
-                dataKey="total"
-                stroke={COLORS[0]}
-                strokeWidth={2}
-                dot={{ fill: COLORS[0], r: 3 }}
-              />
+              <Line type="monotone" dataKey="total" stroke={COLORS[0]} strokeWidth={2} dot={{ fill: COLORS[0], r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
 
-        {/* Pie Chart - Alunos por escola */}
-        <div>
-          <h2 className="text-beige text-lg font-bold mb-5">Alunos por Escola</h2>
+        {/* Pie Chart */}
+        <motion.div
+          variants={staggerItem}
+          initial="initial"
+          animate="animate"
+          className="bg-surface2 border border-border/30 rounded-2xl p-6"
+        >
+          <h2 className="text-text font-semibold mb-4">Alunos por Escola</h2>
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie
@@ -116,7 +106,7 @@ export function Dashboard() {
                 cy="50%"
                 outerRadius={80}
                 label={({ name }) => name as string}
-                labelLine={{ stroke: '#4a453d' }}
+                labelLine={{ stroke: 'var(--color-text-muted)' }}
               >
                 {charts.alunos_por_escola.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -125,39 +115,49 @@ export function Dashboard() {
               <Tooltip {...tooltipStyle} />
             </PieChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
 
-        {/* Bar Chart - Receitas vs Despesas */}
-        <div>
-          <h2 className="text-beige text-lg font-bold mb-5">Receitas vs Despesas</h2>
+        {/* Bar Chart */}
+        <motion.div
+          variants={staggerItem}
+          initial="initial"
+          animate="animate"
+          className="bg-surface2 border border-border/30 rounded-2xl p-6"
+        >
+          <h2 className="text-text font-semibold mb-4">Receitas vs Despesas</h2>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={charts.financeiro_mensal}>
-              <XAxis dataKey="mes" stroke="#4a453d" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="#4a453d" fontSize={11} tickLine={false} axisLine={false} />
+              <XAxis dataKey="mes" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
               <Tooltip {...tooltipStyle} />
-              <Bar dataKey="receitas" fill={COLORS[2]} name="Receitas" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="despesas" fill={COLORS[5]} name="Despesas" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="receitas" fill={COLORS[2]} name="Receitas" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="despesas" fill={COLORS[5]} name="Despesas" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
 
-        {/* Horizontal Bar Chart - Atividade por turno */}
-        <div>
-          <h2 className="text-beige text-lg font-bold mb-5">Atividade por Turno</h2>
+        {/* Horizontal Bar Chart */}
+        <motion.div
+          variants={staggerItem}
+          initial="initial"
+          animate="animate"
+          className="bg-surface2 border border-border/30 rounded-2xl p-6"
+        >
+          <h2 className="text-text font-semibold mb-4">Atividade por Turno</h2>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={charts.atividade_por_turno} layout="vertical">
-              <XAxis type="number" stroke="#4a453d" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis dataKey="turno" type="category" stroke="#4a453d" width={60} fontSize={11} tickLine={false} axisLine={false} />
+              <XAxis type="number" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis dataKey="turno" type="category" stroke="var(--color-text-muted)" width={60} fontSize={11} tickLine={false} axisLine={false} />
               <Tooltip {...tooltipStyle} />
-              <Bar dataKey="rotas" radius={[0, 4, 4, 0]}>
+              <Bar dataKey="rotas" radius={[0, 6, 6, 0]}>
                 {charts.atividade_por_turno.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </PageTransition>
   );
 }
